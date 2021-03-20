@@ -1,0 +1,557 @@
+﻿<Page x:Class="AzurLaneAPI.View.DetailPage"
+      xmlns:vm="clr-namespace:AzurLaneAPI.ViewModel"
+      xmlns:conv="clr-namespace:AzurLaneAPI.View.Converters"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:AzurLaneAPI.View"
+      mc:Ignorable="d" 
+      d:DesignHeight="450" d:DesignWidth="800"
+      Title="DetailPage">
+
+    <Page.DataContext>
+        <vm:DetailVMShip/>
+    </Page.DataContext>
+
+    <Page.Resources>
+        <Style TargetType="TextBlock" x:Key="Variable">
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="HorizontalAlignment" Value="Center"/>
+            <Setter Property="VerticalAlignment" Value="Center"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+        </Style>
+        <Style TargetType="TextBlock" x:Key="Value">
+            <Setter Property="FontSize" Value="14"/>
+        </Style>
+    </Page.Resources>
+    <!-- split screen in two -->
+    <Grid>
+        <Grid.Resources>
+            <conv:FactionToImageConverter x:Key="FactionToImage"/>
+            <conv:HullTypeToImageConverter x:Key="HullToImage"/>
+            <conv:NullToVisibilityConverter x:Key="IsVisible"/>
+            <conv:RetrofitHullToVisibilityConverter x:Key="HasNewHull"/>
+            <conv:SubmarineStatToVisibilityConverter x:Key="IsSS"/>
+            <BitmapImage x:Key="DefaultBackground" UriSource="../Resources/Offline pictures/MainDayBG.png"/>
+            <BitmapImage x:Key="DefaultImage" UriSource="../Resources/Offline pictures/Universal_Bulin.png"/>
+            <BitmapImage x:Key="DefaultThumbnail" UriSource="../Resources/Offline pictures/Universal_BulinIcon.png"/>
+        </Grid.Resources>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition/>
+            <ColumnDefinition/>
+        </Grid.ColumnDefinitions>
+        <!--placeholder-->
+        <TextBlock Text="LOADING..." HorizontalAlignment="Center" VerticalAlignment="Center"/>
+        <!---->
+        <Image Source="{Binding CurrentSkin.Background, FallbackValue={StaticResource DefaultBackground}, IsAsync=True}" Stretch="UniformToFill" HorizontalAlignment="left" Width="auto" Grid.ColumnSpan="2"/>
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="1*"/>
+                <RowDefinition Height="25*"/>
+                <RowDefinition Height="2*"/>
+            </Grid.RowDefinitions>
+            <Viewbox Grid.Row="2" Panel.ZIndex="2" HorizontalAlignment="Left" VerticalAlignment="Bottom" MaxHeight="100" StretchDirection="DownOnly" Stretch="Uniform" >
+                <Button Command="{Binding SwitchBack}" BorderThickness="2" Background="DarkBlue" Opacity="0.5">
+                    <Image Source="/Resources/UI/back_btn.png" Opacity="1"/>
+                </Button>
+            </Viewbox>
+            <ComboBox ItemsSource="{Binding Skins}" SelectedItem="{Binding SelectedSkin}" SelectedIndex="0" FontSize="20"/>
+            <Grid Grid.Row="1">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="1*"/>
+                    <ColumnDefinition Width="8*"/>
+                    <ColumnDefinition Width="1*"/>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition/>
+                    <RowDefinition Height="auto"/>
+                    <RowDefinition/>
+                </Grid.RowDefinitions>
+                <Image Grid.ColumnSpan="3" Grid.RowSpan="3" Source="{Binding CurrentSkin.Image, FallbackValue={StaticResource DefaultImage}, IsAsync=True}" Panel.ZIndex="1"/>
+                <Button Grid.Row="1" Command="{Binding PreviousCommand}" Panel.ZIndex="2">
+                    <Image Source="/Resources/UI/back_btn.png"/>
+                </Button>
+                <Button Grid.Row="1" Grid.Column="2" Command="{Binding NextCommand}" Panel.ZIndex="2">
+                    <Image Source="/Resources/UI/back_btn.png" RenderTransformOrigin="0.5, 0.5">
+                        <Image.RenderTransform>
+                            <ScaleTransform ScaleX="-1"/>
+                        </Image.RenderTransform>
+                    </Image>
+                </Button>
+            </Grid>
+        </Grid>
+        <ScrollViewer Grid.Column="2" VerticalScrollBarVisibility="Auto">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="auto"/>
+                    <RowDefinition Height="auto"/>
+                    <RowDefinition Height="auto"/>
+                    <RowDefinition Height="auto"/>
+                </Grid.RowDefinitions>
+                <!-- top grid -->
+                <Grid Background="LightGray" Margin="2">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="1*"/>
+                        <ColumnDefinition Width="3*"/>
+                    </Grid.ColumnDefinitions>
+                    <DataGridCell Background="AliceBlue"/>
+                    <Image Source="{Binding CurrentShip.Thumbnail, FallbackValue={StaticResource DefaultThumbnail}, IsAsync=True}" VerticalAlignment="Top"/>
+                    <!-- information grid -->
+                    <Grid Grid.Column="1">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="auto"/>
+                            <RowDefinition Height="auto"/>
+                        </Grid.RowDefinitions>
+                        <Border BorderBrush="Black" BorderThickness="1">
+                            <Viewbox Stretch="Uniform" StretchDirection="DownOnly">
+                                <TextBlock Text="{Binding CurrentShip.Name, FallbackValue='Universal Bulin'}" Style="{StaticResource Variable}" HorizontalAlignment="Center" FontWeight="Bold" FontSize="20"/>
+                            </Viewbox>
+                        </Border>
+                        <Viewbox Stretch="Uniform" StretchDirection="DownOnly" HorizontalAlignment="Right">
+                            <TextBlock Text="{Binding CurrentShip.Id, FallbackValue='001'}" Style="{StaticResource Value}" VerticalAlignment="Center" Margin="0,0,10,0"/>
+                        </Viewbox>
+                        <Grid Grid.Row="1">
+                            <Grid.RowDefinitions>
+                                <RowDefinition/>
+                                <RowDefinition/>
+                                <RowDefinition/>
+                                <RowDefinition/>
+                                <RowDefinition/>
+                            </Grid.RowDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="1*"/>
+                                <ColumnDefinition Width="1*"/>
+                            </Grid.ColumnDefinitions>
+
+                            <!-- Rarity -->
+                            <Border BorderBrush="Black" BorderThickness="1">
+                                <Viewbox Stretch="Uniform" StretchDirection="DownOnly">
+                                    <TextBlock Text="Rarity" Style="{StaticResource Variable}" FontWeight="Bold" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                </Viewbox>
+                            </Border>
+                            <Border Grid.Column="1" BorderBrush="Black" BorderThickness="1">
+                                <Viewbox Stretch="Uniform" StretchDirection="DownOnly">
+                                    <StackPanel>
+                                        <TextBlock Text="{Binding CurrentShip.Rarity}" Style="{StaticResource Value}" HorizontalAlignment="Center"/>
+                                        <TextBlock Text="{Binding CurrentShip.Stars}" Style="{StaticResource Value}" HorizontalAlignment="Center" Foreground="Goldenrod"/>
+                                    </StackPanel>
+                                </Viewbox>
+                            </Border>
+
+                            <!-- Classification -->
+                            <Border Grid.Row="1" BorderBrush="Black" BorderThickness="1">
+                                <Viewbox Stretch="Uniform" StretchDirection="DownOnly">
+                                    <TextBlock Text="Classification" Style="{StaticResource Variable}" FontWeight="Bold" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                </Viewbox>
+                            </Border>
+                            <Border Grid.Row="1" Grid.Column="1" BorderBrush="Black" BorderThickness="1">
+                                <Viewbox Stretch="Uniform" StretchDirection="DownOnly">
+                                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                                        <Image Source="{Binding CurrentShip.HullType, Converter={StaticResource HullToImage}}"/>
+                                        <TextBlock Text="{Binding CurrentShip.HullType}" Style="{StaticResource Value}" VerticalAlignment="Center"/>
+                                        <TextBlock Text="-->" Style="{StaticResource Value}"  VerticalAlignment="Center" Visibility="{Binding CurrentShip.RetrofitHullType, Converter={StaticResource HasNewHull}}"/>
+                                        <Image Source="{Binding CurrentShip.RetrofitHullType, Converter={StaticResource HullToImage}}" Visibility="{Binding CurrentShip.RetrofitHullType, Converter={StaticResource HasNewHull}}"/>
+                                        <TextBlock Text="{Binding CurrentShip.RetrofitHullType}" VerticalAlignment="Center" Visibility="{Binding CurrentShip.RetrofitHullType, Converter={StaticResource HasNewHull}}"/>
+                                    </StackPanel>
+                                </Viewbox>
+                            </Border>
+
+                            <!-- Faction -->
+                            <Border Grid.Row="2" BorderBrush="Black" BorderThickness="1">
+                                <Viewbox Stretch="Uniform" StretchDirection="DownOnly">
+                                    <TextBlock Text="Faction" Style="{StaticResource Variable}" FontWeight="Bold"/>
+                                </Viewbox>
+                            </Border>
+                            <Border Grid.Row="2" Grid.Column="1" BorderBrush="Black" BorderThickness="1">
+                                <Viewbox Stretch="Uniform" StretchDirection="DownOnly">
+                                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                                        <Image Source="{Binding CurrentShip.Nationality, Converter={StaticResource FactionToImage}}"/>
+                                        <TextBlock Text="{Binding CurrentShip.Nationality}" Style="{StaticResource Value}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                    </StackPanel>
+                                </Viewbox>
+                            </Border>
+
+                            <!-- Class -->
+                            <Border Grid.Row="3" BorderBrush="Black" BorderThickness="1">
+                                <Viewbox Stretch="Uniform" StretchDirection="DownOnly">
+                                    <TextBlock Text="Class" Style="{StaticResource Variable}" FontWeight="Bold"/>
+                                </Viewbox>
+                            </Border>
+                            <Border Grid.Row="3" Grid.Column="1" BorderBrush="Black" BorderThickness="1">
+                                <Viewbox Stretch="Uniform" StretchDirection="DownOnly">
+                                    <TextBlock Text="{Binding CurrentShip.ShipClass}" Style="{StaticResource Value}" HorizontalAlignment="Center"/>
+                                </Viewbox>
+                            </Border>
+
+                            <!-- Construction -->
+                            <Border Grid.Row="4" BorderBrush="Black" BorderThickness="1">
+                                <Viewbox Stretch="Uniform" StretchDirection="DownOnly">
+                                    <TextBlock Text="Constructin Time" Style="{StaticResource Variable}" FontWeight="Bold"/>
+                                </Viewbox>
+                            </Border>
+                            <Border Grid.Row="4" Grid.Column="1" BorderBrush="Black" BorderThickness="1">
+                                <Viewbox Stretch="Uniform" StretchDirection="DownOnly">
+                                    <TextBlock Text="{Binding CurrentShip.ConstructionTime}" Style="{StaticResource Value}" HorizontalAlignment="Center"/>
+                                </Viewbox>
+                            </Border>
+
+                        </Grid>
+                    </Grid>
+                </Grid>
+
+                <!-- Stats grid -->
+                <Grid Grid.Row="1" Margin="2" Background="LightGray">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="auto"/>
+                        <RowDefinition/>
+                    </Grid.RowDefinitions>
+                    <!-- selection list -->
+                    <ComboBox ItemsSource="{Binding Stats}" SelectedItem="{Binding SelectedStat}" SelectedIndex="0" FontSize="18"/>
+                    <!-- Stats -->
+                    <Grid Grid.Row="1">
+                        <Grid.RowDefinitions>
+                            <RowDefinition/>
+                            <RowDefinition/>
+                            <RowDefinition/>
+                            <RowDefinition/>
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="0.5*"/>
+                            <ColumnDefinition Width="2*"/>
+                            <ColumnDefinition Width="0.5*"/>
+                            <ColumnDefinition Width="2*"/>
+                            <ColumnDefinition Width="0.5*"/>
+                            <ColumnDefinition Width="2*"/>
+                            <ColumnDefinition Width="0.5*"/>
+                            <ColumnDefinition Width="2*"/>
+                        </Grid.ColumnDefinitions>
+
+                        <!--                -->
+                        <!--    first row   -->
+                        <!--                -->
+                        
+                        <!--    Health      -->
+                        <Border BorderBrush="Black" BorderThickness="1">
+                            <Viewbox Stretch="UniformToFill" StretchDirection="DownOnly">
+                                <Image Source="/Resources/Icons/25px-Duration.png" Margin="5"/>
+                            </Viewbox>
+                        </Border>
+                        <Border Grid.Column="1" BorderBrush="Black" BorderThickness="1">
+                            <Viewbox Stretch="UniformToFill" StretchDirection="DownOnly" HorizontalAlignment="Left">
+                                <TextBlock Grid.Column="1" Text="{Binding CurrentStat.Health}" Style="{StaticResource Value}" VerticalAlignment="Center" Margin="10,0" />
+                            </Viewbox>
+                        </Border>
+                        
+                        <!--    Armor       -->
+                        <Border Grid.Column="2" BorderBrush="Black" BorderThickness="1">
+                            <Viewbox Stretch="UniformToFill" StretchDirection="DownOnly">
+                                <Image Grid.Column="2" Source="/Resources/Icons/25px-Armor.png" Margin="5"/>
+                            </Viewbox>
+                        </Border>
+                        <Border Grid.Column="3" BorderBrush="Black" BorderThickness="1">
+                            <Viewbox Stretch="UniformToFill" StretchDirection="DownOnly" HorizontalAlignment="Left">
+                                <TextBlock Grid.Column="3" Text="{Binding CurrentStat.Armor}" Style="{StaticResource Value}" VerticalAlignment="Center" Margin="10,0" />
+                            </Viewbox>
+                        </Border>
+                        
+                        <!--    Refill      -->
+                        <Border Grid.Column="4" BorderBrush="Black" BorderThickness="1">
+                            <Viewbox Stretch="UniformToFill" StretchDirection="DownOnly">
+                                <Image Grid.Column="4" Source="/Resources/Icons/25px-Refill.png" Margin="5"/>
+                            </Viewbox>
+                        </Border>
+                        <Border Grid.Column="5" BorderBrush="Black" BorderThickness="1">
+                            <Viewbox Stretch="UniformToFill" StretchDirection="DownOnly" HorizontalAlignment="Left">
+                                <TextBlock Grid.Column="5" Text="{Binding CurrentStat.Reload}" Style="{StaticResource Value}" VerticalAlignment="Center" Margin="10,0" />
+                            </Viewbox>
+                        </Border>
+                        
+                        <!--    Luck        -->
+                        <Border Grid.Column="6" BorderBrush="Black" BorderThickness="1">
+                            <Viewbox Stretch="UniformToFill" StretchDirection="DownOnly">
+                                <Image Grid.Column="6" Source="/Resources/Icons/24px-Luck.png" Margin="5"/>
+                            </Viewbox>
+                        </Border>
+                        <Border Grid.Column="7" BorderBrush="Black" BorderThickness="1">
+                            <Viewbox Stretch="UniformToFill" StretchDirection="DownOnly" HorizontalAlignment="Left">
+                                <TextBlock Grid.Column="7" Text="{Binding CurrentStat.Luck}" Style="{StaticResource Value}" VerticalAlignment="Center" Margin="10,0" />
+                            </Viewbox>
+                        </Border>
+
+                        <!--                -->
+                        <!--    second row  -->
+                        <!--                -->
+                        
+                        <!--    Firepower   -->
+                        <Border Grid.Row="1" BorderBrush="Black" BorderThickness="1">
+                            <Viewbox Stretch="UniformToFill" StretchDirection="DownOnly">
+                                <Image Grid.Row="1" Source="/Resources/Icons/25px-Firepower.png" Margin="5"/>
+                            </Viewbox>
+                        </Border>
+                        <Border Grid.Row="1" Grid.Column="1" BorderBrush="Black" BorderThickness="1">
+                            <Viewbox Stretch="UniformToFill" StretchDirection="DownOnly" HorizontalAlignment="Left">
+                                <TextBlock Grid.Row="1" Grid.Column="1" Text="{Binding CurrentStat.Firepower}" Style="{StaticResource Value}" VerticalAlignment="Center" Margin="10,0"/>
+                            </Viewbox>
+                        </Border>
+                        
+                        <!--    Torpedo     -->
+                        <Border Grid.Row="1" Grid.Column="2" BorderBrush="Black" BorderThickness="1">
+                            <Viewbox Stretch="UniformToFill" StretchDirection="DownOnly">
+                                <Image Grid.Row="1" Grid.Column="2" Source="/Resources/Icons/25px-Torpedo.png" Margin="5"/>
+                            </Viewbox>
+                        </Border>
+                        <Border Grid.Row="1" Grid.Column="3" BorderBrush="Black" BorderThickness="1">
+                            <Viewbox Stretch="UniformToFill" StretchDirection="DownOnly" HorizontalAlignment="Left">
+                                <TextBlock Grid.Row="1" Grid.Column="3" Text="{Binding CurrentStat.Torpedo}" Style="{StaticResource Value}" VerticalAlignment="Center" Margin="10,0"/>
+                            </Viewbox>
+                        </Border>
+
+                        <!--    Evasion     -->
+                        <Border Grid.Row="1" Grid.Column="4" BorderBrush="Black" BorderThickness="1">
+                            <Viewbox Stretch="UniformToFill" StretchDirection="DownOnly">
+                                <Image Grid.Row="1" Grid.Column="4" Source="/Resources/Icons/25px-Evasion.png" Margin="5"/>
+                            </Viewbox>
+                        </Border>
+                        <Border Grid.Row="1" Grid.Column="5" BorderBrush="Black" BorderThickness="1">
+                            <Viewbox Stretch="UniformToFill" StretchDirection="DownOnly" HorizontalAlignment="Left">
+                                <TextBlock Grid.Row="1" Grid.Column="5" Text="{Binding CurrentStat.Evasion}" Style="{StaticResource Value}" VerticalAlignment="Center" Margin="10,0"/>
+                            </Viewbox>
+                        </Border>
+
+                        <!--    Speed       -->
+                        <Border Grid.Row="1" Grid.Column="6" BorderBrush="Black" BorderThickness="1">
+                            <Viewbox Stretch="UniformToFill" StretchDirection="DownOnly">
+                                <TextBlock Grid.Row="1" Grid.Column="6" Text="Spd" FontWeight="Bold" Margin="5"/>
+                            </Viewbox>
+                        </Border>
+                        <Border Grid.Row="1" Grid.Column="7" BorderBrush="Black" BorderThickness="1">
+                            <Viewbox Stretch="UniformToFill" StretchDirection="DownOnly" HorizontalAlignment="Left">
+                                <TextBlock Grid.Row="1" Grid.Column="7" Text="{Binding CurrentStat.Speed}" Style="{StaticResource Value}" VerticalAlignment="Center" Margin="10,0"/>
+                            </Viewbox>
+                        </Border>
+
+                        <!--                -->
+                        <!--    Third row   -->
+                        <!--                -->
+                        
+                        <!--    Anti-Air    -->
+                        <Border Grid.Row="2" BorderBrush="Black" BorderThickness="1">
+                            <Viewbox Stretch="UniformToFill" StretchDirection="DownOnly">
+                                <Image Grid.Row="2" Source="/Resources/Icons/25px-AntiAir.png" Margin="5"/>
+                            </Viewbox>
+                        </Border>
+                        <Border Grid.Row="2" Grid.Column="1" BorderBrush="Black" BorderThickness="1">
+                            <Viewbox Stretch="UniformToFill" StretchDirection="DownOnly" HorizontalAlignment="Left">
+                                <TextBlock Grid.Row="2" Grid.Column="1" Text="{Binding CurrentStat.Antiair}" Style="{StaticResource Value}" VerticalAlignment="Center" Margin="10,0"/>
+                            </Viewbox>
+                        </Border>
+
+                        <!--    Aviation    -->
+                        <Border Grid.Row="2" Grid.Column="2" BorderBrush="Black" BorderThickness="1">
+                            <Viewbox Stretch="UniformToFill" StretchDirection="DownOnly">
+                                <Image Grid.Row="2" Grid.Column="2" Source="/Resources/Icons/25px-Aviation.png" Margin="5"/>
+                            </Viewbox>
+                        </Border>
+                        <Border Grid.Row="2" Grid.Column="3" BorderBrush="Black" BorderThickness="1">
+                            <Viewbox Stretch="UniformToFill" StretchDirection="DownOnly" HorizontalAlignment="Left">
+                                <TextBlock Grid.Row="2" Grid.Column="3" Text="{Binding CurrentStat.Aviation}" Style="{StaticResource Value}" VerticalAlignment="Center" Margin="10,0"/>
+                            </Viewbox>
+                        </Border>
+
+                        <!--    Oil Consumption     -->
+                        <Border Grid.Row="2" Grid.Column="4" BorderBrush="Black" BorderThickness="1">
+                            <Viewbox Stretch="UniformToFill" StretchDirection="DownOnly">
+                                <Image Grid.Row="2" Grid.Column="4" Source="/Resources/Icons/25px-Consumption.png" Margin="5"/>
+                            </Viewbox>
+                        </Border>
+                        <Border Grid.Row="2" Grid.Column="5" BorderBrush="Black" BorderThickness="1">
+                            <Viewbox Stretch="UniformToFill" StretchDirection="DownOnly" HorizontalAlignment="Left">
+                                <TextBlock Grid.Row="2" Grid.Column="5" Text="{Binding CurrentStat.OilConsumption}" Style="{StaticResource Value}" VerticalAlignment="Center" Margin="10,0"/>
+                            </Viewbox>
+                        </Border>
+
+                        <!--    Accuracy    -->
+                        <Border Grid.Row="2" Grid.Column="6" BorderBrush="Black" BorderThickness="1">
+                            <Viewbox Stretch="UniformToFill" StretchDirection="DownOnly">
+                                <Image Grid.Row="2" Grid.Column="6" Source="/Resources/Icons/25px-Hit.png" Margin="5"/>
+                            </Viewbox>
+                        </Border>
+                        <Border Grid.Row="2" Grid.Column="7" BorderBrush="Black" BorderThickness="1">
+                            <Viewbox Stretch="UniformToFill" StretchDirection="DownOnly" HorizontalAlignment="Left">
+                                <TextBlock Text="{Binding CurrentStat.Accuracy}" Style="{StaticResource Value}" VerticalAlignment="Center" Margin="10,0"/>
+                            </Viewbox>
+                        </Border>
+
+                        <!--                -->
+                        <!--    Fourth row  -->
+                        <!--                -->
+                        
+                        <!--    ASW         -->
+                        <Border Grid.Row="3" BorderBrush="Black" BorderThickness="1">
+                            <Viewbox Stretch="UniformToFill" StretchDirection="DownOnly">
+                                <Image Source="/Resources/Icons/25px-ASW.png" Margin="5"/>
+                            </Viewbox>
+                        </Border>
+                        <Border Grid.Row="3" Grid.Column="1" BorderBrush="Black" BorderThickness="1">
+                            <Viewbox Stretch="UniformToFill" StretchDirection="DownOnly" HorizontalAlignment="Left">
+                                <TextBlock Text="{Binding CurrentStat.AntisubmarineWarfare}" Style="{StaticResource Value}" VerticalAlignment="Center" Margin="10,0"/>
+                            </Viewbox>
+                        </Border>
+                        
+                        <!--    Oxygen      -->
+                        <Border Grid.Row="3" Grid.Column="2" BorderBrush="Black" BorderThickness="1" Visibility="{Binding CurrentShip.HullType, Converter={StaticResource IsSS}}">
+                            <Viewbox Stretch="UniformToFill" StretchDirection="DownOnly">
+                                <Image Source="/Resources/Icons/25px-Oxygen.png" Margin="5"/>
+                            </Viewbox>
+                        </Border>
+                        <Border Grid.Row="3" Grid.Column="3" BorderBrush="Black" BorderThickness="1" Visibility="{Binding CurrentShip.HullType, Converter={StaticResource IsSS}}">
+                            <Viewbox Stretch="UniformToFill" StretchDirection="DownOnly" HorizontalAlignment="Left">
+                                <TextBlock Text="{Binding CurrentStat.Oxygen}" Style="{StaticResource Value}" VerticalAlignment="Center" Margin="10,0"/>
+                            </Viewbox>
+                        </Border>
+                        
+                        <!--    Ammunition  -->
+                        <Border Grid.Row="3" Grid.Column="4" BorderBrush="Black" BorderThickness="1" Visibility="{Binding CurrentShip.HullType, Converter={StaticResource IsSS}}">
+                            <Viewbox Stretch="UniformToFill" StretchDirection="DownOnly">
+                                <Image Source="/Resources/Icons/24px-Ammunition.png" Margin="5"/>
+                            </Viewbox>
+                        </Border>
+                        <Border Grid.Row="3" Grid.Column="5" BorderBrush="Black" BorderThickness="1" Visibility="{Binding CurrentShip.HullType, Converter={StaticResource IsSS}}">
+                            <Viewbox Stretch="UniformToFill" StretchDirection="DownOnly" HorizontalAlignment="Left">
+                                <TextBlock Text="{Binding CurrentStat.Ammunition}" Style="{StaticResource Value}" VerticalAlignment="Center" Margin="10,0"/>
+                            </Viewbox>
+                        </Border>
+                    </Grid>
+                </Grid>
+
+                <!-- Gear Grid -->
+                <Grid Grid.Row="2" Margin="2" Background="LightGray">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="1*"/>
+                        <RowDefinition Height="4*"/>
+                    </Grid.RowDefinitions>
+                    <Border BorderBrush="Black" BorderThickness="1">
+                        <Viewbox Stretch="UniformToFill" StretchDirection="DownOnly">
+                            <TextBlock Style="{StaticResource Variable}" FontSize="20"  Text="Gear" FontWeight="Bold" HorizontalAlignment="Center"/>
+                        </Viewbox>
+                    </Border>
+                    <Grid Grid.Row="1">
+                        <Grid.RowDefinitions>
+                            <RowDefinition/>
+                            <RowDefinition/>
+                            <RowDefinition/>
+                            <RowDefinition/>
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="1*"/>
+                            <ColumnDefinition Width="4*"/>
+                            <ColumnDefinition Width="4*"/>
+                        </Grid.ColumnDefinitions>
+                        <!-- first row -->
+                        <Border BorderBrush="Black" BorderThickness="1">
+                            <Viewbox Stretch="UniformToFill" StretchDirection="DownOnly">
+                                <TextBlock Style="{StaticResource Variable}" Text="Slot" FontWeight="Bold" HorizontalAlignment="Center"/>
+                            </Viewbox>
+                        </Border>
+                        <Border BorderBrush="Black" BorderThickness="1" Grid.Column="1">
+                            <Viewbox Stretch="UniformToFill" StretchDirection="DownOnly">
+                                <TextBlock Style="{StaticResource Variable}" Text="Efficiency" FontWeight="Bold" HorizontalAlignment="Center"/>
+                            </Viewbox>
+                        </Border>
+                        <Border BorderBrush="Black" BorderThickness="1" Grid.Column="2" >
+                            <Viewbox Stretch="UniformToFill" StretchDirection="DownOnly">
+                                <TextBlock Style="{StaticResource Variable}" Text="Equippable" FontWeight="Bold" HorizontalAlignment="Center"/>
+                            </Viewbox>
+                        </Border>
+
+                        <!-- second row -->
+                        <Border BorderBrush="Black" BorderThickness="1"  Grid.Row="1">
+                            <Viewbox Stretch="UniformToFill" StretchDirection="DownOnly">
+                                <TextBlock Style="{StaticResource Value}" Text="1" HorizontalAlignment="Center"/>
+                            </Viewbox>
+                        </Border>
+                        <Border BorderBrush="Black" BorderThickness="1"  Grid.Row="1" Grid.Column="1">
+                            <Viewbox Stretch="UniformToFill" StretchDirection="DownOnly">
+                                <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Center">
+                                    <TextBlock Style="{StaticResource Value}" Text="{Binding CurrentShip.Slots[0].MinEfficiency, StringFormat=' {0}%'}"/>
+                                    <TextBlock Style="{StaticResource Value}" Text="{Binding CurrentShip.Slots[0].MaxEfficiency, StringFormat='-->{0}%'}"/>
+                                    <TextBlock Style="{StaticResource Value}" Text="{Binding CurrentShip.Slots[0].KaiEfficiency, StringFormat='-->{0}%'}" Visibility="{Binding CurrentShip.Slots[0].KaiEfficiency, Converter={StaticResource IsVisible}}"/>
+                                </StackPanel>
+                            </Viewbox>
+                        </Border>
+                        <Border BorderBrush="Black" BorderThickness="1"  Grid.Row="1" Grid.Column="2">
+                            <Viewbox Stretch="UniformToFill" StretchDirection="DownOnly">
+                                <TextBlock Style="{StaticResource Value}"  Grid.Row="1" Grid.Column="2" Text="{Binding CurrentShip.Slots[0].Type}" HorizontalAlignment="Center"/>
+                            </Viewbox>
+                        </Border>
+                        <!-- third row -->
+                        <Border BorderBrush="Black" BorderThickness="1"  Grid.Row="2">
+                            <Viewbox Stretch="UniformToFill" StretchDirection="DownOnly">
+                                <TextBlock Style="{StaticResource Value}"  Grid.Row="2" Text="2" HorizontalAlignment="Center"/>
+                            </Viewbox>
+                        </Border>
+                        <Border BorderBrush="Black" BorderThickness="1"  Grid.Row="2" Grid.Column="1">
+                            <Viewbox Stretch="UniformToFill" StretchDirection="DownOnly">
+                                <StackPanel Grid.Row="2" Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Center">
+                                    <TextBlock Style="{StaticResource Value}" Text="{Binding CurrentShip.Slots[1].MinEfficiency, StringFormat=' {0}%'}"/>
+                                    <TextBlock Style="{StaticResource Value}" Text="{Binding CurrentShip.Slots[1].MaxEfficiency, StringFormat='-->{0}%'}"/>
+                                    <TextBlock Style="{StaticResource Value}" Text="{Binding CurrentShip.Slots[1].KaiEfficiency, StringFormat='-->{0}%'}" Visibility="{Binding CurrentShip.Slots[1].KaiEfficiency, Converter={StaticResource IsVisible}}"/>
+                                </StackPanel>
+                            </Viewbox>
+                        </Border>
+                        <Border BorderBrush="Black" BorderThickness="1"  Grid.Row="2" Grid.Column="2">
+                            <Viewbox Stretch="UniformToFill" StretchDirection="DownOnly">
+                                <TextBlock Style="{StaticResource Value}"  Grid.Row="2" Grid.Column="2" Text="{Binding CurrentShip.Slots[1].Type}" HorizontalAlignment="Center"/>
+                            </Viewbox>
+                        </Border>
+                        <!-- fourth row -->
+                        <Border BorderBrush="Black" BorderThickness="1"  Grid.Row="3">
+                            <Viewbox Stretch="UniformToFill" StretchDirection="DownOnly">
+                                <TextBlock Style="{StaticResource Value}"  Grid.Row="3" Text="3" HorizontalAlignment="Center"/>
+                            </Viewbox>
+                        </Border>
+                        <Border BorderBrush="Black" BorderThickness="1"  Grid.Row="3" Grid.Column="1">
+                            <Viewbox Stretch="UniformToFill" StretchDirection="DownOnly">
+                                <StackPanel Grid.Row="3" Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Center">
+                                    <TextBlock Style="{StaticResource Value}" Text="{Binding CurrentShip.Slots[2].MinEfficiency, StringFormat=' {0}%'}"/>
+                                    <TextBlock Style="{StaticResource Value}" Text="{Binding CurrentShip.Slots[2].MaxEfficiency, StringFormat='-->{0}%'}"/>
+                                    <TextBlock Style="{StaticResource Value}" Text="{Binding CurrentShip.Slots[2].KaiEfficiency, StringFormat='-->{0}%'}" Visibility="{Binding CurrentShip.Slots[2].KaiEfficiency, Converter={StaticResource IsVisible}}"/>
+                                </StackPanel>
+                            </Viewbox>
+                        </Border>
+                        <Border BorderBrush="Black" BorderThickness="1"  Grid.Row="3" Grid.Column="2">
+                            <Viewbox Stretch="UniformToFill" StretchDirection="DownOnly">
+                                <TextBlock Style="{StaticResource Value}"  Grid.Row="3" Grid.Column="2" Text="{Binding CurrentShip.Slots[2].Type}" HorizontalAlignment="Center"/>
+                            </Viewbox>
+                        </Border>
+                    </Grid>
+                </Grid>
+
+                <!-- Skill Grid -->
+                <Grid Grid.Row="3" Margin="2" Background="LightGray">
+                    <ListBox ItemsSource="{Binding CurrentShip.Skills}" ScrollViewer.HorizontalScrollBarVisibility="Disabled" HorizontalContentAlignment="Stretch">
+                        <ListBox.ItemTemplate>
+                            <DataTemplate>
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="1*"/>
+                                        <ColumnDefinition Width="1*"/>
+                                        <ColumnDefinition Width="3*"/>
+                                    </Grid.ColumnDefinitions>
+                                    <!--placeholder-->
+                                    <TextBlock Text="LOADING..." HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                    <!---->
+                                    <Image Source="{Binding Icon, IsAsync=True}"/>
+                                    <Rectangle Grid.Column="1" Fill="{Binding Color}" />
+                                    <TextBlock Grid.Column="1" Text="{Binding Name}" FontWeight="Bold" FontSize="15" VerticalAlignment="Center" HorizontalAlignment="Center" TextWrapping="WrapWithOverflow"/>
+                                    <TextBlock Grid.Column="2" Text="{Binding Description}" FontSize="12" VerticalAlignment="Center" HorizontalAlignment="Left" TextWrapping="WrapWithOverflow" Margin="10"/>
+                                </Grid>
+                            </DataTemplate>
+                        </ListBox.ItemTemplate>
+                    </ListBox>
+                </Grid>
+            </Grid>
+        </ScrollViewer>
+    </Grid>
+</Page>

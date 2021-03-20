@@ -1,0 +1,268 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{D07D1038-3524-4C59-8D75-198DF5EDA750}</ProjectGuid>
+    <OutputType>WinExe</OutputType>
+    <RootNamespace>AzurLaneAPI</RootNamespace>
+    <AssemblyName>AzurLaneAPI</AssemblyName>
+    <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <ProjectTypeGuids>{60dc8134-eba5-43b8-bcc9-bb4bc16c2548};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
+    <WarningLevel>4</WarningLevel>
+    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+    <Deterministic>true</Deterministic>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationIcon>EnterpriseIcon.ico</ApplicationIcon>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="AzurAPINet, Version=1.3.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>packages\AzurAPINet.1.3.0\lib\netstandard2.0\AzurAPINet.dll</HintPath>
+    </Reference>
+    <Reference Include="CommonServiceLocator, Version=2.0.2.0, Culture=neutral, PublicKeyToken=489b6accfaf20ef0, processorArchitecture=MSIL">
+      <HintPath>packages\CommonServiceLocator.2.0.2\lib\net47\CommonServiceLocator.dll</HintPath>
+    </Reference>
+    <Reference Include="GalaSoft.MvvmLight, Version=5.4.1.0, Culture=neutral, PublicKeyToken=e7570ab207bcb616, processorArchitecture=MSIL">
+      <HintPath>packages\MvvmLightLibs.5.4.1.1\lib\net45\GalaSoft.MvvmLight.dll</HintPath>
+    </Reference>
+    <Reference Include="GalaSoft.MvvmLight.Extras, Version=5.4.1.0, Culture=neutral, PublicKeyToken=669f0b5e8f868abf, processorArchitecture=MSIL">
+      <HintPath>packages\MvvmLightLibs.5.4.1.1\lib\net45\GalaSoft.MvvmLight.Extras.dll</HintPath>
+    </Reference>
+    <Reference Include="GalaSoft.MvvmLight.Platform, Version=5.4.1.0, Culture=neutral, PublicKeyToken=5f873c45e98af8a1, processorArchitecture=MSIL">
+      <HintPath>packages\MvvmLightLibs.5.4.1.1\lib\net45\GalaSoft.MvvmLight.Platform.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json, Version=12.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>packages\Newtonsoft.Json.12.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="RestSharp, Version=106.11.7.0, Culture=neutral, PublicKeyToken=598062e77f915f75, processorArchitecture=MSIL">
+      <HintPath>packages\RestSharp.106.11.7\lib\net452\RestSharp.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Windows.Interactivity, Version=4.5.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>packages\MvvmLightLibs.5.4.1.1\lib\net45\System.Windows.Interactivity.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Xml" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Xaml">
+      <RequiredTargetFramework>4.0</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="WindowsBase" />
+    <Reference Include="PresentationCore" />
+    <Reference Include="PresentationFramework" />
+  </ItemGroup>
+  <ItemGroup>
+    <ApplicationDefinition Include="App.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </ApplicationDefinition>
+    <Compile Include="Model\Ship.cs" />
+    <Compile Include="Repository\AzurLaneRepositoryBASE.cs" />
+    <Compile Include="Repository\AzurLaneRepositoryJSON.cs" />
+    <Compile Include="Repository\AzurLaneRepositoryWEB.cs" />
+    <Compile Include="ViewModel\DetailVMShip.cs" />
+    <Compile Include="ViewModel\MainViewModel.cs" />
+    <Compile Include="ViewModel\MyListVM.cs" />
+    <Compile Include="ViewModel\OverViewVM.cs" />
+    <Compile Include="View\Converters\FactionToImageConverter.cs" />
+    <Compile Include="View\Converters\HullTypeToImageConverter.cs" />
+    <Compile Include="View\Converters\NullToVisibilityConverter.cs" />
+    <Compile Include="View\Converters\RarityToBackgroundConverter.cs" />
+    <Compile Include="View\Converters\RarityToFrameConverter.cs" />
+    <Compile Include="View\Converters\RetrofitHullToVisibilityConverter.cs" />
+    <Compile Include="View\Converters\SubmarineStatToVisibilityConverter.cs" />
+    <Compile Include="View\DetailPageShip.xaml.cs">
+      <DependentUpon>DetailPageShip.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\MyListOverviewPage.xaml.cs">
+      <DependentUpon>MyListOverviewPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\OverViewPage.xaml.cs">
+      <DependentUpon>OverViewPage.xaml</DependentUpon>
+    </Compile>
+    <Page Include="MainWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Compile Include="App.xaml.cs">
+      <DependentUpon>App.xaml</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="MainWindow.xaml.cs">
+      <DependentUpon>MainWindow.xaml</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
+    <Page Include="View\DetailPageShip.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\MyListOverviewPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\OverViewPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Properties\AssemblyInfo.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Properties\Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Settings.settings</DependentUpon>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+    </Compile>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <None Include="packages.config" />
+    <None Include="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
+    <EmbeddedResource Include="Resources\Data\AzurLaneShips.json" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Icons\Bilibili.png" />
+    <Resource Include="Resources\Icons\Dragon Empery.png" />
+    <Resource Include="Resources\Icons\Eagle Union.png" />
+    <Resource Include="Resources\Icons\Hololive.png" />
+    <Resource Include="Resources\Icons\Iris Libre.png" />
+    <Resource Include="Resources\Icons\Iron Blood.png" />
+    <Resource Include="Resources\Icons\Kizuna AI.png" />
+    <Resource Include="Resources\Icons\META.png" />
+    <Resource Include="Resources\Icons\Neptunia.png" />
+    <Resource Include="Resources\Icons\Northern Parliament.png" />
+    <Resource Include="Resources\Icons\Royal Navy.png" />
+    <Resource Include="Resources\Icons\Sakura Empire.png" />
+    <Resource Include="Resources\Icons\Sardegna Empire.png" />
+    <Resource Include="Resources\Icons\Universal.png" />
+    <Resource Include="Resources\Icons\Utawarerumono.png" />
+    <Resource Include="Resources\Icons\Venus Vacation.png" />
+    <Resource Include="Resources\Icons\Vichya Dominion.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Bg\Background.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Frames\decisive.png" />
+    <Resource Include="Resources\Frames\elite.png" />
+    <Resource Include="Resources\Frames\priority.png" />
+    <Resource Include="Resources\Frames\rare.png" />
+    <Resource Include="Resources\Frames\super rare.png" />
+    <Resource Include="Resources\Frames\ultra rare.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Frames\normal.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Frames\elite_bg.png" />
+    <Resource Include="Resources\Frames\rare_bg.png" />
+    <Resource Include="Resources\Frames\super rare_bg.png" />
+    <Resource Include="Resources\Frames\ultra rare_bg.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Icons\24px-Ammunition.png" />
+    <Resource Include="Resources\Icons\24px-Luck.png" />
+    <Resource Include="Resources\Icons\25px-AntiAir.png" />
+    <Resource Include="Resources\Icons\25px-Armor.png" />
+    <Resource Include="Resources\Icons\25px-ASW.png" />
+    <Resource Include="Resources\Icons\25px-Aviation.png" />
+    <Resource Include="Resources\Icons\25px-Consumption.png" />
+    <Resource Include="Resources\Icons\25px-Duration.png" />
+    <Resource Include="Resources\Icons\25px-Evasion.png" />
+    <Resource Include="Resources\Icons\25px-Firepower.png" />
+    <Resource Include="Resources\Icons\25px-Hit.png" />
+    <Resource Include="Resources\Icons\25px-Oxygen.png" />
+    <Resource Include="Resources\Icons\25px-Refill.png" />
+    <Resource Include="Resources\Icons\25px-Torpedo.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Icons\Aircraft Carrier.png" />
+    <Resource Include="Resources\Icons\Aviation Battleship.png" />
+    <Resource Include="Resources\Icons\Aviation Submarine.png" />
+    <Resource Include="Resources\Icons\Battlecruiser.png" />
+    <Resource Include="Resources\Icons\Battleship.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Icons\Destroyer.png" />
+    <Resource Include="Resources\Icons\Heavy Cruiser.png" />
+    <Resource Include="Resources\Icons\Large Cruiser.png" />
+    <Resource Include="Resources\Icons\Light Cruiser.png" />
+    <Resource Include="Resources\Icons\Monitor.png" />
+    <Resource Include="Resources\Icons\Submarine.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Icons\Repair.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Icons\Light Carrier.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Offline pictures\MainDayBG.png" />
+    <Resource Include="Resources\Offline pictures\Universal_Bulin.png" />
+    <Resource Include="Resources\Offline pictures\Universal_BulinIcon.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\UI\back_btn.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\UI\btn_toggle_blue.png" />
+    <Resource Include="Resources\UI\btn_toggle_grey.png" />
+    <Resource Include="Resources\UI\Filter.png" />
+    <Resource Include="Resources\UI\text_char.png" />
+    <Resource Include="Resources\UI\text_link_ship.png" />
+    <Resource Include="Resources\UI\text_print_ship.png" />
+    <Resource Include="Resources\UI\toggle_off.png" />
+    <Resource Include="Resources\UI\toggle_on.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Icons\EnterpriseIcon.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="EnterpriseIcon.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\UI\btn_add.png" />
+    <Resource Include="Resources\UI\btn_home.png" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+</Project>
