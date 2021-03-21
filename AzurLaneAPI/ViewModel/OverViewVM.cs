@@ -20,7 +20,7 @@ namespace AzurLaneAPI.ViewModel
         //// AzurLaneRepository+(type)
         //// local repository   => type = JSON
         //// web repository     => type = WEB
-        public AzurLaneRepositoryBASE _alRepository = new AzurLaneRepositoryWEB();
+        public AzurLaneRepositoryBASE _alRepository = new AzurLaneRepositoryBASE();
 
         //ship lists
         public List<Ship> Ships { get; set; }

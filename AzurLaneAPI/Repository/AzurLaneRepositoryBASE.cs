@@ -6,18 +6,77 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
+using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace AzurLaneAPI.Repository
 {
-    public abstract class AzurLaneRepositoryBASE
+    public class AzurLaneRepositoryBASE
     {
-        protected List<Ship> _fullListShips;
-        protected List<Ship> _filterList;
-        protected List<Ship> _filterListByStat;
+        private List<Ship> _fullListShips;
+        private List<Ship> _filterList;
+        private List<Ship> _filterListByStat;
+        
+        public async Task<List<Ship>> GetShips()
+        {
+            if (_fullListShips != null)
+                return _fullListShips;
+            string endpoint = "https://raw.githubusercontent.com/AzurAPI/azurapi-js-setup/master/ships.json";
 
-        public abstract Task<List<Ship>> GetShips();
+            using (HttpClient client = new HttpClient())
+            {
+                try
+                {
+                    var response = await client.GetAsync(endpoint);
+
+                    if (!response.IsSuccessStatusCode)
+                        throw new HttpRequestException(response.ReasonPhrase);
+
+                    string json = await response.Content.ReadAsStringAsync();
+
+                    JToken jObj = JsonConvert.DeserializeObject<JToken>(json);
+                    _fullListShips = new List<Ship>();
+                    foreach (JToken data in jObj)
+                    {
+                        Ship ship = data.ToObject<Ship>();
+                        ship.Name = (string)data.SelectToken("names.en");
+                        ship.Stars = (string)data.SelectToken("stars.stars");
+                        ship.ConstructionTime = (string)data.SelectToken("construction.constructionTime");
+                        for (int i = 0; i < ship.Skills.Length; i++)
+                        {
+                            ship.Skills[i].Name = (string)data.SelectToken($"skills[{i}].names.en");
+                        }
+                        _fullListShips.Add(ship);
+                    }
+                    _fullListShips = _fullListShips.OrderBy(x => x.Id).ToList();
+
+                    if (File.Exists(@"D:\AzurLaneAPIList.json"))
+                    {
+                        json = File.ReadAllText(@"D:\AzurLaneAPIList.json");
+                        if (!json.Equals(""))
+                        {
+                            List<MyShip> ships = JsonConvert.DeserializeObject<List<MyShip>>(json);
+
+                            foreach(Ship ship in _fullListShips)
+                            {
+                                foreach(MyShip myShip in ships)
+                                {
+                                    if (ship.Id == myShip.Id)
+                                        ++ship.Count;
+                                }
+                            }
+                        }
+                    }
+                    _filterList = _fullListShips;
+                    return _fullListShips;
+                }
+                catch (Exception)
+                {
+                    return null;
+                }
+            }
+        }
 
         public List<Ship> GetCommonShips()
         {

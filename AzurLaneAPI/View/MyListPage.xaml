@@ -23,7 +23,6 @@
             <RowDefinition Height="1*"/>
             <RowDefinition Height="8*"/>
         </Grid.RowDefinitions>
-        <Button Content="REFRESH" Command="{Binding RefreshCommand}" HorizontalAlignment="Center" Click="Button_Click"/>
         <ListBox x:Name="myList" Grid.Row="2" Background="Transparent" ItemsSource="{Binding ShipDataLists}" SelectedItem="{Binding SelectedShip}" ScrollViewer.HorizontalScrollBarVisibility="Disabled" Panel.ZIndex="1" 
                  VirtualizingPanel.IsVirtualizing="True"
                  VirtualizingPanel.IsContainerVirtualizable="True"

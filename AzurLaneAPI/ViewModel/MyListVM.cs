@@ -18,7 +18,7 @@ namespace AzurLaneAPI.ViewModel
     class MyListVM : ObservableObject
     {
         public MainViewModel MainVM { get; set; }
-        public AzurLaneRepositoryBASE _alRepository = new AzurLaneRepositoryWEB();
+        public AzurLaneRepositoryBASE _alRepository = new AzurLaneRepositoryBASE();
 
 
 
@@ -26,11 +26,16 @@ namespace AzurLaneAPI.ViewModel
 
         public ObservableCollection<ShipDataList> ShipDataLists { get; set; } = new ObservableCollection<ShipDataList>();
 
-        public Ship _selectedShip;
-        public Ship SelectedShip
+        public ShipDataList _selectedShip;
+        public ShipDataList SelectedShip
         {
             get { return _selectedShip; }
-            set { _selectedShip = value; }
+            set 
+            { 
+                _selectedShip = value;
+                if (value.Ship != null && value.MyShip != null)
+                    MainVM.DetailMyListSwitch();
+            }
         }
 
         public MyListVM()
@@ -52,16 +57,17 @@ namespace AzurLaneAPI.ViewModel
             WriteJson();
         }
 
-        public RelayCommand RefreshCommand
+        public RelayCommand ToDetailCommand
         {
             get
             {
-                return new RelayCommand(Refresh);
+                return new RelayCommand(ToDetail);
             }
         }
-        private void Refresh()
+
+        private void ToDetail()
         {
-            RaisePropertyChanged("ShipList");
+            MainVM.DetailMyListSwitch();
         }
 
         private void WriteJson()

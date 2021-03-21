@@ -30,6 +30,8 @@ namespace AzurLaneAPI.Model
         public bool Retrofit { get; set; }
         public string RetrofitId { get; set; }
         public string RetrofitHullType { get; set; }
+
+        public uint Count { get; set; } = 0;
     }
 
     public class Basestats

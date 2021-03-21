@@ -17,6 +17,7 @@ namespace AzurLaneAPI.ViewModel
         public OverViewPage MainPage { get; set; } = new OverViewPage();
         public DetailPage AzurPage { get; set; } = new DetailPage();
         public MyListPage ListPage { get; set; } = new MyListPage();
+        public DetailPageMyShip AzurListPage { get; set; } = new DetailPageMyShip();
         public Page CurrentPage { get; set; }
 
         public MainViewModel()
@@ -24,6 +25,7 @@ namespace AzurLaneAPI.ViewModel
             (MainPage.DataContext as OverViewVM).SetMainVM(this);
             (AzurPage.DataContext as DetailVMShip).MainVM = this;
             (ListPage.DataContext as MyListVM).MainVM = this;
+            (AzurListPage.DataContext as MyShipDetailVM).MainVM = this;
             CurrentPage = MainPage;
         }
 
@@ -49,6 +51,26 @@ namespace AzurLaneAPI.ViewModel
                 CurrentPage = MainPage;
                 (MainPage.DataContext as OverViewVM).SelectedShip = null;
                 (MainPage.DataContext as OverViewVM).RaisePropertyChanged("SelectedShip");
+                RaisePropertyChanged("CurrentPage");
+            }
+        }
+
+        public void DetailMyListSwitch()
+        {
+            if (CurrentPage is MyListPage)
+            {
+                ShipDataList ship = (ListPage.DataContext as MyListVM).SelectedShip;
+                List<ShipDataList> ships = (ListPage.DataContext as MyListVM).ShipDataLists.ToList();
+                if (ship.MyShip == null)
+                    return;
+                (AzurListPage.DataContext as MyShipDetailVM).CurrentShip = ship;
+                (AzurListPage.DataContext as MyShipDetailVM).Ships = ships;
+                CurrentPage = AzurListPage;
+                RaisePropertyChanged("CurrentPage");
+            }
+            else
+            {
+                CurrentPage = ListPage;
                 RaisePropertyChanged("CurrentPage");
             }
         }

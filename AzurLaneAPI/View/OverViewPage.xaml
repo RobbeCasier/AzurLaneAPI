@@ -264,6 +264,7 @@
                                         </Button.Background>
                                     </Button>
                                 </Viewbox>
+                                <TextBlock Grid.Column="2" Text="{Binding Count}" FontSize="30" Foreground="DarkGray" VerticalAlignment="Center" HorizontalAlignment="Center"/>
                             </Grid>
                         </Grid>
                     </Grid>

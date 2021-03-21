@@ -86,11 +86,10 @@
     <Compile Include="Model\MyShip.cs" />
     <Compile Include="Model\Ship.cs" />
     <Compile Include="Repository\AzurLaneRepositoryBASE.cs" />
-    <Compile Include="Repository\AzurLaneRepositoryJSON.cs" />
-    <Compile Include="Repository\AzurLaneRepositoryWEB.cs" />
     <Compile Include="ViewModel\DetailVMShip.cs" />
     <Compile Include="ViewModel\MainViewModel.cs" />
     <Compile Include="ViewModel\MyListVM.cs" />
+    <Compile Include="ViewModel\MyShipDetailVM.cs" />
     <Compile Include="ViewModel\OverViewVM.cs" />
     <Compile Include="View\Converters\FactionToImageConverter.cs" />
     <Compile Include="View\Converters\HullTypeToImageConverter.cs" />
@@ -99,6 +98,9 @@
     <Compile Include="View\Converters\RarityToFrameConverter.cs" />
     <Compile Include="View\Converters\RetrofitHullToVisibilityConverter.cs" />
     <Compile Include="View\Converters\SubmarineStatToVisibilityConverter.cs" />
+    <Compile Include="View\DetailPageMyShip.xaml.cs">
+      <DependentUpon>DetailPageMyShip.xaml</DependentUpon>
+    </Compile>
     <Compile Include="View\DetailPageShip.xaml.cs">
       <DependentUpon>DetailPageShip.xaml</DependentUpon>
     </Compile>
@@ -120,6 +122,10 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Page Include="View\DetailPageMyShip.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="View\DetailPageShip.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
