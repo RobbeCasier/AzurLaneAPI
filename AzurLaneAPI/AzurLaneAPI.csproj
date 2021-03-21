@@ -83,6 +83,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Model\MyShip.cs" />
     <Compile Include="Model\Ship.cs" />
     <Compile Include="Repository\AzurLaneRepositoryBASE.cs" />
     <Compile Include="Repository\AzurLaneRepositoryJSON.cs" />
@@ -101,8 +102,8 @@
     <Compile Include="View\DetailPageShip.xaml.cs">
       <DependentUpon>DetailPageShip.xaml</DependentUpon>
     </Compile>
-    <Compile Include="View\MyListOverviewPage.xaml.cs">
-      <DependentUpon>MyListOverviewPage.xaml</DependentUpon>
+    <Compile Include="View\MyListPage.xaml.cs">
+      <DependentUpon>MyListPage.xaml</DependentUpon>
     </Compile>
     <Compile Include="View\OverViewPage.xaml.cs">
       <DependentUpon>OverViewPage.xaml</DependentUpon>
@@ -123,7 +124,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="View\MyListOverviewPage.xaml">
+    <Page Include="View\MyListPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -156,6 +157,7 @@
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
     <EmbeddedResource Include="Resources\Data\AzurLaneShips.json" />
+    <EmbeddedResource Include="Resources\Data\MyList.json" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

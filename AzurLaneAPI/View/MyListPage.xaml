@@ -1,4 +1,4 @@
-﻿<Page x:Class="AzurLaneAPI.View.MyListOverviewPage"
+﻿<Page x:Class="AzurLaneAPI.View.MyListPage"
       xmlns:vm="clr-namespace:AzurLaneAPI.ViewModel"
       xmlns:conv="clr-namespace:AzurLaneAPI.View.Converters"
       xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
@@ -8,7 +8,7 @@
       xmlns:local="clr-namespace:AzurLaneAPI.View"
       mc:Ignorable="d" 
       d:DesignHeight="450" d:DesignWidth="800"
-      Title="MyListOverviewPage">
+      Title="MyListPage">
     <Page.DataContext>
         <vm:MyListVM/>
     </Page.DataContext>
@@ -21,10 +21,10 @@
         </Grid.Resources>
         <Grid.RowDefinitions>
             <RowDefinition Height="1*"/>
-            <RowDefinition Height="1*"/>
             <RowDefinition Height="8*"/>
         </Grid.RowDefinitions>
-        <ListBox Grid.Row="2" Background="Transparent" ItemsSource="{Binding MyList}" ScrollViewer.HorizontalScrollBarVisibility="Disabled" Panel.ZIndex="1" 
+        <Button Content="REFRESH" Command="{Binding RefreshCommand}" HorizontalAlignment="Center" Click="Button_Click"/>
+        <ListBox x:Name="myList" Grid.Row="2" Background="Transparent" ItemsSource="{Binding ShipDataLists}" SelectedItem="{Binding SelectedShip}" ScrollViewer.HorizontalScrollBarVisibility="Disabled" Panel.ZIndex="1" 
                  VirtualizingPanel.IsVirtualizing="True"
                  VirtualizingPanel.IsContainerVirtualizable="True"
                  VirtualizingPanel.VirtualizationMode="Recycling"
@@ -38,12 +38,12 @@
             <ListBox.ItemTemplate>
                 <DataTemplate>
                     <Grid>
-                        <Image Source="{Binding Rarity, Converter={StaticResource RarityToBackground}}" HorizontalAlignment="Left" VerticalAlignment="Top"/>
+                        <Image Source="{Binding Ship.Rarity, Converter={StaticResource RarityToBackground}}" HorizontalAlignment="Left" VerticalAlignment="Top"/>
                         <!--placeholder-->
                         <TextBlock Grid.Row="2" Foreground="White" Text="LOADING..." HorizontalAlignment="Center" VerticalAlignment="Center"/>
                         <!---->
-                        <Image Source="{Binding Thumbnail, FallbackValue={StaticResource DefaultThumbnail}, IsAsync=True}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                        <Image Grid.ColumnSpan="3" Source="{Binding Rarity, Converter={StaticResource RarityToFrame}}" HorizontalAlignment="Left" VerticalAlignment="Top"/>
+                        <Image Source="{Binding Ship.Thumbnail, FallbackValue={StaticResource DefaultThumbnail}, IsAsync=True}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        <Image Grid.ColumnSpan="3" Source="{Binding Ship.Rarity, Converter={StaticResource RarityToFrame}}" HorizontalAlignment="Left" VerticalAlignment="Top"/>
                         <Grid>
                             <Grid.RowDefinitions>
                                 <RowDefinition Height="2*"/>
@@ -61,14 +61,14 @@
                                     <ColumnDefinition Width="2*"/>
                                     <ColumnDefinition Width="0.4*"/>
                                 </Grid.ColumnDefinitions>
-                                <Image Grid.Column="1" Source="{Binding HullType, Converter={StaticResource HullToImage}}"/>
+                                <Image Grid.Column="1" Source="{Binding Ship.HullType, Converter={StaticResource HullToImage}}"/>
                                 <Viewbox Grid.Column="3" Stretch="Uniform" StretchDirection="DownOnly">
-                                    <TextBlock Text="{Binding Id}" FontSize="18" Foreground="WhiteSmoke" VerticalAlignment="center" HorizontalAlignment="Right"/>
+                                    <TextBlock Text="{Binding MyShip.Lv, StringFormat='Lv.{0}'}" FontSize="18" Foreground="WhiteSmoke" VerticalAlignment="center" HorizontalAlignment="Right"/>
                                 </Viewbox>
                             </Grid>
                             <DataGridCell Grid.Row="3" Grid.Column="1" Background="Black" Opacity="0.50"/>
                             <Viewbox Grid.Row="3" Grid.Column="1" Stretch="Uniform" StretchDirection="DownOnly">
-                                <TextBlock Text="{Binding Name}" FontSize="18" Foreground="WhiteSmoke" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                <TextBlock Text="{Binding Ship.Name}" FontSize="18" Foreground="WhiteSmoke" HorizontalAlignment="Center" VerticalAlignment="Center"/>
                             </Viewbox>
 
                         </Grid>

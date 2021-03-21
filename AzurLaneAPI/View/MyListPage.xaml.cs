@@ -18,11 +18,16 @@ namespace AzurLaneAPI.View
     /// <summary>
     /// Interaction logic for MyListOverviewPage.xaml
     /// </summary>
-    public partial class MyListOverviewPage : Page
+    public partial class MyListPage : Page
     {
-        public MyListOverviewPage()
+        public MyListPage()
         {
             InitializeComponent();
+        }
+
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+            myList.Items.Refresh();
         }
     }
 }

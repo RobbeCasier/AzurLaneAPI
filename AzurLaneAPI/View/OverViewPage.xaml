@@ -228,6 +228,7 @@
                                 <RowDefinition Height="12.5*"/>
                                 <RowDefinition Height="1*"/>
                             </Grid.RowDefinitions>
+                            <!--HEADER-->
                             <Grid Grid.Row="1">
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="0.4*"/>
@@ -237,15 +238,33 @@
                                     <ColumnDefinition Width="0.4*"/>
                                 </Grid.ColumnDefinitions>
                                 <Image Grid.Column="1" Source="{Binding HullType, Converter={StaticResource HullToImage}}"/>
-                                <Viewbox Grid.Column="3" Stretch="Uniform" StretchDirection="DownOnly">
-                                    <TextBlock Text="{Binding Id}" FontSize="18" Foreground="WhiteSmoke" VerticalAlignment="center" HorizontalAlignment="Right"/>
+                                <Viewbox Grid.Column="3" Stretch="Uniform" StretchDirection="DownOnly" HorizontalAlignment="Right">
+                                    <TextBlock Text="{Binding Id}" FontSize="18" Foreground="WhiteSmoke" VerticalAlignment="center"/>
                                 </Viewbox>
                             </Grid>
-                            <DataGridCell Grid.Row="3" Grid.Column="1" Background="Black" Opacity="0.50"/>
-                            <Viewbox Grid.Row="3" Grid.Column="1" Stretch="Uniform" StretchDirection="DownOnly">
-                                <TextBlock Text="{Binding Name}" FontSize="18" Foreground="WhiteSmoke" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                            
+                            <!--NAME-->
+                            <DataGridCell Grid.Row="3" Background="Black" Opacity="0.50"/>
+                            <Viewbox Grid.Row="3" Stretch="Uniform" StretchDirection="DownOnly">
+                                <TextBlock Text="{Binding Name}" FontSize="18" Foreground="WhiteSmoke"/>
                             </Viewbox>
-
+                            
+                            <Grid Grid.Row="4">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="0.5*"/>
+                                    <ColumnDefinition Width="2*"/>
+                                    <ColumnDefinition Width="8*"/>
+                                    <ColumnDefinition Width="2*"/>
+                                    <ColumnDefinition Width="0.5*"/>
+                                </Grid.ColumnDefinitions>
+                                <Viewbox Grid.Column="3" Stretch="Uniform">
+                                    <Button BorderThickness="0" Command="{Binding RelativeSource={RelativeSource AncestorType={x:Type Page}}, Path=DataContext.AddShipCommand}" CommandParameter="{Binding}">
+                                        <Button.Background>
+                                            <ImageBrush ImageSource="/Resources/UI/btn_add.png"/>
+                                        </Button.Background>
+                                    </Button>
+                                </Viewbox>
+                            </Grid>
                         </Grid>
                     </Grid>
                 </DataTemplate>

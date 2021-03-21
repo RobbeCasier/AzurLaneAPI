@@ -50,6 +50,8 @@ namespace AzurLaneAPI.Repository
                     _fullListShips = _fullListShips.OrderBy(x => x.Id).ToList();
 
                     _filterList = _fullListShips;
+
+                    json = File.ReadAllText(@"D:\AzurLaneAPIList.json");
                     return _fullListShips;
                 }
                 catch (Exception)
@@ -58,6 +60,5 @@ namespace AzurLaneAPI.Repository
                 }
             }
         }
-
     }
 }

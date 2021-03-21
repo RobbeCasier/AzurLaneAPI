@@ -1,4 +1,5 @@
 ﻿using AzurLaneAPI.Model;
+using AzurLaneAPI.Repository;
 using AzurLaneAPI.View;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.CommandWpf;
@@ -15,7 +16,7 @@ namespace AzurLaneAPI.ViewModel
     {
         public OverViewPage MainPage { get; set; } = new OverViewPage();
         public DetailPage AzurPage { get; set; } = new DetailPage();
-        public MyListOverviewPage ListPage { get; set; } = new MyListOverviewPage();
+        public MyListPage ListPage { get; set; } = new MyListPage();
         public Page CurrentPage { get; set; }
 
         public MainViewModel()
@@ -63,6 +64,8 @@ namespace AzurLaneAPI.ViewModel
         public void Home()
         {
             CurrentPage = MainPage;
+            (MainPage.DataContext as OverViewVM).SelectedShip = null;
+            (MainPage.DataContext as OverViewVM).RaisePropertyChanged("SelectedShip");
             RaisePropertyChanged("CurrentPage");
         }
 
@@ -76,7 +79,14 @@ namespace AzurLaneAPI.ViewModel
         public void MyList()
         {
             CurrentPage = ListPage;
+            (ListPage.DataContext as MyListVM).RaisePropertyChanged("Ships");
+            (ListPage.DataContext as MyListVM).RaisePropertyChanged("MyList");
             RaisePropertyChanged("CurrentPage");
+        }
+
+        public void AddShipToList(Ship ship)
+        {
+            (ListPage.DataContext as MyListVM).AddShip(ship);
         }
     }
 }

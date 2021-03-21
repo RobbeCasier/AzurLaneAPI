@@ -20,7 +20,7 @@ namespace AzurLaneAPI.ViewModel
         //// AzurLaneRepository+(type)
         //// local repository   => type = JSON
         //// web repository     => type = WEB
-        private AzurLaneRepositoryBASE _alRepository = new AzurLaneRepositoryWEB();
+        public AzurLaneRepositoryBASE _alRepository = new AzurLaneRepositoryWEB();
 
         //ship lists
         public List<Ship> Ships { get; set; }
@@ -63,6 +63,13 @@ namespace AzurLaneAPI.ViewModel
         //-------------//
         //RELAYCOMMANDS//
         //-------------//
+        public RelayCommand<Ship> AddShipCommand
+        {
+            get
+            {
+                return new RelayCommand<Ship>(MainVM.AddShipToList);
+            }
+        }
         public RelayCommand GetAll
         {
             get
