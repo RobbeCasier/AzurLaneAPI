@@ -7,10 +7,9 @@ My knowledge of this environment is still low, but I hope the end this project w
 ## Description
 Here I will show the current things that can be done.
 - Search through all available ships on the English Server (with exclusion of a few Collabs ships)
+- Add Ships to your list
 
 ## My TODO list
-- Add ships to your list
-- List is local safe file
 - Be able to change lv
 - Be able to change stats
 - Be able to set Marriage (taking stats into account)
