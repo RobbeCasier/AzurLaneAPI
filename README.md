@@ -8,13 +8,10 @@ My knowledge of this environment is still low, but I hope the end this project w
 Here I will show the current things that can be done.
 - Search through all available ships on the English Server (with exclusion of a few Collabs ships)
 - Add Ships to your list
+- Change their data (stats, lv, skins)
 
 ## My TODO list
-- Be able to change lv
-- Be able to change stats
-- Be able to set Marriage (taking stats into account)
-- Be able to set retrofit
-- Be able to set your current owned skins and the current selected one
+- change marriage frame
 - Power calculator
 - Account tab (here you can set your ID and your profile picture to one of your collected ships), will have you collection ratio
 The hardest one:
