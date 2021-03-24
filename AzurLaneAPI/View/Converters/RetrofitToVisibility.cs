@@ -9,25 +9,13 @@ using System.Windows.Data;
 
 namespace AzurLaneAPI.View.Converters
 {
-    class SubmarineStatToVisibilityConverter : IValueConverter
+    class RetrofitToVisibility : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            if (parameter != null)
-            {
-                if (parameter.ToString().Equals("true"))
-                {
-                    if (value.ToString().Equals("Submarine"))
-                        return Visibility.Collapsed;
-                    return Visibility.Visible;
-                }
-            }
-            if (value.ToString().Equals("Submarine"))
-            {
+            if (value != null)
                 return Visibility.Visible;
-            }
             return Visibility.Collapsed;
-
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)

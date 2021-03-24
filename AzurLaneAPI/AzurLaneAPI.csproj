@@ -97,6 +97,7 @@
     <Compile Include="View\Converters\RarityToBackgroundConverter.cs" />
     <Compile Include="View\Converters\RarityToFrameConverter.cs" />
     <Compile Include="View\Converters\RetrofitHullToVisibilityConverter.cs" />
+    <Compile Include="View\Converters\RetrofitToVisibility.cs" />
     <Compile Include="View\Converters\SubmarineStatToVisibilityConverter.cs" />
     <Compile Include="View\DetailPageMyShip.xaml.cs">
       <DependentUpon>DetailPageMyShip.xaml</DependentUpon>

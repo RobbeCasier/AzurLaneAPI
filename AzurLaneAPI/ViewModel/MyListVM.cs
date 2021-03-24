@@ -49,10 +49,18 @@ namespace AzurLaneAPI.ViewModel
             MyShip newShip = new MyShip
             {
                 Id = ship.Id,
+                HullType = ship.HullType,
+                Rarity = ship.Rarity,
                 CurrentStat = ship.Stats.BaseStats
             };
             MyList.Add(newShip);
             ShipDataLists.Add(new ShipDataList { MyShip = newShip, Ship = ship });
+            RaisePropertyChanged("ShipDataLists");
+            WriteJson();
+        }
+
+        public void UpdateList()
+        {
             RaisePropertyChanged("ShipDataLists");
             WriteJson();
         }

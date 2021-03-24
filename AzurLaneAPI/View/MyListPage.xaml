@@ -37,12 +37,12 @@
             <ListBox.ItemTemplate>
                 <DataTemplate>
                     <Grid>
-                        <Image Source="{Binding Ship.Rarity, Converter={StaticResource RarityToBackground}}" HorizontalAlignment="Left" VerticalAlignment="Top"/>
+                        <Image Source="{Binding MyShip.Rarity, Converter={StaticResource RarityToBackground}}" HorizontalAlignment="Left" VerticalAlignment="Top"/>
                         <!--placeholder-->
                         <TextBlock Grid.Row="2" Foreground="White" Text="LOADING..." HorizontalAlignment="Center" VerticalAlignment="Center"/>
                         <!---->
                         <Image Source="{Binding Ship.Thumbnail, FallbackValue={StaticResource DefaultThumbnail}, IsAsync=True}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                        <Image Grid.ColumnSpan="3" Source="{Binding Ship.Rarity, Converter={StaticResource RarityToFrame}}" HorizontalAlignment="Left" VerticalAlignment="Top"/>
+                        <Image Grid.ColumnSpan="3" Source="{Binding MyShip.Rarity, Converter={StaticResource RarityToFrame}}" HorizontalAlignment="Left" VerticalAlignment="Top"/>
                         <Grid>
                             <Grid.RowDefinitions>
                                 <RowDefinition Height="2*"/>
@@ -60,7 +60,7 @@
                                     <ColumnDefinition Width="2*"/>
                                     <ColumnDefinition Width="0.4*"/>
                                 </Grid.ColumnDefinitions>
-                                <Image Grid.Column="1" Source="{Binding Ship.HullType, Converter={StaticResource HullToImage}}"/>
+                                <Image Grid.Column="1" Source="{Binding MyShip.HullType, Converter={StaticResource HullToImage}}"/>
                                 <Viewbox Grid.Column="3" Stretch="Uniform" StretchDirection="DownOnly">
                                     <TextBlock Text="{Binding MyShip.Lv, StringFormat='Lv.{0}'}" FontSize="18" Foreground="WhiteSmoke" VerticalAlignment="center" HorizontalAlignment="Right"/>
                                 </Viewbox>

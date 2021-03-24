@@ -110,5 +110,11 @@ namespace AzurLaneAPI.ViewModel
         {
             (ListPage.DataContext as MyListVM).AddShip(ship);
         }
+
+        public void UpdateMyShipList()
+        {
+            (ListPage.DataContext as MyListVM).RaisePropertyChanged("ShipDataLists");
+            (ListPage.DataContext as MyListVM).UpdateList();
+        }
     }
 }
