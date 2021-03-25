@@ -9,6 +9,7 @@ Here I will show the current things that can be done.
 - Search through all available ships on the English Server (with exclusion of a few Collabs ships)
 - Add Ships to your list
 - Change their data (stats, lv, skins)
+- Change skill lv (you can do the same with all out assaults, but it will take no effect)
 
 ## My TODO list
 - change marriage frame
