@@ -25,6 +25,11 @@ namespace AzurLaneAPI.View
             InitializeComponent();
         }
 
+        public void Refresh()
+        {
+            myList.Items.Refresh();
+        }
+
         private void Button_Click(object sender, RoutedEventArgs e)
         {
             myList.Items.Refresh();

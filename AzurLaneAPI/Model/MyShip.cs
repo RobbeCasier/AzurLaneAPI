@@ -12,6 +12,12 @@ namespace AzurLaneAPI.Model
         public Ship Ship { get; set; }
     }
 
+    struct SkillData
+    {
+        public ushort lv { get; set; }
+        public Skill Skill { get; set; }
+    }
+
     class MyShip
     {
         public string Id { get; set; }
@@ -21,8 +27,9 @@ namespace AzurLaneAPI.Model
         public Basestats CurrentStat { get; set; }
         public bool IsMarried { get; set; } = false;
         public bool IsRetrofitted { get; set; } = false;
-        public ushort[] MySkins { get; set; } = new ushort[]{0};
-        public ushort CurrentSkin { get; set; } = 0;
+        public string[] MySkins { get; set; } = new string[] { "Default" };
+        public string CurrentSkin { get; set; } = "Default";
         public ushort CurrentAffection { get; set; } = 50;
+        public ushort[] SKillLvs { get; set; }
     }
 }

@@ -13,14 +13,16 @@
     <Page.DataContext>
         <vm:MyShipDetailVM/>
     </Page.DataContext>
+    <Page.Resources>
+        <conv:SubmarineStatToVisibilityConverter x:Key="IsSS"/>
+        <conv:RetrofitToVisibility x:Key="hasRetro"/>
+        <conv:SkillDescriptionConverter x:Key="skillCon"/>
+        <BitmapImage x:Key="DefaultBackground" UriSource="../Resources/Offline pictures/MainDayBG.png"/>
+        <BitmapImage x:Key="DefaultImage" UriSource="../Resources/Offline pictures/Universal_Bulin.png"/>
+        <BitmapImage x:Key="DefaultThumbnail" UriSource="../Resources/Offline pictures/Universal_BulinIcon.png"/>
+       
+    </Page.Resources>
     <Grid>
-        <Grid.Resources>
-            <conv:SubmarineStatToVisibilityConverter x:Key="IsSS"/>
-            <conv:RetrofitToVisibility x:Key="hasRetro"/>
-            <BitmapImage x:Key="DefaultBackground" UriSource="../Resources/Offline pictures/MainDayBG.png"/>
-            <BitmapImage x:Key="DefaultImage" UriSource="../Resources/Offline pictures/Universal_Bulin.png"/>
-            <BitmapImage x:Key="DefaultThumbnail" UriSource="../Resources/Offline pictures/Universal_BulinIcon.png"/>
-        </Grid.Resources>
         <Grid.ColumnDefinitions>
             <ColumnDefinition/>
             <ColumnDefinition/>
@@ -36,9 +38,14 @@
                 <RowDefinition Height="2*"/>
             </Grid.RowDefinitions>
             
-            <Image Grid.RowSpan="3" Source="{Binding CurrentSkin.Image, FallbackValue={StaticResource DefaultImage}, IsAsync=true}"/>
 
+            <Viewbox Grid.Row="2" Panel.ZIndex="2" HorizontalAlignment="Left" VerticalAlignment="Bottom" MaxHeight="100" StretchDirection="DownOnly" Stretch="Uniform" >
+                <Button Command="{Binding SwitchBack}" BorderThickness="2" Background="DarkBlue" Opacity="0.5">
+                    <Image Source="/Resources/UI/back_btn.png" Opacity="1"/>
+                </Button>
+            </Viewbox>
             <ComboBox Grid.Row="0" ItemsSource="{Binding Skins}" SelectedItem="{Binding SelectedSkin}" SelectedIndex="0" VerticalContentAlignment="Center" HorizontalContentAlignment="Center"/>
+            
             <Viewbox Stretch="Uniform" StretchDirection="DownOnly" Grid.Row="1" Panel.ZIndex="3" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,0,5,0">
                 <StackPanel Background="Gray">
                     <Viewbox Stretch="Uniform" StretchDirection="DownOnly">
@@ -54,333 +61,399 @@
                     <Button Content="SET ACTIVE" Visibility="{Binding IsUnlocked}" Command="{Binding ActivateCommand}"/>
                 </StackPanel>
             </Viewbox>
-            
-            <Viewbox Grid.Row="2" Panel.ZIndex="2" HorizontalAlignment="Left" VerticalAlignment="Bottom" MaxHeight="100" StretchDirection="DownOnly" Stretch="Uniform" >
-                <Button Command="{Binding SwitchBack}" BorderThickness="2" Background="DarkBlue" Opacity="0.5">
-                    <Image Source="/Resources/UI/back_btn.png" Opacity="1"/>
+            <Grid Grid.Row="1">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="1*"/>
+                    <ColumnDefinition Width="8*"/>
+                    <ColumnDefinition Width="1*"/>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition/>
+                    <RowDefinition Height="auto"/>
+                    <RowDefinition/>
+                </Grid.RowDefinitions>
+                <Image Grid.RowSpan="3" Grid.ColumnSpan="3" Source="{Binding CurrentSkin.Image, FallbackValue={StaticResource DefaultImage}, IsAsync=true}"/>
+                <Button Grid.Row="1" Command="{Binding PreviousCommand}" Panel.ZIndex="2">
+                    <Image Source="/Resources/UI/back_btn.png"/>
                 </Button>
-            </Viewbox>
+                <Button Grid.Row="1" Grid.Column="2" Command="{Binding NextCommand}" Panel.ZIndex="2">
+                    <Image Source="/Resources/UI/back_btn.png" RenderTransformOrigin="0.5, 0.5">
+                        <Image.RenderTransform>
+                            <ScaleTransform ScaleX="-1"/>
+                        </Image.RenderTransform>
+                    </Image>
+                </Button>
+            </Grid>
         </Grid>
 
         <Grid Grid.Column="1">
             <Grid.RowDefinitions>
-                <RowDefinition Height="9*"/>
                 <RowDefinition Height="1*"/>
+                <RowDefinition Height="18*"/>
             </Grid.RowDefinitions>
-            <ScrollViewer VerticalScrollBarVisibility="Auto">
-                <Grid>
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="auto"/>
-                        <RowDefinition Height="auto"/>
-                        <RowDefinition Height="auto"/>
-                    </Grid.RowDefinitions>
-                    <Grid Grid.Row="1">
-                        <Grid.Background>
-                            <SolidColorBrush Color="Gray" Opacity="0.6"/>
-                        </Grid.Background>
+            <Viewbox>
+                <TextBlock Text="{Binding CurrentShip.Ship.Name}" Foreground="White"/>
+            </Viewbox>
+            <ScrollViewer VerticalScrollBarVisibility="Auto" Grid.Row="1">
+                <StackPanel>
+                    <Grid>
                         <Grid.RowDefinitions>
-                            <RowDefinition/>
-                            <RowDefinition/>
-                            <RowDefinition/>
+                            <RowDefinition Height="auto"/>
+                            <RowDefinition Height="auto"/>
+                            <RowDefinition Height="auto"/>
                         </Grid.RowDefinitions>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition/>
-                            <ColumnDefinition/>
-                            <ColumnDefinition/>
-                        </Grid.ColumnDefinitions>
+                        <Grid Grid.Row="1">
+                            <Grid.Background>
+                                <SolidColorBrush Color="Gray" Opacity="0.6"/>
+                            </Grid.Background>
+                            <Grid.RowDefinitions>
+                                <RowDefinition/>
+                                <RowDefinition/>
+                                <RowDefinition/>
+                            </Grid.RowDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition/>
+                                <ColumnDefinition/>
+                                <ColumnDefinition/>
+                            </Grid.ColumnDefinitions>
 
-                        <!--Power-->
-                        <Viewbox Stretch="Uniform" StretchDirection="DownOnly" HorizontalAlignment="Left">
-                            <TextBlock Text="Stats" FontSize="24" Foreground="White" VerticalAlignment="Bottom"/>
-                        </Viewbox>
-                        <!--<Viewbox Grid.Column="2" Stretch="Uniform" StretchDirection="DownOnly" HorizontalAlignment="Left">
+                            <!--Power-->
+                            <Viewbox Stretch="Uniform" StretchDirection="DownOnly" HorizontalAlignment="Left">
+                                <TextBlock Text="Stats" FontSize="24" Foreground="White" VerticalAlignment="Bottom"/>
+                            </Viewbox>
+                            <!--<Viewbox Grid.Column="2" Stretch="Uniform" StretchDirection="DownOnly" HorizontalAlignment="Left">
                             <TextBlock Grid.Column="3" Text="Power" FontSize="18" Foreground="White" VerticalAlignment="Bottom"/>
                         </Viewbox>
                         <Viewbox Grid.Column="2" Stretch="Uniform" StretchDirection="DownOnly" HorizontalAlignment="Right">
                             <TextBlock Grid.Column="3" Text="5200" FontSize="24" HorizontalAlignment="Right" Foreground="White" VerticalAlignment="Bottom"/>
                         </Viewbox>-->
 
-                        <!--Level-->
-                        <Viewbox Grid.Row="1" Stretch="Uniform" StretchDirection="DownOnly" HorizontalAlignment="Left">
-                            <TextBlock FontSize="24" Foreground="White" Text="{Binding LVProgress, StringFormat='Level:{0}'}"/>
-                        </Viewbox>
-                        <Slider Grid.Row="1" Grid.Column="1" Minimum="1" Maximum="120" Value="{Binding LVProgress}" VerticalAlignment="Center"/>
-
-                        <!--Stats left-->
-                        <Grid Grid.Row="3">
-                            <Grid.RowDefinitions>
-                                <RowDefinition/>
-                                <RowDefinition/>
-                                <RowDefinition/>
-                                <RowDefinition/>
-                                <RowDefinition/>
-                            </Grid.RowDefinitions>
-                            <Grid Margin="2">
-                                <Grid.Background>
-                                    <SolidColorBrush Color="DarkGray" Opacity="0.8"/>
-                                </Grid.Background>
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="1*"/>
-                                    <ColumnDefinition Width="1*"/>
-                                    <ColumnDefinition Width="8*"/>
-                                </Grid.ColumnDefinitions>
-                                <Viewbox Stretch="Uniform" StretchDirection="DownOnly" HorizontalAlignment="Left" Margin="2">
-                                    <Image Source="/Resources/Icons/25px-Duration.png"/>
-                                </Viewbox>
-                                <Viewbox Grid.Column="1" Stretch="Uniform" StretchDirection="DownOnly" HorizontalAlignment="Left" Margin="2">
-                                    <TextBlock Grid.Column="1" Foreground="White" Text="HP" FontSize="18" FontWeight="Bold" VerticalAlignment="Center"/>
-                                </Viewbox>
-                                <DockPanel Grid.Column="2">
-                                    <TextBlock DockPanel.Dock="Right" Foreground="White" FontSize="18" Text="{Binding HPProgress}" VerticalAlignment="Center"/>
-                                    <Slider VerticalAlignment="Center" Value="{Binding HPProgress}" TickFrequency="1" Minimum="{Binding CurrentShip.Ship.Stats.BaseStats.Health}" Maximum="{Binding CurrentMaxStat.Health}"/>
-                                </DockPanel>
-                            </Grid>
-                            <Grid Grid.Row="1" Margin="2">
-                                <Grid.Background>
-                                    <SolidColorBrush Color="DarkGray" Opacity="0.8"/>
-                                </Grid.Background>
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="1*"/>
-                                    <ColumnDefinition Width="1*"/>
-                                    <ColumnDefinition Width="8*"/>
-                                </Grid.ColumnDefinitions>
-                                <Viewbox Stretch="Uniform" StretchDirection="DownOnly" HorizontalAlignment="Left" Margin="2">
-                                    <Image Source="/Resources/Icons/25px-Firepower.png"/>
-                                </Viewbox>
-                                <Viewbox Grid.Column="1" Stretch="Uniform" StretchDirection="DownOnly" HorizontalAlignment="Left" Margin="2">
-                                    <TextBlock Grid.Column="1" Foreground="White" Text="FP" FontSize="18" FontWeight="Bold" VerticalAlignment="Center"/>
-                                </Viewbox>
-                                <DockPanel Grid.Column="2">
-                                    <TextBlock DockPanel.Dock="Right" Foreground="White" FontSize="18" Text="{Binding FPProgress}" VerticalAlignment="Center"/>
-                                    <Slider VerticalAlignment="Center" Value="{Binding FPProgress}" TickFrequency="1" Minimum="{Binding CurrentShip.Ship.Stats.BaseStats.Firepower}" Maximum="{Binding CurrentMaxStat.Firepower}"/>
-                                </DockPanel>
-                            </Grid>
-                            <Grid Grid.Row="2" Margin="2">
-                                <Grid.Background>
-                                    <SolidColorBrush Color="DarkGray" Opacity="0.8"/>
-                                </Grid.Background>
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="1*"/>
-                                    <ColumnDefinition Width="1*"/>
-                                    <ColumnDefinition Width="8*"/>
-                                </Grid.ColumnDefinitions>
-                                <Viewbox Stretch="Uniform" StretchDirection="DownOnly" HorizontalAlignment="Left" Margin="2">
-                                    <Image Source="/Resources/Icons/25px-AntiAir.png"/>
-                                </Viewbox>
-                                <Viewbox Grid.Column="1" Stretch="Uniform" StretchDirection="DownOnly" HorizontalAlignment="Left" Margin="2">
-                                    <TextBlock Grid.Column="1" Foreground="White" Text="AA" FontSize="18" FontWeight="Bold" VerticalAlignment="Center"/>
-                                </Viewbox>
-                                <DockPanel Grid.Column="2">
-                                    <TextBlock DockPanel.Dock="Right" Foreground="White" FontSize="18" Text="{Binding AAProgress}" VerticalAlignment="Center"/>
-                                    <Slider VerticalAlignment="Center" Value="{Binding AAProgress}" TickFrequency="1" Minimum="{Binding CurrentShip.Ship.Stats.BaseStats.Antiair}" Maximum="{Binding CurrentMaxStat.Antiair}"/>
-                                </DockPanel>
-                            </Grid>
-                            <Grid Grid.Row="3" Margin="2" Visibility="{Binding CurrentShip.Ship.HullType, Converter={StaticResource IsSS}, ConverterParameter=true}">
-                                <Grid.Background>
-                                    <SolidColorBrush Color="DarkGray" Opacity="0.8"/>
-                                </Grid.Background>
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="*"/>
-                                    <ColumnDefinition Width="1*"/>
-                                    <ColumnDefinition Width="8*"/>
-                                </Grid.ColumnDefinitions>
-                                <Viewbox Stretch="Uniform" StretchDirection="DownOnly" HorizontalAlignment="Left" Margin="2">
-                                    <Image Source="/Resources/Icons/25px-ASW.png"/>
-                                </Viewbox>
-                                <Viewbox Grid.Column="1" Stretch="Uniform" StretchDirection="DownOnly" HorizontalAlignment="Left" Margin="2">
-                                    <TextBlock Grid.Column="1" Foreground="White" Text="ASW" FontSize="18" FontWeight="Bold" VerticalAlignment="Center"/>
-                                </Viewbox>
-                                <DockPanel Grid.Column="2">
-                                    <TextBlock DockPanel.Dock="Right" Foreground="White" FontSize="18" Text="{Binding ASWProgress}" VerticalAlignment="Center"/>
-                                    <Slider VerticalAlignment="Center" Value="{Binding ASWProgress}" TickFrequency="1" Minimum="{Binding CurrentShip.Ship.Stats.BaseStats.AntisubmarineWarfare}" Maximum="{Binding CurrentMaxStat.AntisubmarineWarfare}"/>
-                                </DockPanel>
-                            </Grid>
-                            <Grid Grid.Row="3" Margin="2" Visibility="{Binding CurrentShip.Ship.HullType, Converter={StaticResource IsSS}}">
-                                <Grid.Background>
-                                    <SolidColorBrush Color="DarkGray" Opacity="0.8"/>
-                                </Grid.Background>
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="*"/>
-                                    <ColumnDefinition Width="1*"/>
-                                    <ColumnDefinition Width="8*"/>
-                                </Grid.ColumnDefinitions>
-                                <Viewbox Stretch="Uniform" StretchDirection="DownOnly" HorizontalAlignment="Left" Margin="2">
-                                    <Image Source="/Resources/Icons/25px-Oxygen.png"/>
-                                </Viewbox>
-                                <Viewbox Grid.Column="1" Stretch="Uniform" StretchDirection="DownOnly" HorizontalAlignment="Left" Margin="2">
-                                    <TextBlock Grid.Column="1" Foreground="White" Text="OXY" FontSize="18" FontWeight="Bold" VerticalAlignment="Center"/>
-                                </Viewbox>
-                                <DockPanel Grid.Column="2">
-                                    <TextBlock DockPanel.Dock="Right" Foreground="White" FontSize="18" Text="{Binding OXYProgress}" VerticalAlignment="Center"/>
-                                    <Slider VerticalAlignment="Center" Value="{Binding OXYProgress}" TickFrequency="1" Minimum="{Binding CurrentShip.Ship.Stats.BaseStats.Oxygen}" Maximum="{Binding CurrentMaxStat.Oxygen}"/>
-                                </DockPanel>
-                            </Grid>
-                        </Grid>
-
-                        <!--center-->
-                        <Grid Grid.Row="3" Grid.Column="1">
-                            <Grid.RowDefinitions>
-                                <RowDefinition/>
-                                <RowDefinition/>
-                                <RowDefinition/>
-                                <RowDefinition/>
-                                <RowDefinition/>
-                            </Grid.RowDefinitions>
-                            <Grid Margin="2">
-                                <Grid.Background>
-                                    <SolidColorBrush Color="DarkGray" Opacity="0.8"/>
-                                </Grid.Background>
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="1*"/>
-                                    <ColumnDefinition Width="1*"/>
-                                    <ColumnDefinition Width="8*"/>
-                                </Grid.ColumnDefinitions>
-                                <Viewbox Stretch="Uniform" StretchDirection="DownOnly" HorizontalAlignment="Left" Margin="2">
-                                    <Image Source="/Resources/Icons/25px-Armor.png"/>
-                                </Viewbox>
-                                <Viewbox Grid.Column="1" Stretch="Uniform" StretchDirection="DownOnly" HorizontalAlignment="Left" Margin="2">
-                                    <TextBlock Grid.Column="1" Foreground="White" Text="{Binding CurrentStat.Armor}" FontSize="18" FontWeight="Bold" VerticalAlignment="Center"/>
-                                </Viewbox>
-                            </Grid>
-                            <Grid Grid.Row="1" Margin="2">
-                                <Grid.Background>
-                                    <SolidColorBrush Color="DarkGray" Opacity="0.8"/>
-                                </Grid.Background>
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="1*"/>
-                                    <ColumnDefinition Width="1*"/>
-                                    <ColumnDefinition Width="8*"/>
-                                </Grid.ColumnDefinitions>
-                                <Viewbox Stretch="Uniform" StretchDirection="DownOnly" HorizontalAlignment="Left" Margin="2">
-                                    <Image Source="/Resources/Icons/25px-Torpedo.png"/>
-                                </Viewbox>
-                                <Viewbox Grid.Column="1" Stretch="Uniform" StretchDirection="DownOnly" HorizontalAlignment="Left" Margin="2">
-                                    <TextBlock Grid.Column="1" Foreground="White" Text="TRP" FontSize="18" FontWeight="Bold" VerticalAlignment="Center"/>
-                                </Viewbox>
-                                <DockPanel Grid.Column="2">
-                                    <TextBlock DockPanel.Dock="Right" Foreground="White" FontSize="18" Text="{Binding TRPProgress}" VerticalAlignment="Center"/>
-                                    <Slider VerticalAlignment="Center" Value="{Binding TRPProgress}" TickFrequency="1" Minimum="{Binding CurrentShip.Ship.Stats.BaseStats.Torpedo}" Maximum="{Binding CurrentMaxStat.Torpedo}"/>
-                                </DockPanel>
-                            </Grid>
-                            <Grid Grid.Row="2" Margin="2">
-                                <Grid.Background>
-                                    <SolidColorBrush Color="DarkGray" Opacity="0.8"/>
-                                </Grid.Background>
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="1*"/>
-                                    <ColumnDefinition Width="1*"/>
-                                    <ColumnDefinition Width="8*"/>
-                                </Grid.ColumnDefinitions>
-                                <Viewbox Stretch="Uniform" StretchDirection="DownOnly" HorizontalAlignment="Left" Margin="2">
-                                    <Image Source="/Resources/Icons/25px-Aviation.png"/>
-                                </Viewbox>
-                                <Viewbox Grid.Column="1" Stretch="Uniform" StretchDirection="DownOnly" HorizontalAlignment="Left" Margin="2">
-                                    <TextBlock Grid.Column="1" Foreground="White" Text="AVI" FontSize="18" FontWeight="Bold" VerticalAlignment="Center"/>
-                                </Viewbox>
-                                <DockPanel Grid.Column="2">
-                                    <TextBlock DockPanel.Dock="Right" Foreground="White" FontSize="18" Text="{Binding AVIProgress}" VerticalAlignment="Center"/>
-                                    <Slider VerticalAlignment="Center" Value="{Binding AVIProgress}" TickFrequency="1" Minimum="{Binding CurrentShip.Ship.Stats.BaseStats.Aviation}" Maximum="{Binding CurrentMaxStat.Aviation}"/>
-                                </DockPanel>
-                            </Grid>
-                            <Grid Grid.Row="3" Margin="2"  Visibility="{Binding CurrentShip.Ship.HullType, Converter={StaticResource IsSS}}">
-                                <Grid.Background>
-                                    <SolidColorBrush Color="DarkGray" Opacity="0.8"/>
-                                </Grid.Background>
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="1*"/>
-                                    <ColumnDefinition Width="1*"/>
-                                    <ColumnDefinition Width="8*"/>
-                                </Grid.ColumnDefinitions>
-                                <Viewbox Stretch="Uniform" StretchDirection="DownOnly" HorizontalAlignment="Left" Margin="2">
-                                    <Image Source="/Resources/Icons/24px-Ammunition.png"/>
-                                </Viewbox>
-                                <Viewbox Grid.Column="1" Stretch="Uniform" StretchDirection="DownOnly" HorizontalAlignment="Left" Margin="2">
-                                    <TextBlock Grid.Column="1" Foreground="White" Text="AMO" FontSize="18" FontWeight="Bold" VerticalAlignment="Center"/>
-                                </Viewbox>
-                                <DockPanel Grid.Column="2">
-                                    <TextBlock DockPanel.Dock="Right" Foreground="White" FontSize="18" Text="{Binding AMOProgress}" VerticalAlignment="Center"/>
-                                    <Slider VerticalAlignment="Center" Value="{Binding AMOProgress}" TickFrequency="1" Minimum="{Binding CurrentShip.Ship.Stats.BaseStats.Ammunition}" Maximum="{Binding CurrentMaxStat.Ammunition}"/>
-                                </DockPanel>
-                            </Grid>
-                        </Grid>
-
-                        <!--right-->
-                        <Grid Grid.Row="3" Grid.Column="2">
-                            <Grid.RowDefinitions>
-                                <RowDefinition/>
-                                <RowDefinition/>
-                                <RowDefinition/>
-                                <RowDefinition/>
-                                <RowDefinition/>
-                            </Grid.RowDefinitions>
-                            <Grid Margin="2">
-                                <Grid.Background>
-                                    <SolidColorBrush Color="DarkGray" Opacity="0.8"/>
-                                </Grid.Background>
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="1*"/>
-                                    <ColumnDefinition Width="1*"/>
-                                    <ColumnDefinition Width="8*"/>
-                                </Grid.ColumnDefinitions>
-                                <Viewbox Stretch="Uniform" StretchDirection="DownOnly" HorizontalAlignment="Left" Margin="2">
-                                    <Image Source="/Resources/Icons/25px-Refill.png"/>
-                                </Viewbox>
-                                <Viewbox Grid.Column="1" Stretch="Uniform" StretchDirection="DownOnly" HorizontalAlignment="Left" Margin="2">
-                                    <TextBlock Grid.Column="1" Foreground="White" Text="RLD" FontSize="18" FontWeight="Bold" VerticalAlignment="Center"/>
-                                </Viewbox>
-                                <DockPanel Grid.Column="2">
-                                    <TextBlock DockPanel.Dock="Right" Foreground="White" FontSize="18" Text="{Binding RLDProgress}" VerticalAlignment="Center"/>
-                                    <Slider VerticalAlignment="Center" Value="{Binding RLDProgress}" TickFrequency="1" Minimum="{Binding CurrentShip.Ship.Stats.BaseStats.Reload}" Maximum="{Binding CurrentMaxStat.Reload}"/>
-                                </DockPanel>
-                            </Grid>
-                            <Grid Grid.Row="1" Margin="2">
-                                <Grid.Background>
-                                    <SolidColorBrush Color="DarkGray" Opacity="0.8"/>
-                                </Grid.Background>
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="1*"/>
-                                    <ColumnDefinition Width="1*"/>
-                                    <ColumnDefinition Width="8*"/>
-                                </Grid.ColumnDefinitions>
-                                <Viewbox Stretch="Uniform" StretchDirection="DownOnly" HorizontalAlignment="Left" Margin="2">
-                                    <Image Source="/Resources/Icons/25px-Evasion.png"/>
-                                </Viewbox>
-                                <Viewbox Grid.Column="1" Stretch="Uniform" StretchDirection="DownOnly" HorizontalAlignment="Left" Margin="2">
-                                    <TextBlock Grid.Column="1" Foreground="White" Text="EVA" FontSize="18" FontWeight="Bold" VerticalAlignment="Center"/>
-                                </Viewbox>
-                                <DockPanel Grid.Column="2">
-                                    <TextBlock DockPanel.Dock="Right" Foreground="White" FontSize="18" Text="{Binding EVAProgress}" VerticalAlignment="Center"/>
-                                    <Slider VerticalAlignment="Center" Value="{Binding EVAProgress}" TickFrequency="1" Minimum="{Binding CurrentShip.Ship.Stats.BaseStats.Evasion}" Maximum="{Binding CurrentMaxStat.Evasion}"/>
-                                </DockPanel>
-                            </Grid>
-                            <Grid Grid.Row="2" Margin="2">
-                                <Grid.Background>
-                                    <SolidColorBrush Color="DarkGray" Opacity="0.8"/>
-                                </Grid.Background>
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="1*"/>
-                                    <ColumnDefinition Width="1*"/>
-                                    <ColumnDefinition Width="8*"/>
-                                </Grid.ColumnDefinitions>
-                                <Viewbox Stretch="Uniform" StretchDirection="DownOnly" HorizontalAlignment="Left" Margin="2">
-                                    <Image Source="/Resources/Icons/25px-Consumption.png"/>
-                                </Viewbox>
-                                <Viewbox Grid.Column="1" Stretch="Uniform" StretchDirection="DownOnly" HorizontalAlignment="Left" Margin="2">
-                                    <TextBlock Grid.Column="1" Foreground="White" Text="Cost" FontSize="18" FontWeight="Bold" VerticalAlignment="Center"/>
-                                </Viewbox>
-                                <DockPanel Grid.Column="2">
-                                    <TextBlock DockPanel.Dock="Right" Foreground="White" FontSize="18" Text="{Binding CostProgress}" VerticalAlignment="Center"/>
-                                    <Slider VerticalAlignment="Center" Value="{Binding CostProgress}" TickFrequency="1" Minimum="{Binding CurrentShip.Ship.Stats.BaseStats.OilConsumption}" Maximum="{Binding CurrentMaxStat.OilConsumption}"/>
-                                </DockPanel>
-                            </Grid>
-                            <Viewbox Grid.Row="3" Stretch="Uniform" StretchDirection="DownOnly">
-                                <Button Command="{Binding SaveCommand}">
-                                    <TextBlock FontSize="24" Text="SAVE"/>
-                                </Button>
+                            <!--Level-->
+                            <Viewbox Grid.Row="1" Stretch="Uniform" StretchDirection="DownOnly" HorizontalAlignment="Left">
+                                <TextBlock FontSize="24" Foreground="White" Text="{Binding LVProgress, StringFormat='Level:{0}'}"/>
                             </Viewbox>
+                            <Slider Grid.Row="1" Grid.Column="1" Minimum="1" Maximum="120" Value="{Binding LVProgress}" VerticalAlignment="Center"/>
+
+                            <!--Stats left-->
+                            <Grid Grid.Row="3">
+                                <Grid.RowDefinitions>
+                                    <RowDefinition/>
+                                    <RowDefinition/>
+                                    <RowDefinition/>
+                                    <RowDefinition/>
+                                    <RowDefinition/>
+                                </Grid.RowDefinitions>
+                                <Grid Margin="2">
+                                    <Grid.Background>
+                                        <SolidColorBrush Color="DarkGray" Opacity="0.8"/>
+                                    </Grid.Background>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="1*"/>
+                                        <ColumnDefinition Width="1*"/>
+                                        <ColumnDefinition Width="8*"/>
+                                    </Grid.ColumnDefinitions>
+                                    <Viewbox Stretch="Uniform" StretchDirection="DownOnly" HorizontalAlignment="Left" Margin="2">
+                                        <Image Source="/Resources/Icons/25px-Duration.png"/>
+                                    </Viewbox>
+                                    <Viewbox Grid.Column="1" Stretch="Uniform" StretchDirection="DownOnly" HorizontalAlignment="Left" Margin="2">
+                                        <TextBlock Grid.Column="1" Foreground="White" Text="HP" FontSize="18" FontWeight="Bold" VerticalAlignment="Center"/>
+                                    </Viewbox>
+                                    <DockPanel Grid.Column="2">
+                                        <TextBlock DockPanel.Dock="Right" Foreground="White" FontSize="18" Text="{Binding HPProgress}" VerticalAlignment="Center"/>
+                                        <Slider VerticalAlignment="Center" Value="{Binding HPProgress}" TickFrequency="1" Minimum="{Binding CurrentShip.Ship.Stats.BaseStats.Health}" Maximum="{Binding CurrentMaxStat.Health}"/>
+                                    </DockPanel>
+                                </Grid>
+                                <Grid Grid.Row="1" Margin="2">
+                                    <Grid.Background>
+                                        <SolidColorBrush Color="DarkGray" Opacity="0.8"/>
+                                    </Grid.Background>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="1*"/>
+                                        <ColumnDefinition Width="1*"/>
+                                        <ColumnDefinition Width="8*"/>
+                                    </Grid.ColumnDefinitions>
+                                    <Viewbox Stretch="Uniform" StretchDirection="DownOnly" HorizontalAlignment="Left" Margin="2">
+                                        <Image Source="/Resources/Icons/25px-Firepower.png"/>
+                                    </Viewbox>
+                                    <Viewbox Grid.Column="1" Stretch="Uniform" StretchDirection="DownOnly" HorizontalAlignment="Left" Margin="2">
+                                        <TextBlock Grid.Column="1" Foreground="White" Text="FP" FontSize="18" FontWeight="Bold" VerticalAlignment="Center"/>
+                                    </Viewbox>
+                                    <DockPanel Grid.Column="2">
+                                        <TextBlock DockPanel.Dock="Right" Foreground="White" FontSize="18" Text="{Binding FPProgress}" VerticalAlignment="Center"/>
+                                        <Slider VerticalAlignment="Center" Value="{Binding FPProgress}" TickFrequency="1" Minimum="{Binding CurrentShip.Ship.Stats.BaseStats.Firepower}" Maximum="{Binding CurrentMaxStat.Firepower}"/>
+                                    </DockPanel>
+                                </Grid>
+                                <Grid Grid.Row="2" Margin="2">
+                                    <Grid.Background>
+                                        <SolidColorBrush Color="DarkGray" Opacity="0.8"/>
+                                    </Grid.Background>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="1*"/>
+                                        <ColumnDefinition Width="1*"/>
+                                        <ColumnDefinition Width="8*"/>
+                                    </Grid.ColumnDefinitions>
+                                    <Viewbox Stretch="Uniform" StretchDirection="DownOnly" HorizontalAlignment="Left" Margin="2">
+                                        <Image Source="/Resources/Icons/25px-AntiAir.png"/>
+                                    </Viewbox>
+                                    <Viewbox Grid.Column="1" Stretch="Uniform" StretchDirection="DownOnly" HorizontalAlignment="Left" Margin="2">
+                                        <TextBlock Grid.Column="1" Foreground="White" Text="AA" FontSize="18" FontWeight="Bold" VerticalAlignment="Center"/>
+                                    </Viewbox>
+                                    <DockPanel Grid.Column="2">
+                                        <TextBlock DockPanel.Dock="Right" Foreground="White" FontSize="18" Text="{Binding AAProgress}" VerticalAlignment="Center"/>
+                                        <Slider VerticalAlignment="Center" Value="{Binding AAProgress}" TickFrequency="1" Minimum="{Binding CurrentShip.Ship.Stats.BaseStats.Antiair}" Maximum="{Binding CurrentMaxStat.Antiair}"/>
+                                    </DockPanel>
+                                </Grid>
+                                <Grid Grid.Row="3" Margin="2" Visibility="{Binding CurrentShip.Ship.HullType, Converter={StaticResource IsSS}, ConverterParameter=true}">
+                                    <Grid.Background>
+                                        <SolidColorBrush Color="DarkGray" Opacity="0.8"/>
+                                    </Grid.Background>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="1*"/>
+                                        <ColumnDefinition Width="8*"/>
+                                    </Grid.ColumnDefinitions>
+                                    <Viewbox Stretch="Uniform" StretchDirection="DownOnly" HorizontalAlignment="Left" Margin="2">
+                                        <Image Source="/Resources/Icons/25px-ASW.png"/>
+                                    </Viewbox>
+                                    <Viewbox Grid.Column="1" Stretch="Uniform" StretchDirection="DownOnly" HorizontalAlignment="Left" Margin="2">
+                                        <TextBlock Grid.Column="1" Foreground="White" Text="ASW" FontSize="18" FontWeight="Bold" VerticalAlignment="Center"/>
+                                    </Viewbox>
+                                    <DockPanel Grid.Column="2">
+                                        <TextBlock DockPanel.Dock="Right" Foreground="White" FontSize="18" Text="{Binding ASWProgress}" VerticalAlignment="Center"/>
+                                        <Slider VerticalAlignment="Center" Value="{Binding ASWProgress}" TickFrequency="1" Minimum="{Binding CurrentShip.Ship.Stats.BaseStats.AntisubmarineWarfare, FallbackValue=0}" Maximum="{Binding CurrentMaxStat.AntisubmarineWarfare, FallbackValue=0}"/>
+                                    </DockPanel>
+                                </Grid>
+                                <Grid Grid.Row="3" Margin="2" Visibility="{Binding CurrentShip.Ship.HullType, Converter={StaticResource IsSS}}">
+                                    <Grid.Background>
+                                        <SolidColorBrush Color="DarkGray" Opacity="0.8"/>
+                                    </Grid.Background>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="1*"/>
+                                        <ColumnDefinition Width="8*"/>
+                                    </Grid.ColumnDefinitions>
+                                    <Viewbox Stretch="Uniform" StretchDirection="DownOnly" HorizontalAlignment="Left" Margin="2">
+                                        <Image Source="/Resources/Icons/25px-Oxygen.png"/>
+                                    </Viewbox>
+                                    <Viewbox Grid.Column="1" Stretch="Uniform" StretchDirection="DownOnly" HorizontalAlignment="Left" Margin="2">
+                                        <TextBlock Grid.Column="1" Foreground="White" Text="OXY" FontSize="18" FontWeight="Bold" VerticalAlignment="Center"/>
+                                    </Viewbox>
+                                    <DockPanel Grid.Column="2">
+                                        <TextBlock DockPanel.Dock="Right" Foreground="White" FontSize="18" Text="{Binding OXYProgress, FallbackValue=0, TargetNullValue=0}" VerticalAlignment="Center"/>
+                                        <Slider VerticalAlignment="Center" Value="{Binding OXYProgress, FallbackValue=0, TargetNullValue=0}" TickFrequency="1" Minimum="{Binding CurrentShip.Ship.Stats.BaseStats.Oxygen, FallbackValue=0 ,TargetNullValue=0}" Maximum="{Binding CurrentMaxStat.Oxygen, FallbackValue=0, TargetNullValue=0}"/>
+                                    </DockPanel>
+                                </Grid>
+                            </Grid>
+
+                            <!--center-->
+                            <Grid Grid.Row="3" Grid.Column="1">
+                                <Grid.RowDefinitions>
+                                    <RowDefinition/>
+                                    <RowDefinition/>
+                                    <RowDefinition/>
+                                    <RowDefinition/>
+                                    <RowDefinition/>
+                                </Grid.RowDefinitions>
+                                <Grid Margin="2">
+                                    <Grid.Background>
+                                        <SolidColorBrush Color="DarkGray" Opacity="0.8"/>
+                                    </Grid.Background>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="1*"/>
+                                        <ColumnDefinition Width="1*"/>
+                                        <ColumnDefinition Width="8*"/>
+                                    </Grid.ColumnDefinitions>
+                                    <Viewbox Stretch="Uniform" StretchDirection="DownOnly" HorizontalAlignment="Left" Margin="2">
+                                        <Image Source="/Resources/Icons/25px-Armor.png"/>
+                                    </Viewbox>
+                                    <Viewbox Grid.Column="1" Stretch="Uniform" StretchDirection="DownOnly" HorizontalAlignment="Left" Margin="2">
+                                        <TextBlock Grid.Column="1" Foreground="White" Text="{Binding CurrentStat.Armor}" FontSize="18" FontWeight="Bold" VerticalAlignment="Center"/>
+                                    </Viewbox>
+                                </Grid>
+                                <Grid Grid.Row="1" Margin="2">
+                                    <Grid.Background>
+                                        <SolidColorBrush Color="DarkGray" Opacity="0.8"/>
+                                    </Grid.Background>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="1*"/>
+                                        <ColumnDefinition Width="1*"/>
+                                        <ColumnDefinition Width="8*"/>
+                                    </Grid.ColumnDefinitions>
+                                    <Viewbox Stretch="Uniform" StretchDirection="DownOnly" HorizontalAlignment="Left" Margin="2">
+                                        <Image Source="/Resources/Icons/25px-Torpedo.png"/>
+                                    </Viewbox>
+                                    <Viewbox Grid.Column="1" Stretch="Uniform" StretchDirection="DownOnly" HorizontalAlignment="Left" Margin="2">
+                                        <TextBlock Grid.Column="1" Foreground="White" Text="TRP" FontSize="18" FontWeight="Bold" VerticalAlignment="Center"/>
+                                    </Viewbox>
+                                    <DockPanel Grid.Column="2">
+                                        <TextBlock DockPanel.Dock="Right" Foreground="White" FontSize="18" Text="{Binding TRPProgress}" VerticalAlignment="Center"/>
+                                        <Slider VerticalAlignment="Center" Value="{Binding TRPProgress}" TickFrequency="1" Minimum="{Binding CurrentShip.Ship.Stats.BaseStats.Torpedo}" Maximum="{Binding CurrentMaxStat.Torpedo}"/>
+                                    </DockPanel>
+                                </Grid>
+                                <Grid Grid.Row="2" Margin="2">
+                                    <Grid.Background>
+                                        <SolidColorBrush Color="DarkGray" Opacity="0.8"/>
+                                    </Grid.Background>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="1*"/>
+                                        <ColumnDefinition Width="1*"/>
+                                        <ColumnDefinition Width="8*"/>
+                                    </Grid.ColumnDefinitions>
+                                    <Viewbox Stretch="Uniform" StretchDirection="DownOnly" HorizontalAlignment="Left" Margin="2">
+                                        <Image Source="/Resources/Icons/25px-Aviation.png"/>
+                                    </Viewbox>
+                                    <Viewbox Grid.Column="1" Stretch="Uniform" StretchDirection="DownOnly" HorizontalAlignment="Left" Margin="2">
+                                        <TextBlock Grid.Column="1" Foreground="White" Text="AVI" FontSize="18" FontWeight="Bold" VerticalAlignment="Center"/>
+                                    </Viewbox>
+                                    <DockPanel Grid.Column="2">
+                                        <TextBlock DockPanel.Dock="Right" Foreground="White" FontSize="18" Text="{Binding AVIProgress}" VerticalAlignment="Center"/>
+                                        <Slider VerticalAlignment="Center" Value="{Binding AVIProgress}" TickFrequency="1" Minimum="{Binding CurrentShip.Ship.Stats.BaseStats.Aviation}" Maximum="{Binding CurrentMaxStat.Aviation}"/>
+                                    </DockPanel>
+                                </Grid>
+                                <Grid Grid.Row="3" Margin="2"  Visibility="{Binding CurrentShip.Ship.HullType, Converter={StaticResource IsSS}}">
+                                    <Grid.Background>
+                                        <SolidColorBrush Color="DarkGray" Opacity="0.8"/>
+                                    </Grid.Background>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="1*"/>
+                                        <ColumnDefinition Width="1*"/>
+                                        <ColumnDefinition Width="8*"/>
+                                    </Grid.ColumnDefinitions>
+                                    <Viewbox Stretch="Uniform" StretchDirection="DownOnly" HorizontalAlignment="Left" Margin="2">
+                                        <Image Source="/Resources/Icons/24px-Ammunition.png"/>
+                                    </Viewbox>
+                                    <Viewbox Grid.Column="1" Stretch="Uniform" StretchDirection="DownOnly" HorizontalAlignment="Left" Margin="2">
+                                        <TextBlock Grid.Column="1" Foreground="White" Text="AMO" FontSize="18" FontWeight="Bold" VerticalAlignment="Center"/>
+                                    </Viewbox>
+                                    <DockPanel Grid.Column="2">
+                                        <TextBlock DockPanel.Dock="Right" Foreground="White" FontSize="18" Text="{Binding AMOProgress, FallbackValue=0, TargetNullValue=0}" VerticalAlignment="Center"/>
+                                        <Slider VerticalAlignment="Center" Value="{Binding AMOProgress, FallbackValue=0, TargetNullValue=0}" TickFrequency="1" Minimum="{Binding CurrentShip.Ship.Stats.BaseStats.Ammunition, FallbackValue=0, TargetNullValue=0}" Maximum="{Binding CurrentMaxStat.Ammunition, FallbackValue=0, TargetNullValue=0}"/>
+                                    </DockPanel>
+                                </Grid>
+                            </Grid>
+
+                            <!--right-->
+                            <Grid Grid.Row="3" Grid.Column="2">
+                                <Grid.RowDefinitions>
+                                    <RowDefinition/>
+                                    <RowDefinition/>
+                                    <RowDefinition/>
+                                    <RowDefinition/>
+                                    <RowDefinition/>
+                                </Grid.RowDefinitions>
+                                <Grid Margin="2">
+                                    <Grid.Background>
+                                        <SolidColorBrush Color="DarkGray" Opacity="0.8"/>
+                                    </Grid.Background>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="1*"/>
+                                        <ColumnDefinition Width="1*"/>
+                                        <ColumnDefinition Width="8*"/>
+                                    </Grid.ColumnDefinitions>
+                                    <Viewbox Stretch="Uniform" StretchDirection="DownOnly" HorizontalAlignment="Left" Margin="2">
+                                        <Image Source="/Resources/Icons/25px-Refill.png"/>
+                                    </Viewbox>
+                                    <Viewbox Grid.Column="1" Stretch="Uniform" StretchDirection="DownOnly" HorizontalAlignment="Left" Margin="2">
+                                        <TextBlock Grid.Column="1" Foreground="White" Text="RLD" FontSize="18" FontWeight="Bold" VerticalAlignment="Center"/>
+                                    </Viewbox>
+                                    <DockPanel Grid.Column="2">
+                                        <TextBlock DockPanel.Dock="Right" Foreground="White" FontSize="18" Text="{Binding RLDProgress}" VerticalAlignment="Center"/>
+                                        <Slider VerticalAlignment="Center" Value="{Binding RLDProgress}" TickFrequency="1" Minimum="{Binding CurrentShip.Ship.Stats.BaseStats.Reload}" Maximum="{Binding CurrentMaxStat.Reload}"/>
+                                    </DockPanel>
+                                </Grid>
+                                <Grid Grid.Row="1" Margin="2">
+                                    <Grid.Background>
+                                        <SolidColorBrush Color="DarkGray" Opacity="0.8"/>
+                                    </Grid.Background>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="1*"/>
+                                        <ColumnDefinition Width="1*"/>
+                                        <ColumnDefinition Width="8*"/>
+                                    </Grid.ColumnDefinitions>
+                                    <Viewbox Stretch="Uniform" StretchDirection="DownOnly" HorizontalAlignment="Left" Margin="2">
+                                        <Image Source="/Resources/Icons/25px-Evasion.png"/>
+                                    </Viewbox>
+                                    <Viewbox Grid.Column="1" Stretch="Uniform" StretchDirection="DownOnly" HorizontalAlignment="Left" Margin="2">
+                                        <TextBlock Grid.Column="1" Foreground="White" Text="EVA" FontSize="18" FontWeight="Bold" VerticalAlignment="Center"/>
+                                    </Viewbox>
+                                    <DockPanel Grid.Column="2">
+                                        <TextBlock DockPanel.Dock="Right" Foreground="White" FontSize="18" Text="{Binding EVAProgress}" VerticalAlignment="Center"/>
+                                        <Slider VerticalAlignment="Center" Value="{Binding EVAProgress}" TickFrequency="1" Minimum="{Binding CurrentShip.Ship.Stats.BaseStats.Evasion}" Maximum="{Binding CurrentMaxStat.Evasion}"/>
+                                    </DockPanel>
+                                </Grid>
+                                <Grid Grid.Row="2" Margin="2">
+                                    <Grid.Background>
+                                        <SolidColorBrush Color="DarkGray" Opacity="0.8"/>
+                                    </Grid.Background>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="1*"/>
+                                        <ColumnDefinition Width="1*"/>
+                                        <ColumnDefinition Width="8*"/>
+                                    </Grid.ColumnDefinitions>
+                                    <Viewbox Stretch="Uniform" StretchDirection="DownOnly" HorizontalAlignment="Left" Margin="2">
+                                        <Image Source="/Resources/Icons/25px-Consumption.png"/>
+                                    </Viewbox>
+                                    <Viewbox Grid.Column="1" Stretch="Uniform" StretchDirection="DownOnly" HorizontalAlignment="Left" Margin="2">
+                                        <TextBlock Grid.Column="1" Foreground="White" Text="Cost" FontSize="18" FontWeight="Bold" VerticalAlignment="Center"/>
+                                    </Viewbox>
+                                    <DockPanel Grid.Column="2">
+                                        <TextBlock DockPanel.Dock="Right" Foreground="White" FontSize="18" Text="{Binding CostProgress}" VerticalAlignment="Center"/>
+                                        <Slider VerticalAlignment="Center" Value="{Binding CostProgress}" TickFrequency="1" Minimum="{Binding CurrentShip.Ship.Stats.BaseStats.OilConsumption}" Maximum="{Binding CurrentMaxStat.OilConsumption}"/>
+                                    </DockPanel>
+                                </Grid>
+                            </Grid>
                         </Grid>
                     </Grid>
-                </Grid>
+                    <Grid>
+                        <ListBox ItemsSource="{Binding Skills}" ScrollViewer.HorizontalScrollBarVisibility="Disabled" ScrollViewer.VerticalScrollBarVisibility="Disabled" HorizontalContentAlignment="Stretch">
+                            <ListBox.ItemTemplate>
+                                <DataTemplate>
+                                    <Grid>
+                                        <Grid.Resources>
+                                            <Style x:Key="conV" TargetType="{x:Type TextBlock}">
+                                                <Setter Property="Text">
+                                                    <Setter.Value>
+                                                        <MultiBinding Converter="{StaticResource skillCon}">
+                                                            <Binding Path="lv"/>
+                                                            <Binding Path="Skill.Description"/>
+                                                        </MultiBinding>
+                                                    </Setter.Value>
+                                                </Setter>
+                                            </Style>
+                                        </Grid.Resources>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="0.5*"/>
+                                            <ColumnDefinition Width="1*"/>
+                                            <ColumnDefinition Width="1*"/>
+                                            <ColumnDefinition Width="5*"/>
+                                            <ColumnDefinition Width="1*"/>
+                                        </Grid.ColumnDefinitions>
+                                        <Viewbox>
+                                            <DockPanel VerticalAlignment="Center">
+                                                <StackPanel>
+                                                    <TextBlock FontSize="24" Text="{Binding lv, StringFormat='Lv.{0}'}" VerticalAlignment="Center"/>
+                                                    <Slider Value="{Binding lv}" Minimum="1" Maximum="10"/>
+                                                </StackPanel>
+                                            </DockPanel>
+                                        </Viewbox>
+                                        <Viewbox Grid.Column="1">
+                                            <Image Source="{Binding Skill.Icon}"/>
+                                        </Viewbox>
+                                        <Rectangle Grid.Column="2" Fill="{Binding Skill.Color}"/>
+                                        <TextBlock Grid.Column="2" Text="{Binding Skill.Name}" VerticalAlignment="Center" HorizontalAlignment="Center" TextWrapping="WrapWithOverflow"/>
+                                        <TextBlock Grid.Column="3" Style="{StaticResource conV}" VerticalAlignment="Center" TextWrapping="WrapWithOverflow"/>
+                                        <Button Grid.Column="4" Content="UPDATE" Command="{Binding RelativeSource={RelativeSource AncestorType={x:Type Page}}, Path=DataContext.UpdateSkillCommand}" CommandParameter="{Binding}"/>
+                                    </Grid>
+                                </DataTemplate>
+                            </ListBox.ItemTemplate>
+                        </ListBox>
+                    </Grid>
+                    <Viewbox Grid.Row="3" Stretch="Uniform" StretchDirection="DownOnly">
+                        <Button Command="{Binding SaveCommand}">
+                            <TextBlock FontSize="24" Text="SAVE"/>
+                        </Button>
+                    </Viewbox>
+                </StackPanel>
             </ScrollViewer>
         </Grid>
     </Grid>

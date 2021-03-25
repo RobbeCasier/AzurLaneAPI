@@ -320,5 +320,10 @@ namespace AzurLaneAPI.View
             if (e.Key == Key.Return)
                 searchButton.Command.Execute(sender);
         }
+
+        private void Refresh(object sender, RoutedEventArgs e)
+        {
+            myList.Items.Refresh();
+        }
     }
 }

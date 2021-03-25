@@ -67,8 +67,16 @@ namespace AzurLaneAPI.ViewModel
         {
             get
             {
-                return new RelayCommand<Ship>(MainVM.AddShipToList);
+                return new RelayCommand<Ship>(AddShip);
             }
+        }
+        private void AddShip(Ship ship)
+        {
+            List<Ship> newList = Ships;
+            newList.Find(x => x.Id == ship.Id).Count++;
+            Ships = newList;
+            RaisePropertyChanged("Ships");
+            MainVM.AddShipToList(ship);
         }
         public RelayCommand GetAll
         {

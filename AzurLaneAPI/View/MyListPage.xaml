@@ -17,6 +17,7 @@
             <conv:RarityToFrameConverter x:Key="RarityToFrame"/>
             <conv:RarityToBackgroundConverter x:Key="RarityToBackground"/>
             <conv:HullTypeToImageConverter x:Key="HullToImage"/>
+            <conv:MarriedStatusToVisibility x:Key="MaryVisible"/>
             <BitmapImage x:Key="DefaultThumbnail" UriSource="../Resources/Offline pictures/Universal_BulinIcon.png"/>
         </Grid.Resources>
         <Grid.RowDefinitions>
@@ -42,7 +43,8 @@
                         <TextBlock Grid.Row="2" Foreground="White" Text="LOADING..." HorizontalAlignment="Center" VerticalAlignment="Center"/>
                         <!---->
                         <Image Source="{Binding Ship.Thumbnail, FallbackValue={StaticResource DefaultThumbnail}, IsAsync=True}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                        <Image Grid.ColumnSpan="3" Source="{Binding MyShip.Rarity, Converter={StaticResource RarityToFrame}}" HorizontalAlignment="Left" VerticalAlignment="Top"/>
+                        <Image Grid.ColumnSpan="3" Source="{Binding MyShip.Rarity, Converter={StaticResource RarityToFrame}}" HorizontalAlignment="Left" VerticalAlignment="Top" Visibility="{Binding MyShip.IsMarried, Converter={StaticResource MaryVisible}, ConverterParameter=false}"/>
+                        <Image Grid.ColumnSpan="3" Source="/Resources/Frames/Married.png" HorizontalAlignment="Left" VerticalAlignment="Top" Visibility="{Binding MyShip.IsMarried, Converter={StaticResource MaryVisible}, ConverterParameter=true}"/>
                         <Grid>
                             <Grid.RowDefinitions>
                                 <RowDefinition Height="2*"/>

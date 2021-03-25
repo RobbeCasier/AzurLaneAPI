@@ -46,12 +46,18 @@ namespace AzurLaneAPI.ViewModel
 
         public void AddShip(Ship ship)
         {
+            ushort[] skills1 = new ushort[ship.Skills.Length];
+            for (ushort i = 0; i < skills1.Length; i++)
+            {
+                skills1[i] = 1;
+            }
             MyShip newShip = new MyShip
             {
                 Id = ship.Id,
                 HullType = ship.HullType,
                 Rarity = ship.Rarity,
-                CurrentStat = ship.Stats.BaseStats
+                CurrentStat = ship.Stats.BaseStats,
+                SKillLvs = skills1
             };
             MyList.Add(newShip);
             ShipDataLists.Add(new ShipDataList { MyShip = newShip, Ship = ship });
@@ -99,6 +105,7 @@ namespace AzurLaneAPI.ViewModel
                             if (!json.Equals(""))
                             {
                                 MyList = JsonConvert.DeserializeObject<List<MyShip>>(json);
+                                MyList = MyList.OrderByDescending(x => x.Lv).ToList();
                                 foreach (MyShip myShip in MyList)
                                 {
                                     Ship tShip = taskRes.Result.Find(x => x.Id == myShip.Id);

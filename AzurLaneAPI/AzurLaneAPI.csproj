@@ -93,11 +93,13 @@
     <Compile Include="ViewModel\OverViewVM.cs" />
     <Compile Include="View\Converters\FactionToImageConverter.cs" />
     <Compile Include="View\Converters\HullTypeToImageConverter.cs" />
+    <Compile Include="View\Converters\MarriedStatusToVisibility.cs" />
     <Compile Include="View\Converters\NullToVisibilityConverter.cs" />
     <Compile Include="View\Converters\RarityToBackgroundConverter.cs" />
     <Compile Include="View\Converters\RarityToFrameConverter.cs" />
     <Compile Include="View\Converters\RetrofitHullToVisibilityConverter.cs" />
     <Compile Include="View\Converters\RetrofitToVisibility.cs" />
+    <Compile Include="View\Converters\SkillDescriptionConverter.cs" />
     <Compile Include="View\Converters\SubmarineStatToVisibilityConverter.cs" />
     <Compile Include="View\DetailPageMyShip.xaml.cs">
       <DependentUpon>DetailPageMyShip.xaml</DependentUpon>
@@ -272,6 +274,9 @@
   <ItemGroup>
     <Resource Include="Resources\UI\btn_add.png" />
     <Resource Include="Resources\UI\btn_home.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Frames\Married.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

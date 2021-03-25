@@ -70,6 +70,7 @@ namespace AzurLaneAPI.ViewModel
             }
             else
             {
+                ListPage.Refresh();
                 CurrentPage = ListPage;
                 RaisePropertyChanged("CurrentPage");
             }
@@ -113,7 +114,6 @@ namespace AzurLaneAPI.ViewModel
 
         public void UpdateMyShipList()
         {
-            (ListPage.DataContext as MyListVM).RaisePropertyChanged("ShipDataLists");
             (ListPage.DataContext as MyListVM).UpdateList();
         }
     }

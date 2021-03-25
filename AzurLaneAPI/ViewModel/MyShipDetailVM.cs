@@ -51,13 +51,20 @@ namespace AzurLaneAPI.ViewModel
         {
             get
             {
-                //if skin name exist in list, not visible
-                foreach (string skinName in MySkins)
+                if (CurrentSkin != null)
                 {
-                    if (CurrentSkin.Name == skinName)
-                        return Visibility.Collapsed;
+                    if (CurrentSkin.Name != "Retrofit" && CurrentSkin.Name != "Oath" && CurrentSkin.Name != "Default")
+                    {
+                        //if skin name exist in list, not visible
+                        foreach (string skinName in MySkins)
+                        {
+                            if (CurrentSkin.Name == skinName)
+                                return Visibility.Collapsed;
+                        }
+                        return Visibility.Visible;
+                    }
                 }
-                return Visibility.Visible;
+                return Visibility.Collapsed;
             }
         }
 
@@ -68,7 +75,7 @@ namespace AzurLaneAPI.ViewModel
                 //if skin name exist in list, not visible
                 foreach (string skinName in MySkins)
                 {
-                    if (CurrentSkin.Name == skinName && CurrentSkin.Name != CurrentShip.Ship.Skins[CurrentShip.MyShip.CurrentSkin].Name)
+                    if (CurrentSkin.Name == skinName && CurrentSkin.Name != CurrentShip.MyShip.CurrentSkin)
                         return Visibility.Visible;
                 }
                 return Visibility.Collapsed;
@@ -87,15 +94,15 @@ namespace AzurLaneAPI.ViewModel
             set 
             { 
                 _currentShip = value;
-                RaisePropertyChanged("CurrentShip");
+                
                 Skins = GetSkins();
                 RaisePropertyChanged("Skins");
-                SelectedSkin = value.Ship.Skins[value.MyShip.CurrentSkin].Name;
+                SelectedSkin = value.MyShip.CurrentSkin;
                 RaisePropertyChanged("SelectedSkin");
                 List<string> newList = new List<string>();
-                foreach (ushort element in _currentShip.MyShip.MySkins)
+                foreach (string element in _currentShip.MyShip.MySkins)
                 {
-                    newList.Add(_currentShip.Ship.Skins[element].Name);
+                    newList.Add(element);
                 }
                 MySkins = newList;
                 RaisePropertyChanged("MySkins");
@@ -114,10 +121,37 @@ namespace AzurLaneAPI.ViewModel
         {
             get { return _isMarried; }
             set 
-            { 
-                _isMarried = value;
-                RaisePropertyChanged("IsMarried");
-                RaisePropertyChanged("MaxAffection");
+            {
+                if (!CurrentShip.MyShip.IsMarried)
+                {
+                    _isMarried = CurrentShip.MyShip.IsMarried = value;
+                    RaisePropertyChanged("IsMarried");
+                    RaisePropertyChanged("MaxAffection");
+                    CalcMaxStat();
+                    if (MySkins.Find(x => x.Equals("Oath")) == null && value == true)
+                    {
+                        MySkins.Add("Oath");
+                        SelectedSkin = "Oath";
+                        CurrentShip.MyShip.CurrentSkin = "Oath";
+                        RaisePropertyChanged("SelectedSkin");
+                        RaisePropertyChanged("MySkins");
+                        List<string> newList = CurrentShip.MyShip.MySkins.ToList();
+                        newList.Add("Oath");
+                        CurrentShip.MyShip.MySkins = newList.ToArray();
+                        RaisePropertyChanged("IsUnlocked");
+                        RaisePropertyChanged("IsNotUnlocked");
+
+                    }
+                    MainVM.UpdateMyShipList();
+                    RaisePropertyChanged("CurrentShip");
+                }
+                else
+                {
+                    _isMarried = CurrentShip.MyShip.IsMarried;
+                    RaisePropertyChanged("IsMarried");
+                    RaisePropertyChanged("MaxAffection");
+                    CalcMaxStat();
+                }
             }
         }
 
@@ -126,27 +160,36 @@ namespace AzurLaneAPI.ViewModel
             get { return _isRetrofitted; }
             set
             {
-                _isRetrofitted = CurrentShip.MyShip.IsRetrofitted = value;
-                RaisePropertyChanged("IsRetrofitted");
-                CalcMaxStat();
-                if (MySkins.Find(x => x.Equals("Retrofit")) == null && value == true)
+                if (!CurrentShip.MyShip.IsRetrofitted)
                 {
-                    MySkins.Add(CurrentShip.Ship.Skins[1].Name);
-                    SelectedSkin = CurrentShip.Ship.Skins[1].Name;
-                    CurrentShip.MyShip.CurrentSkin = 1;
-                    RaisePropertyChanged("SelectedSkin");
-                    RaisePropertyChanged("MySkins");
-                    List<ushort> newList = CurrentShip.MyShip.MySkins.ToList();
-                    newList.Add(1);
-                    CurrentShip.MyShip.MySkins = newList.ToArray();
-                    CurrentShip.MyShip.Rarity = GetNextRarity(CurrentShip.MyShip.Rarity);
-                    CurrentShip.MyShip.HullType = CurrentShip.Ship.RetrofitHullType;
-                    RaisePropertyChanged("IsUnlocked");
-                    RaisePropertyChanged("IsNotUnlocked");
+                    _isRetrofitted = CurrentShip.MyShip.IsRetrofitted = value;
+                    RaisePropertyChanged("IsRetrofitted");
+                    CalcMaxStat();
+                    if (MySkins.Find(x => x.Equals("Retrofit")) == null && value == true)
+                    {
+                        MySkins.Add("Retrofit");
+                        SelectedSkin = "Retrofit";
+                        CurrentShip.MyShip.CurrentSkin = "Retrofit";
+                        RaisePropertyChanged("SelectedSkin");
+                        RaisePropertyChanged("MySkins");
+                        List<string> newList = CurrentShip.MyShip.MySkins.ToList();
+                        newList.Add("Retrofit");
+                        CurrentShip.MyShip.MySkins = newList.ToArray();
+                        CurrentShip.MyShip.Rarity = GetNextRarity(CurrentShip.MyShip.Rarity);
+                        CurrentShip.MyShip.HullType = CurrentShip.Ship.RetrofitHullType;
+                        RaisePropertyChanged("IsUnlocked");
+                        RaisePropertyChanged("IsNotUnlocked");
 
+                    }
+                    MainVM.UpdateMyShipList();
+                    RaisePropertyChanged("CurrentShip");
                 }
-                MainVM.UpdateMyShipList();
-                RaisePropertyChanged("CurrentShip");
+                else
+                {
+                    _isRetrofitted = CurrentShip.MyShip.IsRetrofitted;
+                    RaisePropertyChanged("IsRetrofitted");
+                    CalcMaxStat();
+                }
             }
         }
 
@@ -192,7 +235,8 @@ namespace AzurLaneAPI.ViewModel
             set 
             {
                 _affProgress = value;
-                CalcAffection(); 
+                CalcAffection();
+                CalcMaxStat();
             } 
         }
         public string AffProgressString { get;set; }
@@ -321,7 +365,7 @@ namespace AzurLaneAPI.ViewModel
                 Basestats stat120Retro = CurrentShip.Ship.Stats.Level120Retrofit;
                 Basestats stat = new Basestats();
 
-                if (IsRetrofitted)
+                if (CurrentShip.MyShip.IsRetrofitted)
                 {
                     stat.Health = CalcMaxStatAtAffection(stat120.Health, stat120Retro.Health);
                     stat.Firepower = CalcMaxStatAtAffection(stat120.Firepower, stat120Retro.Firepower);
@@ -382,7 +426,8 @@ namespace AzurLaneAPI.ViewModel
                 AffProgressString = "Oath";
                 if (AffProgress < 200)
                     AffMultiplier = 1.06;
-                AffMultiplier = 1.12;
+                else
+                    AffMultiplier = 1.12;
             }
             RaisePropertyChanged("AffProgressString");
             RaisePropertyChanged("AffProgress");
@@ -433,7 +478,7 @@ namespace AzurLaneAPI.ViewModel
 
         private void Activate()
         {
-            CurrentShip.MyShip.CurrentSkin = (ushort)Skins.IndexOf(CurrentSkin.Name);
+            CurrentShip.MyShip.CurrentSkin = CurrentSkin.Name;
             RaisePropertyChanged("IsUnlocked");
 
             MainVM.UpdateMyShipList();
@@ -441,14 +486,16 @@ namespace AzurLaneAPI.ViewModel
 
         private void Unlock()
         {
-            ushort id = (ushort)Skins.IndexOf(CurrentSkin.Name);
+            string id = CurrentSkin.Name;
             CurrentShip.MyShip.CurrentSkin = id;
+            RaisePropertyChanged("IsUnlocked");
 
-            List<ushort> newList = CurrentShip.MyShip.MySkins.ToList();
+            List<string> newList = CurrentShip.MyShip.MySkins.ToList();
             newList.Add(id);
             CurrentShip.MyShip.MySkins = newList.ToArray();
-            RaisePropertyChanged("CurrentShip.MyShip.MySkins");
-            RaisePropertyChanged("IsUnlocked");
+            MySkins = newList;
+            RaisePropertyChanged("MySkins");
+            RaisePropertyChanged("CurrentShip");
             RaisePropertyChanged("IsNotUnlocked");
 
             MainVM.UpdateMyShipList();
@@ -475,6 +522,13 @@ namespace AzurLaneAPI.ViewModel
             CurrentShip.MyShip.CurrentStat.Reload = RLDProgress.ToString();
             CurrentShip.MyShip.CurrentStat.Evasion = EVAProgress.ToString();
             CurrentShip.MyShip.CurrentStat.OilConsumption = CostProgress.ToString();
+
+            ushort[] newList = new ushort[Skills.Count];
+            for (int i = 0; i < Skills.Count; i++)
+            {
+                newList[i] = Skills[i].lv;
+            }
+            CurrentShip.MyShip.SKillLvs = newList;
             CurrentShip.MyShip.Lv = LVProgress;
 
             MainVM.UpdateMyShipList();
@@ -500,34 +554,131 @@ namespace AzurLaneAPI.ViewModel
             LVProgress = CurrentShip.MyShip.Lv;
             IsMarried = CurrentShip.MyShip.IsMarried;
             IsRetrofitted = CurrentShip.MyShip.IsRetrofitted;
+
+            if (CurrentShip.MyShip.SKillLvs == null || CurrentShip.MyShip.SKillLvs.Length < CurrentShip.Ship.Skills.Length)
+            {
+                List<ushort> skills = new List<ushort>();
+                for (ushort i = 0; i < CurrentShip.Ship.Skills.Length; i++)
+                {
+                    skills.Add(1);
+                }
+                CurrentShip.MyShip.SKillLvs = skills.ToArray();
+                RaisePropertyChanged("CurrentShip");
+            }
+
+            //set skilldata
+            List<SkillData> skillList = new List<SkillData>();
+            for (ushort i = 0; i < CurrentShip.Ship.Skills.Length; i++)
+            {
+                SkillData temp = new SkillData();
+                temp.lv = CurrentShip.MyShip.SKillLvs[i];
+                temp.Skill = CurrentShip.Ship.Skills[i];
+                skillList.Add(temp);
+            }
+            Skills = skillList;
+            RaisePropertyChanged("Skills");
         }
 
         private string CalcMaxStatAtAffection(string stat, string retStat = "")
         {
             if (retStat == null || retStat.Equals("0"))
-                return stat;
+                return "0";
             else if (retStat.Equals(""))
             {
                 if (stat == null)
-                    return stat;
+                    return "0";
                 else if (stat.Equals("0"))
-                    return stat;
+                    return "0";
                 double stat120 = ushort.Parse(stat);
                 double tempInt = (ushort)(stat120 / 1.06);
                 tempInt *= AffMultiplier;
+                if (tempInt % 1 > 0)
+                    tempInt++;
                 return ((ushort)tempInt).ToString();
             }
             else
             {
+                if (stat == null)
+                    return "0";
+                else if (stat.Equals("0"))
+                    return "0";
                 double stat120 = ushort.Parse(stat);
                 double stat120Retro = ushort.Parse(retStat);
                 double diff = stat120Retro - stat120;
-                double tempInt = (ushort)(stat120 / 1.06);
+                double tempInt = (stat120 / 1.06);
                 tempInt *= AffMultiplier;
                 tempInt += diff;
+                if (tempInt % 1 > 0)
+                    tempInt++;
                 return ((ushort)tempInt).ToString();
             }
         }
+
+        public RelayCommand NextCommand
+        {
+            get
+            {
+                return new RelayCommand(Next);
+            }
+        }
+
+        public RelayCommand PreviousCommand
+        {
+            get
+            {
+                return new RelayCommand(Previous);
+            }
+        }
+
+        private void Next()
+        {
+            int index = Ships.FindIndex(x => x.Ship.Id == _currentShip.Ship.Id);
+            if (index + 1 < Ships.Count)
+                CurrentShip = Ships[index + 1];
+            else
+                CurrentShip = Ships[0];
+            RaisePropertyChanged("CurrentShip");
+        }
+
+        private void Previous()
+        {
+            int index = Ships.FindIndex(x => x.Ship.Id == _currentShip.Ship.Id);
+            if (index - 1 >= 0)
+                CurrentShip = Ships[index - 1];
+            else
+                CurrentShip = Ships[Ships.Count - 1];
+            RaisePropertyChanged("CurrentShip");
+        }
+
+        //SKILLS
+        private List<SkillData> _skills = new List<SkillData>();
+        public List<SkillData> Skills
+        {
+            get
+            {
+                return _skills;
+            }
+            set
+            {
+                _skills = value;
+            }
+        }
+
+        public RelayCommand<SkillData> UpdateSkillCommand
+        { 
+            get
+            {
+                return new RelayCommand<SkillData>(UpdateSkill);
+            }
+        }
+        private void UpdateSkill(SkillData data)
+        {
+            int idx = Skills.IndexOf(Skills.Find(x => x.Skill.Name == data.Skill.Name));
+            SkillData temp = Skills[idx];
+            temp.lv = data.lv;
+            Skills[idx] = temp;
+        }
+
 
 
     }

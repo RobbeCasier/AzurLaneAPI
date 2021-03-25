@@ -199,7 +199,7 @@
             </Viewbox>
         </Grid>
 
-        <ListBox Grid.Row="2" Background="Transparent" ItemsSource="{Binding Ships}" SelectedItem="{Binding SelectedShip}" ScrollViewer.HorizontalScrollBarVisibility="Disabled" Panel.ZIndex="1" 
+        <ListBox x:Name="myList" Grid.Row="2" Background="Transparent" ItemsSource="{Binding Ships}" SelectedItem="{Binding SelectedShip}" ScrollViewer.HorizontalScrollBarVisibility="Disabled" Panel.ZIndex="1" 
                  VirtualizingPanel.IsVirtualizing="True"
                  VirtualizingPanel.IsContainerVirtualizable="True"
                  VirtualizingPanel.VirtualizationMode="Recycling"
@@ -258,7 +258,7 @@
                                     <ColumnDefinition Width="0.5*"/>
                                 </Grid.ColumnDefinitions>
                                 <Viewbox Grid.Column="3" Stretch="Uniform">
-                                    <Button BorderThickness="0" Command="{Binding RelativeSource={RelativeSource AncestorType={x:Type Page}}, Path=DataContext.AddShipCommand}" CommandParameter="{Binding}">
+                                    <Button BorderThickness="0" Command="{Binding RelativeSource={RelativeSource AncestorType={x:Type Page}}, Path=DataContext.AddShipCommand}" CommandParameter="{Binding}" Click="Refresh">
                                         <Button.Background>
                                             <ImageBrush ImageSource="/Resources/UI/btn_add.png"/>
                                         </Button.Background>
