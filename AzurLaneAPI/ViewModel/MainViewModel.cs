@@ -60,7 +60,7 @@ namespace AzurLaneAPI.ViewModel
             if (CurrentPage is MyListPage)
             {
                 ShipDataList ship = (ListPage.DataContext as MyListVM).SelectedShip;
-                List<ShipDataList> ships = (ListPage.DataContext as MyListVM).ShipDataLists.ToList();
+                List<ShipDataList> ships = (ListPage.DataContext as MyListVM).FilterListStat.ToList();
                 if (ship.MyShip == null)
                     return;
                 (AzurListPage.DataContext as MyShipDetailVM).CurrentShip = ship;
@@ -70,7 +70,6 @@ namespace AzurLaneAPI.ViewModel
             }
             else
             {
-                ListPage.Refresh();
                 CurrentPage = ListPage;
                 RaisePropertyChanged("CurrentPage");
             }

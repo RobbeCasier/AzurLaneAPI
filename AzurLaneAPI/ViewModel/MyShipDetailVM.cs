@@ -13,6 +13,7 @@ namespace AzurLaneAPI.ViewModel
     class MyShipDetailVM : ViewModelBase
     {
         //SKINS
+        #region Skins
         public Skin CurrentSkin { get; set; }
         public List<string> MySkins { get; set; } = new List<string>();
         public List<string> Skins { get; set; }
@@ -81,6 +82,7 @@ namespace AzurLaneAPI.ViewModel
                 return Visibility.Collapsed;
             }
         }
+        #endregion
 
         public Basestats CurrentStat { get; set; }
         public List<ShipDataList> Ships { get; set; }
@@ -140,9 +142,9 @@ namespace AzurLaneAPI.ViewModel
                         CurrentShip.MyShip.MySkins = newList.ToArray();
                         RaisePropertyChanged("IsUnlocked");
                         RaisePropertyChanged("IsNotUnlocked");
+                        MainVM.UpdateMyShipList();
 
                     }
-                    MainVM.UpdateMyShipList();
                     RaisePropertyChanged("CurrentShip");
                 }
                 else
@@ -179,9 +181,9 @@ namespace AzurLaneAPI.ViewModel
                         CurrentShip.MyShip.HullType = CurrentShip.Ship.RetrofitHullType;
                         RaisePropertyChanged("IsUnlocked");
                         RaisePropertyChanged("IsNotUnlocked");
+                        MainVM.UpdateMyShipList();
 
                     }
-                    MainVM.UpdateMyShipList();
                     RaisePropertyChanged("CurrentShip");
                 }
                 else
@@ -212,6 +214,7 @@ namespace AzurLaneAPI.ViewModel
         }
 
         //SLIDERS
+        #region stat_sliders
         private ushort _affProgress;
         private ushort _hpProgress;
         private ushort _fpProgress;
@@ -350,8 +353,10 @@ namespace AzurLaneAPI.ViewModel
             }
         }
 
+        #endregion
 
-        //Current max stats
+        //calculations
+        #region calculations
         public Basestats CurrentMaxStat
         {
             get; set;
@@ -394,10 +399,10 @@ namespace AzurLaneAPI.ViewModel
                     stat.OilConsumption = stat120.OilConsumption;
                 }
                 CurrentMaxStat = stat;
+                RaisePropertyChanged("CurrentMaxStat");
             }
             else
                 CurrentMaxStat = new Basestats();
-            RaisePropertyChanged("CurrentMaxStat");
         }
         private void CalcAffection()
         {
@@ -432,6 +437,7 @@ namespace AzurLaneAPI.ViewModel
             RaisePropertyChanged("AffProgressString");
             RaisePropertyChanged("AffProgress");
         }
+        #endregion
 
         public ushort MaxAffection
         {
@@ -443,7 +449,8 @@ namespace AzurLaneAPI.ViewModel
             }
         }
 
-
+        //Commands
+        #region commands
         public RelayCommand SwitchBack
         {
             get
@@ -473,6 +480,21 @@ namespace AzurLaneAPI.ViewModel
             get
             {
                 return new RelayCommand(Activate);
+            }
+        }
+        public RelayCommand NextCommand
+        {
+            get
+            {
+                return new RelayCommand(Next);
+            }
+        }
+
+        public RelayCommand PreviousCommand
+        {
+            get
+            {
+                return new RelayCommand(Previous);
             }
         }
 
@@ -534,6 +556,27 @@ namespace AzurLaneAPI.ViewModel
             MainVM.UpdateMyShipList();
         }
 
+        private void Next()
+        {
+            int index = Ships.FindIndex(x => x.Ship.Id == _currentShip.Ship.Id);
+            if (index + 1 < Ships.Count)
+                CurrentShip = Ships[index + 1];
+            else
+                CurrentShip = Ships[0];
+            RaisePropertyChanged("CurrentShip");
+        }
+
+        private void Previous()
+        {
+            int index = Ships.FindIndex(x => x.Ship.Id == _currentShip.Ship.Id);
+            if (index - 1 >= 0)
+                CurrentShip = Ships[index - 1];
+            else
+                CurrentShip = Ships[Ships.Count - 1];
+            RaisePropertyChanged("CurrentShip");
+        }
+        #endregion
+
         private void SetCurrentStats()
         {
             AffProgress = CurrentShip.MyShip.CurrentAffection;
@@ -544,10 +587,12 @@ namespace AzurLaneAPI.ViewModel
             ASWProgress = ushort.Parse(CurrentStat.AntisubmarineWarfare);
             if (CurrentStat.Oxygen != null)
                 OXYProgress = ushort.Parse(CurrentStat.Oxygen);
+
             TRPProgress = ushort.Parse(CurrentStat.Torpedo);
             AVIProgress = ushort.Parse(CurrentStat.Aviation);
             if (CurrentStat.Ammunition != null)
                 AMOProgress = ushort.Parse(CurrentStat.Ammunition);
+
             RLDProgress = ushort.Parse(CurrentStat.Reload);
             EVAProgress = ushort.Parse(CurrentStat.Evasion);
             CostProgress = ushort.Parse(CurrentStat.OilConsumption);
@@ -614,41 +659,6 @@ namespace AzurLaneAPI.ViewModel
             }
         }
 
-        public RelayCommand NextCommand
-        {
-            get
-            {
-                return new RelayCommand(Next);
-            }
-        }
-
-        public RelayCommand PreviousCommand
-        {
-            get
-            {
-                return new RelayCommand(Previous);
-            }
-        }
-
-        private void Next()
-        {
-            int index = Ships.FindIndex(x => x.Ship.Id == _currentShip.Ship.Id);
-            if (index + 1 < Ships.Count)
-                CurrentShip = Ships[index + 1];
-            else
-                CurrentShip = Ships[0];
-            RaisePropertyChanged("CurrentShip");
-        }
-
-        private void Previous()
-        {
-            int index = Ships.FindIndex(x => x.Ship.Id == _currentShip.Ship.Id);
-            if (index - 1 >= 0)
-                CurrentShip = Ships[index - 1];
-            else
-                CurrentShip = Ships[Ships.Count - 1];
-            RaisePropertyChanged("CurrentShip");
-        }
 
         //SKILLS
         private List<SkillData> _skills = new List<SkillData>();

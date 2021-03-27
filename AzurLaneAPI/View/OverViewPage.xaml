@@ -121,7 +121,7 @@
                                 <!--    Sort    -->
                                 <TextBlock Text="Sort" FontSize="18"/>
                                 <CheckBox FontSize="18" Grid.Column="1" Content="Rarity" x:Name="cRarity" VerticalContentAlignment="Center" Checked="OnSelectionIndex" Unchecked="OnUnselectionIndex" Command="{Binding SearchParametersCommand}" CommandParameter="{Binding RelativeSource={RelativeSource Self}}"/>
-                                <CheckBox FontSize="18" Grid.Column="2" Content="Index" x:Name="cId" IsChecked="True" VerticalContentAlignment="Center" Checked="OnSelectionIndex" Unchecked="OnUnselectionIndex" Command="{Binding SearchParametersCommand}" CommandParameter="{Binding RelativeSource={RelativeSource Self}}"/>
+                                <CheckBox FontSize="18" Grid.Column="2" Content="Lv." x:Name="cId" IsChecked="True" VerticalContentAlignment="Center" Checked="OnSelectionIndex" Unchecked="OnUnselectionIndex" Command="{Binding SearchParametersCommand}" CommandParameter="{Binding RelativeSource={RelativeSource Self}}"/>
                                 <Expander FontSize="18" x:Name="statExpander" Grid.Column="3" Header="Stat" ExpandDirection="Down" Background="LightGray" Panel.ZIndex="3">
                                     <Canvas>
                                         <Border BorderThickness="1" BorderBrush="Black">

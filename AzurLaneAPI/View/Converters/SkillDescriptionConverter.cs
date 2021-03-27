@@ -20,11 +20,11 @@ namespace AzurLaneAPI.View.Converters
         {
             string description = values[1].ToString();
             ushort lv = (ushort)values[0];
-            string pattern = @"\d*\.?\d*.\s\(\d*\.?\d*.\)";
+            string pattern = @"\d{1,}\.?\d*.?\s\(([^\s]{3})?\d{1,}\.?\d*.?\)";
             MatchCollection matches = Regex.Matches(description, pattern);
             if (matches.Count > 0)
             {
-                string subPattern = @"(\d*\.?\d*)";
+                string subPattern = @"(\d{1,}\.?\d*)";
                 double minVal, maxVal, diffVal, newVal;
                 string newString = "", subString = "";
                 int indexOffset = 0;
@@ -47,9 +47,14 @@ namespace AzurLaneAPI.View.Converters
                     //get the match result
                     MatchCollection subMatches = Regex.Matches(subString, subPattern);
                     //matches from substring vb.: 12% (40%) -> 12 and 40
-                    minVal = double.Parse(subString.Substring(subMatches[0].Index, subMatches[0].Length));
-
                     int indx = 0;
+                    while (subMatches[indx].Length == 0)
+                    {
+                        ++indx;
+                    }
+
+                    minVal = double.Parse(subString.Substring(subMatches[indx].Index, subMatches[indx].Length));
+
                     do
                     {
                         ++indx;
@@ -66,12 +71,12 @@ namespace AzurLaneAPI.View.Converters
                     newString = newVal.ToString();
                     if (subString.Contains("%"))
                         newString += "%";
-                    else
-                        newString += "s";
 
-                    map.Add(subString, newString);
                     //replace, replaces everything that matches!!!
                     description = description.Replace(subString, newString);
+
+                    //keep track of the replaced substrings
+                    map.Add(subString, newString);
 
                     indexOffset += (subString.Length - newString.Length);
                 }

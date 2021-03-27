@@ -24,7 +24,117 @@
             <RowDefinition Height="1*"/>
             <RowDefinition Height="8*"/>
         </Grid.RowDefinitions>
-        <ListBox x:Name="myList" Grid.Row="2" Background="Transparent" ItemsSource="{Binding ShipDataLists}" SelectedItem="{Binding SelectedShip}" ScrollViewer.HorizontalScrollBarVisibility="Disabled" Panel.ZIndex="1" 
+        <Grid Panel.ZIndex="5">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="1*"/>
+                <ColumnDefinition Width="1*"/>
+                <ColumnDefinition Width="1*"/>
+            </Grid.ColumnDefinitions>
+            <Viewbox Grid.Column="0" Stretch="Uniform" StretchDirection="DownOnly" HorizontalAlignment="Left" Panel.ZIndex="3">
+                <Expander x:Name="filterExpander" Header="FILTER" FontSize="24" Background="LightGray" VerticalAlignment="Center" ExpandDirection="Down">
+                    <Canvas Width="185">
+                        <Border BorderBrush="Black" BorderThickness="5">
+                            <Grid Background="LightGray">
+                                <Grid.RowDefinitions>
+                                    <RowDefinition/>
+                                    <RowDefinition/>
+                                    <RowDefinition/>
+                                    <RowDefinition/>
+                                    <RowDefinition/>
+                                    <RowDefinition/>
+                                    <RowDefinition/>
+                                </Grid.RowDefinitions>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition/>
+                                    <ColumnDefinition/>
+                                    <ColumnDefinition/>
+                                    <ColumnDefinition/>
+                                    <ColumnDefinition/>
+                                    <ColumnDefinition/>
+                                    <ColumnDefinition/>
+                                </Grid.ColumnDefinitions>
+
+                                <!--    Sort    -->
+                                <TextBlock Text="Sort" FontSize="18"/>
+                                <CheckBox FontSize="18" Grid.Column="1" Content="Rarity" x:Name="cRarity" VerticalContentAlignment="Center" Checked="OnSelectionIndex" Unchecked="OnUnselectionIndex" Command="{Binding SearchParametersCommand}" CommandParameter="{Binding RelativeSource={RelativeSource Self}}"/>
+                                <CheckBox FontSize="18" Grid.Column="2" Content="Lv." x:Name="cLv" IsChecked="True" VerticalContentAlignment="Center" Checked="OnSelectionIndex" Unchecked="OnUnselectionIndex" Command="{Binding SearchParametersCommand}" CommandParameter="{Binding RelativeSource={RelativeSource Self}}"/>
+                                <Expander FontSize="18" x:Name="statExpander" Grid.Column="3" Header="Stat" ExpandDirection="Down" Background="LightGray" Panel.ZIndex="3">
+                                    <Canvas>
+                                        <Border BorderThickness="1" BorderBrush="Black">
+                                            <StackPanel Background="LightGray">
+                                                <CheckBox Content="FP" x:Name="cFirepower" VerticalContentAlignment="Center" Checked="OnSelectionIndex" Unchecked="OnUnselectionIndex" Command="{Binding SearchParametersCommand}" CommandParameter="{Binding RelativeSource={RelativeSource Self}}"/>
+                                                <CheckBox Content="AVI" x:Name="cAviation" VerticalContentAlignment="Center" Checked="OnSelectionIndex" Unchecked="OnUnselectionIndex" Command="{Binding SearchParametersCommand}" CommandParameter="{Binding RelativeSource={RelativeSource Self}}"/>
+                                                <CheckBox Content="EVA" x:Name="cEvasion" VerticalContentAlignment="Center" Checked="OnSelectionIndex" Unchecked="OnUnselectionIndex" Command="{Binding SearchParametersCommand}" CommandParameter="{Binding RelativeSource={RelativeSource Self}}"/>
+                                                <CheckBox Content="AA" x:Name="cAntiair" VerticalContentAlignment="Center" Checked="OnSelectionIndex" Unchecked="OnUnselectionIndex" Command="{Binding SearchParametersCommand}" CommandParameter="{Binding RelativeSource={RelativeSource Self}}"/>
+                                                <CheckBox Content="TRP" x:Name="cTorpedo" VerticalContentAlignment="Center" Checked="OnSelectionIndex" Unchecked="OnUnselectionIndex" Command="{Binding SearchParametersCommand}" CommandParameter="{Binding RelativeSource={RelativeSource Self}}"/>
+                                                <CheckBox Content="RLD" x:Name="cReload" VerticalContentAlignment="Center" Checked="OnSelectionIndex" Unchecked="OnUnselectionIndex" Command="{Binding SearchParametersCommand}" CommandParameter="{Binding RelativeSource={RelativeSource Self}}"/>
+                                                <CheckBox Content="HP" x:Name="cHealth" VerticalContentAlignment="Center" Checked="OnSelectionIndex" Unchecked="OnUnselectionIndex" Command="{Binding SearchParametersCommand}" CommandParameter="{Binding RelativeSource={RelativeSource Self}}"/>
+                                                <CheckBox Content="ASW" x:Name="cAntisubmarineWarfare" VerticalContentAlignment="Center" Checked="OnSelectionIndex" Unchecked="OnUnselectionIndex" Command="{Binding SearchParametersCommand}" CommandParameter="{Binding RelativeSource={RelativeSource Self}}"/>
+                                            </StackPanel>
+                                        </Border>
+                                    </Canvas>
+                                </Expander>
+                                <Rectangle Height="1" Fill="Black" Opacity="0.75" Grid.ColumnSpan="7" Grid.RowSpan="1" VerticalAlignment="Bottom"/>
+
+                                <!--    Index    -->
+                                <TextBlock Grid.Row="1" Text="Index" FontSize="18"/>
+                                <CheckBox FontSize="18" Grid.Row="1" Grid.Column="1" VerticalContentAlignment="Center" Checked="OnIndexSelection" Unchecked="OnIndexUnselection" Content="All" IsChecked="True" x:Name="cIndexAll" Command="{Binding SearchParametersIndexCommand}" CommandParameter="{Binding RelativeSource={RelativeSource Self}}"/>
+                                <CheckBox FontSize="18" Grid.Row="1" Grid.Column="2" VerticalContentAlignment="Center" Checked="OnIndexSelection" Unchecked="OnIndexUnselection" Content="Vanguard" x:Name="cVanguard" Command="{Binding SearchParametersIndexCommand}" CommandParameter="{Binding RelativeSource={RelativeSource Self}}"/>
+                                <CheckBox FontSize="18" Grid.Row="1" Grid.Column="3" VerticalContentAlignment="Center" Checked="OnIndexSelection" Unchecked="OnIndexUnselection" Content="Main" x:Name="cMain" Command="{Binding SearchParametersIndexCommand}" CommandParameter="{Binding RelativeSource={RelativeSource Self}}"/>
+                                <CheckBox FontSize="18" Grid.Row="1" Grid.Column="4" VerticalContentAlignment="Center" Checked="OnIndexSelection" Unchecked="OnIndexUnselection" Content="DD" x:Name="cDD" Command="{Binding SearchParametersIndexCommand}" CommandParameter="{Binding RelativeSource={RelativeSource Self}}"/>
+                                <CheckBox FontSize="18" Grid.Row="1" Grid.Column="5" VerticalContentAlignment="Center" Checked="OnIndexSelection" Unchecked="OnIndexUnselection" Content="CL" x:Name="cCL" Command="{Binding SearchParametersIndexCommand}" CommandParameter="{Binding RelativeSource={RelativeSource Self}}"/>
+                                <CheckBox FontSize="18" Grid.Row="1" Grid.Column="6" VerticalContentAlignment="Center" Checked="OnIndexSelection" Unchecked="OnIndexUnselection" Content="CA" x:Name="cCA" Command="{Binding SearchParametersIndexCommand}" CommandParameter="{Binding RelativeSource={RelativeSource Self}}"/>
+
+                                <CheckBox FontSize="18" Grid.Row="2" Grid.Column="1" VerticalContentAlignment="Center" Checked="OnIndexSelection" Unchecked="OnIndexUnselection" Content="BB" x:Name="cBB" Command="{Binding SearchParametersIndexCommand}" CommandParameter="{Binding RelativeSource={RelativeSource Self}}"/>
+                                <CheckBox FontSize="18" Grid.Row="2" Grid.Column="2" VerticalContentAlignment="Center" Checked="OnIndexSelection" Unchecked="OnIndexUnselection" Content="CV" x:Name="cCV" Command="{Binding SearchParametersIndexCommand}" CommandParameter="{Binding RelativeSource={RelativeSource Self}}"/>
+                                <CheckBox FontSize="18" Grid.Row="2" Grid.Column="3" VerticalContentAlignment="Center" Checked="OnIndexSelection" Unchecked="OnIndexUnselection" Content="Repair" x:Name="cRepair" Command="{Binding SearchParametersIndexCommand}" CommandParameter="{Binding RelativeSource={RelativeSource Self}}"/>
+                                <CheckBox FontSize="18" Grid.Row="2" Grid.Column="4" VerticalContentAlignment="Center" Checked="OnIndexSelection" Unchecked="OnIndexUnselection" Content="SS" x:Name="cSS" Command="{Binding SearchParametersIndexCommand}" CommandParameter="{Binding RelativeSource={RelativeSource Self}}"/>
+                                <CheckBox FontSize="18" Grid.Row="2" Grid.Column="5" VerticalContentAlignment="Center" Checked="OnIndexSelection" Unchecked="OnIndexUnselection" Content="Others" x:Name="cIndexOther" Command="{Binding SearchParametersIndexCommand}" CommandParameter="{Binding RelativeSource={RelativeSource Self}}"/>
+
+                                <Rectangle Grid.Row="2" Height="1" Fill="Black" Opacity="0.75" Grid.ColumnSpan="7" Grid.RowSpan="1" VerticalAlignment="Bottom"/>
+                                <!--    Faction    -->
+                                <TextBlock FontSize="18" Grid.Row="3" Text="Faction"/>
+                                <CheckBox FontSize="18" Grid.Row="3" Grid.Column="1" VerticalContentAlignment="Center" Checked="OnFactionSelection" Unchecked="OnFactionUnselection" Content="All Factions" IsChecked="True" x:Name="cAllFaction" Command="{Binding SearchParametersFaction}" CommandParameter="{Binding RelativeSource={RelativeSource Self}}"/>
+                                <CheckBox FontSize="18" Grid.Row="3" Grid.Column="2" VerticalContentAlignment="Center" Checked="OnFactionSelection" Unchecked="OnFactionUnselection" Content="Eagle Union" x:Name="cEagle" Command="{Binding SearchParametersFaction}" CommandParameter="{Binding RelativeSource={RelativeSource Self}}"/>
+                                <CheckBox FontSize="18" Grid.Row="3" Grid.Column="3" VerticalContentAlignment="Center" Checked="OnFactionSelection" Unchecked="OnFactionUnselection" Content="Royal Navy" x:Name="cRoyal" Command="{Binding SearchParametersFaction}" CommandParameter="{Binding RelativeSource={RelativeSource Self}}"/>
+                                <CheckBox FontSize="18" Grid.Row="3" Grid.Column="4" VerticalContentAlignment="Center" Checked="OnFactionSelection" Unchecked="OnFactionUnselection" Content="Sakura Empire" x:Name="cSakura" Command="{Binding SearchParametersFaction}" CommandParameter="{Binding RelativeSource={RelativeSource Self}}"/>
+                                <CheckBox FontSize="18" Grid.Row="3" Grid.Column="5" VerticalContentAlignment="Center" Checked="OnFactionSelection" Unchecked="OnFactionUnselection" Content="Iron Blood" x:Name="cIron" Command="{Binding SearchParametersFaction}" CommandParameter="{Binding RelativeSource={RelativeSource Self}}"/>
+                                <CheckBox FontSize="18" Grid.Row="3" Grid.Column="6" VerticalContentAlignment="Center" Checked="OnFactionSelection" Unchecked="OnFactionUnselection" Content="Dragon Empery" x:Name="cDragon" Command="{Binding SearchParametersFaction}" CommandParameter="{Binding RelativeSource={RelativeSource Self}}"/>
+
+                                <CheckBox FontSize="18" Grid.Row="4" Grid.Column="1" VerticalContentAlignment="Center" Checked="OnFactionSelection" Unchecked="OnFactionUnselection" Content="Sardegna Empire" x:Name="cSardegna" Command="{Binding SearchParametersFaction}" CommandParameter="{Binding RelativeSource={RelativeSource Self}}"/>
+                                <CheckBox FontSize="18" Grid.Row="4" Grid.Column="2" VerticalContentAlignment="Center" Checked="OnFactionSelection" Unchecked="OnFactionUnselection" Content="Northern Parliament" x:Name="cNorthern" Command="{Binding SearchParametersFaction}" CommandParameter="{Binding RelativeSource={RelativeSource Self}}"/>
+                                <CheckBox FontSize="18" Grid.Row="4" Grid.Column="3" VerticalContentAlignment="Center" Checked="OnFactionSelection" Unchecked="OnFactionUnselection" Content="Iris Libre" x:Name="cIris" Command="{Binding SearchParametersFaction}" CommandParameter="{Binding RelativeSource={RelativeSource Self}}"/>
+                                <CheckBox FontSize="18" Grid.Row="4" Grid.Column="4" VerticalContentAlignment="Center" Checked="OnFactionSelection" Unchecked="OnFactionUnselection" Content="Vichya Dominion" x:Name="cVichya" Command="{Binding SearchParametersFaction}" CommandParameter="{Binding RelativeSource={RelativeSource Self}}"/>
+                                <CheckBox FontSize="18" Grid.Row="4" Grid.Column="5" VerticalContentAlignment="Center" Checked="OnFactionSelection" Unchecked="OnFactionUnselection" Content="Other" x:Name="cFactionOther" Command="{Binding SearchParametersFaction}" CommandParameter="{Binding RelativeSource={RelativeSource Self}}"/>
+
+                                <Rectangle Grid.Row="4" Height="1" Fill="Black" Opacity="0.75" Grid.ColumnSpan="7" Grid.RowSpan="1" VerticalAlignment="Bottom"/>
+                                <!--    Rarity    -->
+                                <TextBlock FontSize="18" Grid.Row="5" Text="Rarity"/>
+                                <CheckBox FontSize="18" Grid.Row="5" Grid.Column="1" VerticalContentAlignment="Center" Checked="OnRaritySelecion" Unchecked="OnRarityUnselection" Content="All" IsChecked="True" x:Name="cRarityAll" Command="{Binding SearchParametersRarity}" CommandParameter="{Binding RelativeSource={RelativeSource Self}}"/>
+                                <CheckBox FontSize="18" Grid.Row="5" Grid.Column="2" VerticalContentAlignment="Center" Checked="OnRaritySelecion" Unchecked="OnRarityUnselection" Content="Common" x:Name="cNormal" Command="{Binding SearchParametersRarity}" CommandParameter="{Binding RelativeSource={RelativeSource Self}}"/>
+                                <CheckBox FontSize="18" Grid.Row="5" Grid.Column="3" VerticalContentAlignment="Center" Checked="OnRaritySelecion" Unchecked="OnRarityUnselection" Content="Rare" x:Name="cRare" Command="{Binding SearchParametersRarity}" CommandParameter="{Binding RelativeSource={RelativeSource Self}}"/>
+                                <CheckBox FontSize="18" Grid.Row="5" Grid.Column="4" VerticalContentAlignment="Center" Checked="OnRaritySelecion" Unchecked="OnRarityUnselection" Content="Elite" x:Name="cElite" Command="{Binding SearchParametersRarity}" CommandParameter="{Binding RelativeSource={RelativeSource Self}}"/>
+                                <CheckBox FontSize="18" Grid.Row="5" Grid.Column="5" VerticalContentAlignment="Center" Checked="OnRaritySelecion" Unchecked="OnRarityUnselection" Content="Super Rare" x:Name="cSuper" Command="{Binding SearchParametersRarity}" CommandParameter="{Binding RelativeSource={RelativeSource Self}}"/>
+                                <CheckBox FontSize="18" Grid.Row="5" Grid.Column="6" VerticalContentAlignment="Center" Checked="OnRaritySelecion" Unchecked="OnRarityUnselection" Content="Ultra" x:Name="cUltra" Command="{Binding SearchParametersRarity}" CommandParameter="{Binding RelativeSource={RelativeSource Self}}"/>
+
+                                <Button FontSize="18" Grid.Row="6" Grid.ColumnSpan="7" HorizontalAlignment="Center" Content="CONFIRM" Command="{Binding FilterCommand}"/>
+
+                            </Grid>
+                        </Border>
+                    </Canvas>
+                </Expander>
+            </Viewbox>
+            <!--Search Bar-->
+            <Viewbox Grid.Column="2" Stretch="Uniform" StretchDirection="DownOnly" HorizontalAlignment="Right">
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                    <TextBox x:Name="SearchBox" FontSize="24" Width="200" VerticalContentAlignment="Center" KeyDown="SearchBox_KeyDown"/>
+                    <Button x:Name="searchButton" Command="{Binding SearchCommand}" CommandParameter="{Binding ElementName=SearchBox}">
+                        <TextBlock Text="Search" FontSize="24"/>
+                    </Button>
+                </StackPanel>
+            </Viewbox>
+        </Grid>
+        <ListBox x:Name="myList" Grid.Row="1" Background="Transparent" ItemsSource="{Binding FilterListStat}" SelectedItem="{Binding SelectedShip}" ScrollViewer.HorizontalScrollBarVisibility="Disabled" Panel.ZIndex="1" 
                  VirtualizingPanel.IsVirtualizing="True"
                  VirtualizingPanel.IsContainerVirtualizable="True"
                  VirtualizingPanel.VirtualizationMode="Recycling"
