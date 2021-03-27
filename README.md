@@ -1,7 +1,7 @@
 # AzurLaneAPI
 ## Introduction
 Welcome to my implementation on the AzurAPI: https://azurapi.github.io/#introduction  
-This project started as an assignment given by my University (Howest Kortrijk Belgium) where I attend the course DAE - Game Development. Where I had to chose an API to work on.  
+This project started as an assignment given by my University (Howest Kortrijk Belgium) where I attend the course DAE - Game Development. Where I had to chose an API to work on. It was only something small that needed to be done in 2 weeks, but the need of a seperate list let me think to continue the project for an easier lookup.
 My knowledge of this environment is still low, but I hope the end this project with good quality code and a nice looking interface.  
 
 ## Description
