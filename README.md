@@ -12,7 +12,6 @@ Here I will show the current things that can be done.
 - Change skill lv (you can do the same with all out assaults, but it will take no effect)
 
 ## My TODO list
-- change marriage frame
 - Power calculator
 - Account tab (here you can set your ID and your profile picture to one of your collected ships), will have you collection ratio
 The hardest one:
