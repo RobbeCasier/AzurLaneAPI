@@ -11,7 +11,7 @@ namespace ALListViewer
             Xamarin.Forms.DataGrid.DataGridComponent.Init();
             InitializeComponent();
 
-            MainPage = new MainPage();
+            MainPage = new ShellPage();
         }
 
         protected override void OnStart()

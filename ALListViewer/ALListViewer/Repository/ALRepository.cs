@@ -55,7 +55,7 @@ namespace ALListViewer.Repository
                     //local file
                     //...
 
-                    _filterList = _fullShipList;
+                    _filterStatList = _filterList = _fullShipList;
                     return _fullShipList;
 
                 }
@@ -64,6 +64,74 @@ namespace ALListViewer.Repository
                     return null;
                 }
             }
+        }
+
+        public List<Ship> GetCommonShips()
+        {
+            List<Ship> fullList = _fullShipList;
+
+            List<Ship> sortedList = new List<Ship>();
+
+            foreach (Ship ship in fullList)
+            {
+                int id;
+                if (int.TryParse(ship.Id, out id))
+                    if (id < 1000)
+                        sortedList.Add(ship);
+            }
+            _filterStatList = _filterList = sortedList;
+            return _filterList;
+        }
+
+        public List<Ship> GetCollabsShips()
+        {
+            List<Ship> fullList = _fullShipList;
+
+            List<Ship> sortedList = new List<Ship>();
+
+            foreach (Ship ship in fullList)
+            {
+                int id;
+                if (ship.Id.Contains("Collab"))
+                    sortedList.Add(ship);
+                else if (int.TryParse(ship.Id, out id))
+                    if (id > 10000 && id < 30000)
+                        sortedList.Add(ship);
+            }
+            _filterStatList = _filterList = sortedList;
+            return _filterList;
+        }
+
+        public List<Ship> GetPRShips()
+        {
+            List<Ship> fullList = _fullShipList;
+
+            List<Ship> sortedList = new List<Ship>();
+
+            foreach (Ship ship in fullList)
+            {
+                if (ship.Id.Contains("Plan"))
+                    sortedList.Add(ship);
+            }
+            _filterStatList = _filterList = sortedList;
+            return _filterList;
+        }
+
+        public List<Ship> GetMETAShips()
+        {
+            List<Ship> fullList = _fullShipList;
+
+            List<Ship> sortedList = new List<Ship>();
+
+            foreach (Ship ship in fullList)
+            {
+                int id;
+                if (int.TryParse(ship.Id, out id))
+                    if (id > 30000)
+                        sortedList.Add(ship);
+            }
+            _filterStatList = _filterList = sortedList;
+            return _filterList;
         }
 
         public List<Ship> SearchShip(string name)

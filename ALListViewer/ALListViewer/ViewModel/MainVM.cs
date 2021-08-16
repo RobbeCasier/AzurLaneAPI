@@ -14,31 +14,88 @@ using GalaSoft.MvvmLight.Command;
 
 namespace ALListViewer.ViewModel
 {
+    class BaseSort
+    {
+        public string Name { get; set; }
+        public Action Function { get; set; }
+    }
     class MainVM : ObservableObject
     {
         public ALRepository _alRepository = new ALRepository();
 
         public List<Ship> Ships { get; set; }
+        public List<BaseSort> BasicSortList { get; set; }
 
         public MainVM()
         {
+            SetupBasicSortingTypes();
             GetShips();
         }
 
-
-        public RelayCommand<string> CmdSearch
+        //selection here
+        private BaseSort _selectedBaseSort;
+        public BaseSort SelectedBaseSort
         {
             get
             {
-                return new RelayCommand<string>(Search);
+                return _selectedBaseSort;
+            }
+            set
+            {
+                if (Ships != null)
+                {
+                    _selectedBaseSort = value;
+                    _selectedBaseSort.Function();
+                }
             }
         }
-
-        private void Search(string sender)
+        private void SetupBasicSortingTypes()
         {
-            Ships = _alRepository.SearchShip((string)sender);
-            RaisePropertyChanged("Ships");
+            BasicSortList = new List<BaseSort>();
+            BaseSort sort = new BaseSort
+            {
+                Name = "All",
+                Function = GetShips
+            };
+            BasicSortList.Add(sort);
+
+            sort = new BaseSort
+            {
+                Name = "Common",
+                Function = GetCommonShips
+            };
+            BasicSortList.Add(sort);
+
+            sort = new BaseSort
+            {
+                Name = "Collabs",
+                Function = GetCollabsShips
+            };
+            BasicSortList.Add(sort);
+
+            sort = new BaseSort
+            {
+                Name = "Priority Ship",
+                Function = GetPRShips
+            };
+            BasicSortList.Add(sort);
+
+            sort = new BaseSort
+            {
+                Name = "META",
+                Function = GetMETAShips
+            };
+            BasicSortList.Add(sort);
+
+            RaisePropertyChanged("BasicSortList");
         }
+
+        public ICommand CmdSearch => new Command<string>((string value) =>
+        {
+            Ships = _alRepository.SearchShip(value);
+            RaisePropertyChanged("Ships");
+        });
+
         private void GetShips()
         {
             var taskResult = Task.Run(() =>
@@ -51,6 +108,30 @@ namespace ALListViewer.ViewModel
                     Ships = taskResult.Result;
                     RaisePropertyChanged("Ships");
                 });
+        }
+
+        private void GetCommonShips()
+        {
+            Ships = _alRepository.GetCommonShips();
+            RaisePropertyChanged("Ships");
+        }
+
+        private void GetCollabsShips()
+        {
+            Ships = _alRepository.GetCollabsShips();
+            RaisePropertyChanged("Ships");
+        }
+
+        private void GetPRShips()
+        {
+            Ships = _alRepository.GetPRShips();
+            RaisePropertyChanged("Ships");
+        }
+
+        private void GetMETAShips()
+        {
+            Ships = _alRepository.GetMETAShips();
+            RaisePropertyChanged("Ships");
         }
     }
 }

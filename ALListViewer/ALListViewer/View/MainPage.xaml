@@ -1,0 +1,182 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:conv="clr-namespace:ALListViewer.Converters"
+             xmlns:vm="clr-namespace:ALListViewer.ViewModel"
+             xmlns:dg="clr-namespace:Xamarin.Forms.DataGrid;assembly=Xamarin.Forms.DataGrid"
+             x:Class="ALListViewer.View.MainPage"
+             Title="List">
+    <ContentPage.BindingContext>
+        <vm:MainVM/>
+    </ContentPage.BindingContext>
+    <!--<StackLayout>
+        <Frame BackgroundColor="#2196F3" Padding="24" CornerRadius="0">
+            <Label Text="Welcome to Xamarin.Forms!" HorizontalTextAlignment="Center" TextColor="White" FontSize="36"/>
+        </Frame>
+        <Label Text="Start developing now" FontSize="Title" Padding="30,10,30,10"/>
+        <Label Text="Make changes to your XAML file and save to see your UI update in the running app with XAML Hot Reload. Give it a try!" FontSize="16" Padding="30,0,30,0"/>
+        <Label FontSize="16" Padding="30,24,30,0">
+            <Label.FormattedText>
+                <FormattedString>
+                    <FormattedString.Spans>
+                        <Span Text="Learn more at "/>
+                        <Span Text="https://aka.ms/xamarin-quickstart" FontAttributes="Bold"/>
+                    </FormattedString.Spans>
+                </FormattedString>
+            </Label.FormattedText>
+        </Label>
+    </StackLayout>
+    -->
+    <StackLayout Orientation="Vertical" VerticalOptions="StartAndExpand">
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="auto"/>
+            </Grid.RowDefinitions>
+            <Picker Grid.Column="0"
+                    Title="Select Ship Types"
+                    ItemDisplayBinding="{Binding Name}"
+                    ItemsSource="{Binding BasicSortList}"
+                    SelectedItem="{Binding SelectedBaseSort}">
+
+            </Picker>
+            <SearchBar Grid.Column="1" 
+                       x:Name="SearchBar"
+                       Placeholder="Search Ship"
+                       SearchCommand="{Binding CmdSearch}"
+                       SearchCommandParameter="{Binding Source={x:Reference SearchBar}, Path=Text}">
+            </SearchBar>
+        </Grid>
+        <StackLayout Orientation="Horizontal" HorizontalOptions="End">
+            <Button Text="List"/>
+            <Button Text="Simple"/>
+            <Button Text="AL Style"/>
+        </StackLayout>
+        <dg:DataGrid ItemsSource="{Binding Ships}" IsSortable="True">
+            <x:Arguments>
+                <ListViewCachingStrategy>RetainElement</ListViewCachingStrategy>
+            </x:Arguments>
+            <dg:DataGrid.Resources>
+                <conv:FactionToImage x:Key="FactionToImage"/>
+            </dg:DataGrid.Resources>
+            <dg:DataGrid.Columns>
+                <dg:DataGridColumn Title="ID" PropertyName="Id" Width="auto" SortingEnabled="True"/>
+                <dg:DataGridColumn Title="Name" PropertyName="Name" SortingEnabled="True">
+                    <dg:DataGridColumn.CellTemplate>
+                        <DataTemplate>
+                            <Label Text="{Binding}" HorizontalOptions="CenterAndExpand" HorizontalTextAlignment="Center" VerticalTextAlignment="Center" TextColor="Black"/>
+                        </DataTemplate>
+                    </dg:DataGridColumn.CellTemplate>
+                </dg:DataGridColumn>
+                <dg:DataGridColumn Title="Rarity" PropertyName="Rarity" SortingEnabled="True">
+                    <dg:DataGridColumn.CellTemplate>
+                        <DataTemplate>
+                            <ContentView HorizontalOptions="Fill"
+                                                 VerticalOptions="Fill">
+                                <ContentView.Triggers>
+                                    <DataTrigger TargetType="ContentView" Binding="{Binding}" Value="Normal">
+                                        <Setter Property="BackgroundColor" Value="Gray"/>
+                                    </DataTrigger>
+                                    <DataTrigger TargetType="ContentView" Binding="{Binding}" Value="Rare">
+                                        <Setter Property="BackgroundColor" Value="#9fe8ff"/>
+                                    </DataTrigger>
+                                    <DataTrigger TargetType="ContentView" Binding="{Binding}" Value="Elite">
+                                        <Setter Property="BackgroundColor" Value="#c4adff"/>
+                                    </DataTrigger>
+                                    <DataTrigger TargetType="ContentView" Binding="{Binding}" Value="Super Rare">
+                                        <Setter Property="BackgroundColor" Value="#ee9"/>
+                                    </DataTrigger>
+                                    <DataTrigger TargetType="ContentView" Binding="{Binding}" Value="Priority">
+                                        <Setter Property="BackgroundColor" Value="#ee9"/>
+                                    </DataTrigger>
+                                    <DataTrigger TargetType="ContentView" Binding="{Binding}" Value="Ultra Rare">
+                                        <Setter Property="Background">
+                                            <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                                                <GradientStop Color="#fbffca" Offset="0"/>
+                                                <GradientStop Color="#baffbf" Offset="0.3"/>
+                                                <GradientStop Color="#a7efff" Offset="0.6"/>
+                                                <GradientStop Color="#ffabff" Offset="1.0"/>
+                                            </LinearGradientBrush>
+                                        </Setter>
+                                    </DataTrigger>
+                                    <DataTrigger TargetType="ContentView" Binding="{Binding}" Value="Decisive">
+                                        <Setter Property="Background">
+                                            <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                                                <GradientStop Color="#fbffca" Offset="0"/>
+                                                <GradientStop Color="#baffbf" Offset="0.3"/>
+                                                <GradientStop Color="#a7efff" Offset="0.6"/>
+                                                <GradientStop Color="#ffabff" Offset="1.0"/>
+                                            </LinearGradientBrush>
+                                        </Setter>
+                                    </DataTrigger>
+                                </ContentView.Triggers>
+                                <Label Text="{Binding}" HorizontalOptions="Center" VerticalOptions="Center" TextColor="Black"/>
+                            </ContentView>
+                        </DataTemplate>
+                    </dg:DataGridColumn.CellTemplate>
+                </dg:DataGridColumn>
+                <dg:DataGridColumn Title="Type" PropertyName="HullType" SortingEnabled="True">
+                    <dg:DataGridColumn.CellTemplate>
+                        <DataTemplate>
+                            <ContentView HorizontalOptions="Fill"
+                                         VerticalOptions="Fill">
+                                <ContentView.Triggers>
+                                    <DataTrigger TargetType="ContentView" Binding="{Binding}" Value="Destroyer">
+                                        <Setter Property="BackgroundColor" Value="#9fe8ff"/>
+                                    </DataTrigger>
+                                    <DataTrigger TargetType="ContentView" Binding="{Binding}" Value="Light Cruiser">
+                                        <Setter Property="BackgroundColor" Value="#ffd192"/>
+                                    </DataTrigger>
+                                    <DataTrigger TargetType="ContentView" Binding="{Binding}" Value="Heavy Cruiser">
+                                        <Setter Property="BackgroundColor" Value="#ffd192"/>
+                                    </DataTrigger>
+                                    <DataTrigger TargetType="ContentView" Binding="{Binding}" Value="Monitor">
+                                        <Setter Property="BackgroundColor" Value="#ffd192"/>
+                                    </DataTrigger>
+                                    <DataTrigger TargetType="ContentView" Binding="{Binding}" Value="Battleship">
+                                        <Setter Property="BackgroundColor" Value="#ffb4b4"/>
+                                    </DataTrigger>
+                                    <DataTrigger TargetType="ContentView" Binding="{Binding}" Value="Battlecruiser">
+                                        <Setter Property="BackgroundColor" Value="#ffb4b4"/>
+                                    </DataTrigger>
+                                    <DataTrigger TargetType="ContentView" Binding="{Binding}" Value="Light Carrier">
+                                        <Setter Property="BackgroundColor" Value="#c4adff"/>
+                                    </DataTrigger>
+                                    <DataTrigger TargetType="ContentView" Binding="{Binding}" Value="Aircraft Carrier">
+                                        <Setter Property="BackgroundColor" Value="#c4adff"/>
+                                    </DataTrigger>
+                                    <DataTrigger TargetType="ContentView" Binding="{Binding}" Value="Repair">
+                                        <Setter Property="BackgroundColor" Value="#76ffdd"/>
+                                    </DataTrigger>
+                                    <DataTrigger TargetType="ContentView" Binding="{Binding}" Value="Munition Ship">
+                                        <Setter Property="BackgroundColor" Value="#76ffdd"/>
+                                    </DataTrigger>
+                                    <DataTrigger TargetType="ContentView" Binding="{Binding}" Value="Submarine">
+                                        <Setter Property="BackgroundColor" Value="#98fb98"/>
+                                    </DataTrigger>
+                                    <DataTrigger TargetType="ContentView" Binding="{Binding}" Value="Submarine Carrier">
+                                        <Setter Property="BackgroundColor" Value="#98fb98"/>
+                                    </DataTrigger>
+                                    <DataTrigger TargetType="ContentView" Binding="{Binding}" Value="Large Cruiser">
+                                        <Setter Property="BackgroundColor" Value="#ffa17c"/>
+                                    </DataTrigger>
+                                </ContentView.Triggers>
+                                <Label Text="{Binding}" HorizontalOptions="Center" VerticalOptions="Center" TextColor="Black"/>
+                            </ContentView>
+                        </DataTemplate>
+                    </dg:DataGridColumn.CellTemplate>
+                </dg:DataGridColumn>
+                <dg:DataGridColumn Title="Faction" PropertyName="Nationality" SortingEnabled="True" HorizontalContentAlignment="FillAndExpand">
+                </dg:DataGridColumn>
+            </dg:DataGrid.Columns>
+            <dg:DataGrid.RowsBackgroundColorPalette>
+                <dg:PaletteCollection>
+                    <Color>#FFFFFF</Color>
+                </dg:PaletteCollection>
+            </dg:DataGrid.RowsBackgroundColorPalette>
+        </dg:DataGrid>
+    </StackLayout>
+</ContentPage>
