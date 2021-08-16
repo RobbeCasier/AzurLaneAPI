@@ -584,14 +584,23 @@ namespace AzurLaneAPI.ViewModel
             HPProgress = ushort.Parse(CurrentStat.Health);
             FPProgress = ushort.Parse(CurrentStat.Firepower);
             AAProgress = ushort.Parse(CurrentStat.Antiair);
-            ASWProgress = ushort.Parse(CurrentStat.AntisubmarineWarfare);
+            if (CurrentStat.AntisubmarineWarfare.Equals(""))
+                ASWProgress = 0;
+            else
+                ASWProgress = ushort.Parse(CurrentStat.AntisubmarineWarfare);
+
             if (CurrentStat.Oxygen != null)
                 OXYProgress = ushort.Parse(CurrentStat.Oxygen);
 
             TRPProgress = ushort.Parse(CurrentStat.Torpedo);
             AVIProgress = ushort.Parse(CurrentStat.Aviation);
             if (CurrentStat.Ammunition != null)
-                AMOProgress = ushort.Parse(CurrentStat.Ammunition);
+            {
+                if (CurrentStat.Ammunition.Equals(""))
+                    AMOProgress = 2;
+                else
+                    AMOProgress = ushort.Parse(CurrentStat.Ammunition);
+            }
 
             RLDProgress = ushort.Parse(CurrentStat.Reload);
             EVAProgress = ushort.Parse(CurrentStat.Evasion);
@@ -634,6 +643,8 @@ namespace AzurLaneAPI.ViewModel
                     return "0";
                 else if (stat.Equals("0"))
                     return "0";
+                else if (stat.Equals(""))
+                    return "2";
                 double stat120 = ushort.Parse(stat);
                 double tempInt = (ushort)(stat120 / 1.06);
                 tempInt *= AffMultiplier;

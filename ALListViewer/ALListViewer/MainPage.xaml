@@ -1,0 +1,100 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:vm="clr-namespace:ALListViewer.ViewModel"
+             xmlns:dg="clr-namespace:Xamarin.Forms.DataGrid;assembly=Xamarin.Forms.DataGrid"
+             x:Class="ALListViewer.MainPage">
+    <ContentPage.BindingContext>
+        <vm:MainVM/>
+    </ContentPage.BindingContext>
+    <!--<StackLayout>
+        <Frame BackgroundColor="#2196F3" Padding="24" CornerRadius="0">
+            <Label Text="Welcome to Xamarin.Forms!" HorizontalTextAlignment="Center" TextColor="White" FontSize="36"/>
+        </Frame>
+        <Label Text="Start developing now" FontSize="Title" Padding="30,10,30,10"/>
+        <Label Text="Make changes to your XAML file and save to see your UI update in the running app with XAML Hot Reload. Give it a try!" FontSize="16" Padding="30,0,30,0"/>
+        <Label FontSize="16" Padding="30,24,30,0">
+            <Label.FormattedText>
+                <FormattedString>
+                    <FormattedString.Spans>
+                        <Span Text="Learn more at "/>
+                        <Span Text="https://aka.ms/xamarin-quickstart" FontAttributes="Bold"/>
+                    </FormattedString.Spans>
+                </FormattedString>
+            </Label.FormattedText>
+        </Label>
+    </StackLayout>
+    -->
+    <StackLayout Orientation="Vertical">
+        <SearchBar x:Name="SearchBar"
+                   Placeholder="Search Ship"
+                   SearchCommand="{Binding CmdSearch}"
+                   SearchCommandParameter="{Binding Source={x:Reference SearchBar}, Path=Text}">
+        </SearchBar>
+        <dg:DataGrid ItemsSource="{Binding Ships}" IsSortable="True">
+            <x:Arguments>
+                <ListViewCachingStrategy>RetainElement</ListViewCachingStrategy>
+            </x:Arguments>
+            <dg:DataGrid.Columns>
+                <dg:DataGridColumn Title="ID" PropertyName="Id" Width="auto" SortingEnabled="True"/>
+                <dg:DataGridColumn Title="Name" PropertyName="Name" SortingEnabled="True">
+                    <dg:DataGridColumn.CellTemplate>
+                        <DataTemplate>
+                            <Label Text="{Binding}" HorizontalOptions="CenterAndExpand" HorizontalTextAlignment="Center" VerticalTextAlignment="Center" TextColor="Black"/>
+                        </DataTemplate>
+                    </dg:DataGridColumn.CellTemplate>
+                </dg:DataGridColumn>
+                <dg:DataGridColumn Title="Rarity" PropertyName="Rarity" SortingEnabled="True"/>
+                <dg:DataGridColumn Title="Type" PropertyName="HullType" SortingEnabled="True"/>
+                <dg:DataGridColumn Title="Faction" PropertyName="Nationality" SortingEnabled="True" HorizontalContentAlignment="FillAndExpand"/>
+                <!--<dg:DataGridColumn Title="FP">
+                <dg:DataGridColumn.CellTemplate>
+                    <DataTemplate>
+                        <TextCell Text="{Binding Stats.Level120.Firepower}"/>
+                    </DataTemplate>
+                </dg:DataGridColumn.CellTemplate>
+            </dg:DataGridColumn>
+            <dg:DataGridColumn Title="HP">
+                <dg:DataGridColumn.CellTemplate>
+                    <DataTemplate>
+                        <TextCell Text="{Binding Stats.Level120.Health}"/>
+                    </DataTemplate>
+                </dg:DataGridColumn.CellTemplate>
+            </dg:DataGridColumn>
+            <dg:DataGridColumn Title="AA">
+                <dg:DataGridColumn.CellTemplate>
+                    <DataTemplate>
+                        <TextCell Text="{Binding Stats.Level120.Antiair}"/>
+                    </DataTemplate>
+                </dg:DataGridColumn.CellTemplate>
+            </dg:DataGridColumn>
+            <dg:DataGridColumn Title="EVA">
+                <dg:DataGridColumn.CellTemplate>
+                    <DataTemplate>
+                        <TextCell Text="{Binding Stats.Level120.Evasion}"/>
+                    </DataTemplate>
+                </dg:DataGridColumn.CellTemplate>
+            </dg:DataGridColumn>
+            <dg:DataGridColumn Title="AVI">
+                <dg:DataGridColumn.CellTemplate>
+                    <DataTemplate>
+                        <TextCell Text="{Binding Stats.Level120.Aviation}"/>
+                    </DataTemplate>
+                </dg:DataGridColumn.CellTemplate>
+            </dg:DataGridColumn>
+            <dg:DataGridColumn Title="TP">
+                <dg:DataGridColumn.CellTemplate>
+                    <DataTemplate>
+                        <TextCell Text="{Binding Stats.Level120.Torpedo}"/>
+                    </DataTemplate>
+                </dg:DataGridColumn.CellTemplate>
+            </dg:DataGridColumn>-->
+            </dg:DataGrid.Columns>
+            <dg:DataGrid.RowsBackgroundColorPalette>
+                <dg:PaletteCollection>
+                    <Color>#FFFFFF</Color>
+                </dg:PaletteCollection>
+            </dg:DataGrid.RowsBackgroundColorPalette>
+        </dg:DataGrid>
+    </StackLayout>
+</ContentPage>
