@@ -1,0 +1,74 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:vm="clr-namespace:ALListViewer.ViewModel"
+             xmlns:conv="clr-namespace:ALListViewer.Converters"
+             x:Class="ALListViewer.View.GeneralPage"
+             Title="General">
+    <ContentPage.BindingContext>
+        <vm:DetailPageVM/>
+    </ContentPage.BindingContext>
+    <StackLayout>
+        <Grid>
+            <Grid.Resources>
+                <conv:ImagWeb x:Key="RetrieveImage"/>
+            </Grid.Resources>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+            <Image Grid.Column="0" Source="{Binding Ship.Thumbnail, Converter={StaticResource RetrieveImage}}"/>
+            <Grid Grid.Column="1">
+                <Grid.RowDefinitions>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                </Grid.ColumnDefinitions>
+                <Label Grid.Row="0"
+                       Grid.Column="0"
+                       Text="ID"/>
+                <Label Grid.Row="0"
+                       Grid.Column="1"  
+                       Text="{Binding Ship.Id}"/>
+                <Label Grid.Row="1"
+                       Grid.Column="0"  
+                       Text="Rarity"/>
+                <Label Grid.Row="1"
+                       Grid.Column="1"  
+                       Text="{Binding Ship.Rarity}"/>
+                <Label Grid.Row="2"
+                       Grid.Column="0"  
+                       Text="Classification"/>
+                <Label Grid.Row="2"
+                       Grid.Column="1"  
+                       Text="{Binding Ship.ShipClass}"/>
+                <Label Grid.Row="3"
+                       Grid.Column="0"  
+                       Text="Faction"/>
+                <Label Grid.Row="3"
+                       Grid.Column="1"  
+                       Text="{Binding Ship.Nationality}"/>
+                <Label Grid.Row="4"
+                       Grid.Column="0"  
+                       Text="Class"/>
+                <Label Grid.Row="4"
+                       Grid.Column="1"  
+                       Text="{Binding Ship.HullType}"/>
+                <Label Grid.Row="5"
+                       Grid.Column="0"  
+                       Text="Construction Time"/>
+                <Label Grid.Row="5"
+                       Grid.Column="1"  
+                       Text="{Binding Ship.ConstructionTime}"/>
+            </Grid>
+        </Grid>
+        
+    </StackLayout>
+</ContentPage>

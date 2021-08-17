@@ -11,6 +11,7 @@ using System.Collections.ObjectModel;
 using System.Windows.Input;
 using Xamarin.Forms;
 using GalaSoft.MvvmLight.Command;
+using ALListViewer.View;
 
 namespace ALListViewer.ViewModel
 {
@@ -48,6 +49,28 @@ namespace ALListViewer.ViewModel
                     _selectedBaseSort.Function();
                 }
             }
+        }
+
+        private Ship _selectedShip;
+        public Ship SelectedShip
+        {
+            get
+            {
+                return _selectedShip;
+            }
+            set
+            {
+                _selectedShip = value;
+                GoToDetailPage();
+            }
+        }
+
+        async void GoToDetailPage()
+        {
+            var detailPage = new DetailPage();
+            detailPage.Title = SelectedShip.Name;
+            (detailPage.BindingContext as DetailPageVM).Ship = SelectedShip;
+            await Application.Current.MainPage.Navigation.PushAsync(detailPage, true);
         }
         private void SetupBasicSortingTypes()
         {
