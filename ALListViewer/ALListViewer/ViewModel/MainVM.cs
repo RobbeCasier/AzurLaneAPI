@@ -69,8 +69,9 @@ namespace ALListViewer.ViewModel
         {
             var detailPage = new DetailPage();
             detailPage.Title = SelectedShip.Name;
-            (detailPage.BindingContext as DetailPageVM).Ship = SelectedShip;
             await Application.Current.MainPage.Navigation.PushAsync(detailPage, true);
+            (detailPage.BindingContext as DetailPageVM).Ship = SelectedShip;
+            (detailPage.BindingContext as DetailPageVM).RaisePropertyChanged("Ship");
         }
         private void SetupBasicSortingTypes()
         {

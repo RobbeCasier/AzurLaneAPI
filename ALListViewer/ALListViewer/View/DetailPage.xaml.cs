@@ -17,8 +17,12 @@ namespace ALListViewer.View
             InitializeComponent();
 
             var genPage = new GeneralPage();
+            var quotesPage = new QuotesPage();
+            var galPage = new GalleryPage();
             genPage.BindingContext = this.BindingContext;
             Children.Add(genPage);
+            Children.Add(quotesPage);
+            Children.Add(galPage);
         }
     }
 }
