@@ -1,11 +1,64 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:vm="clr-namespace:ALListViewer.ViewModel"
+             xmlns:conv="clr-namespace:ALListViewer.Converters"
+             xmlns:dg="clr-namespace:Xamarin.Forms.DataGrid;assembly=Xamarin.Forms.DataGrid"
+             xmlns:xct="clr-namespace:Xamarin.CommunityToolkit.UI.Views;assembly=Xamarin.CommunityToolkit"
+             xmlns:local="clr-namespace:ALListViewer.View"
              x:Class="ALListViewer.View.QuotesPage"
              Title="Quotes">
-    
+    <ContentPage.BindingContext>
+        <vm:DetailPageVM/>
+    </ContentPage.BindingContext>
     <ContentPage.Content>
-        <StackLayout>
+        <StackLayout VerticalOptions="Fill">
+            <CollectionView ItemsSource="{Binding Ship.Skins}">
+                <CollectionView.ItemTemplate>
+                    <DataTemplate>
+                        <StackLayout>
+                            <Label Text="{Binding Name}" FontAttributes="Bold" FontSize="20"/>
+                            <dg:DataGrid SelectionEnabled="False" ItemsSource="{Binding Lines}" VerticalOptions="FillAndExpand">
+                                <x:Arguments>
+                                    <ListViewCachingStrategy>RetainElement</ListViewCachingStrategy>
+                                </x:Arguments>
+                                <dg:DataGrid.Resources>
+                                    <conv:ValueToVisibility x:Key="Visible"/>
+                                </dg:DataGrid.Resources>
+                                <dg:DataGrid.Columns>
+                                    <dg:DataGridColumn Title="Event" PropertyName="Event" Width="1*"/>
+                                    <dg:DataGridColumn Title="JP Audio" PropertyName="Audio" Width="auto">
+                                        <dg:DataGridColumn.CellTemplate>
+                                            <DataTemplate>
+                                                <ImageButton IsVisible="{Binding ., Converter={StaticResource Visible}}"
+                                                             Source="PlayAudioImage.png" 
+                                                             HeightRequest="20" 
+                                                             WidthRequest="20" 
+                                                             HorizontalOptions="CenterAndExpand" 
+                                                             VerticalOptions="CenterAndExpand" 
+                                                             Command="{Binding Source={RelativeSource AncestorType={x:Type local:QuotesPage}}, Path=CmdPlayAudio}" 
+                                                             CommandParameter="{Binding}" />
+                                            </DataTemplate>
+                                        </dg:DataGridColumn.CellTemplate>
+                                    </dg:DataGridColumn>
+                                    <dg:DataGridColumn Title="Transcription" PropertyName="En" Width="2*" HorizontalContentAlignment="FillAndExpand" VerticalContentAlignment="FillAndExpand">
+                                        <dg:DataGridColumn.CellTemplate>
+                                            <DataTemplate>
+                                                <Label Text="{Binding}" VerticalOptions="CenterAndExpand" HorizontalOptions="StartAndExpand"/>
+                                            </DataTemplate>
+                                        </dg:DataGridColumn.CellTemplate>
+                                    </dg:DataGridColumn>
+                                </dg:DataGrid.Columns>
+                                <dg:DataGrid.RowsBackgroundColorPalette>
+                                    <dg:PaletteCollection>
+                                        <Color>#FFFFFF</Color>
+                                    </dg:PaletteCollection>
+                                </dg:DataGrid.RowsBackgroundColorPalette>
+                            </dg:DataGrid>
+                        </StackLayout>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
         </StackLayout>
     </ContentPage.Content>
 </ContentPage>

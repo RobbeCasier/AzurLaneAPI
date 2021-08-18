@@ -61,7 +61,8 @@ namespace ALListViewer.ViewModel
             set
             {
                 _selectedShip = value;
-                GoToDetailPage();
+                if (value != null)
+                    GoToDetailPage();
             }
         }
 
@@ -76,6 +77,8 @@ namespace ALListViewer.ViewModel
             (detailPage.BindingContext as DetailPageVM).ColorBrush = bgColor;
             (detailPage.BindingContext as DetailPageVM).RaisePropertyChanged("Ship");
             (detailPage.BindingContext as DetailPageVM).RaisePropertyChanged("ColorBrush");
+            SelectedShip = null;
+            RaisePropertyChanged("SelectedShip");
         }
         private void SetupBasicSortingTypes()
         {
@@ -138,7 +141,7 @@ namespace ALListViewer.ViewModel
                     {
                         return _alRepository.GetVoices();
                     });
-                    taskResult.ConfigureAwait(true).GetAwaiter().OnCompleted(
+                    voiceTask.ConfigureAwait(true).GetAwaiter().OnCompleted(
                         () =>
                         {
                             RaisePropertyChanged("Ships");

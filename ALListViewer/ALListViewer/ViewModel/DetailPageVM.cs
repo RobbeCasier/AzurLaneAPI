@@ -141,6 +141,7 @@ namespace ALListViewer.ViewModel
             }
         }
 
+
         async private Task Collapse(Expander exp)
         {
             await Task.Delay((int)exp.AnimationLength);

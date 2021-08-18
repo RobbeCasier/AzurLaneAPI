@@ -41,7 +41,7 @@
                 <conv:FactionToImage x:Key="FactionToImage"/>
             </dg:DataGrid.Resources>
             <dg:DataGrid.Columns>
-                <dg:DataGridColumn Title="ID" PropertyName="Id" Width="auto" SortingEnabled="True"/>
+                <dg:DataGridColumn Title="ID" PropertyName="Id" SortingEnabled="True"/>
                 <dg:DataGridColumn Title="Name" PropertyName="Name" SortingEnabled="True">
                     <dg:DataGridColumn.CellTemplate>
                         <DataTemplate>
