@@ -23,24 +23,25 @@ namespace ALListViewer.Repository
             if (_fullShipList != null)
                 return _fullShipList;
 
-            string endpoint = "https://raw.githubusercontent.com/AzurAPI/azurapi-js-setup/master/ships.json";
+            string endpointShip = "https://raw.githubusercontent.com/AzurAPI/azurapi-js-setup/master/ships.json";
 
             using (HttpClient client = new HttpClient())
             {
                 try
                 {
-                    var response = await client.GetAsync(endpoint);
+                    var responseShip = await client.GetAsync(endpointShip);
 
-                    if (!response.IsSuccessStatusCode)
-                        throw new HttpRequestException(response.ReasonPhrase);
+                    if (!responseShip.IsSuccessStatusCode)
+                        throw new HttpRequestException(responseShip.ReasonPhrase);
 
-                    string json = await response.Content.ReadAsStringAsync();
+                    string jsonShip = await responseShip.Content.ReadAsStringAsync();
 
-                    JToken jObj = JsonConvert.DeserializeObject<JToken>(json);
+                    JToken jObjShip = JsonConvert.DeserializeObject<JToken>(jsonShip);
                     _fullShipList = new List<Ship>();
-                    foreach (JToken data in jObj)
+                    foreach (JToken data in jObjShip)
                     {
                         Ship ship = data.ToObject<Ship>();
+
                         ship.Name = (string)data.SelectToken("names.en");
                         ship.Stars = (string)data.SelectToken("stars.stars");
                         ship.ConstructionTime = (string)data.SelectToken("construction.constructionTime");
@@ -62,6 +63,53 @@ namespace ALListViewer.Repository
                 catch(Exception)
                 {
                     return null;
+                }
+            }
+        }
+
+        public async Task GetVoices()
+        {
+            if (_fullShipList == null)
+                return;
+
+            string endpointVoice = "https://raw.githubusercontent.com/AzurAPI/azurapi-js-setup/master/voice_lines.json";
+
+            using (HttpClient client = new HttpClient())
+            {
+                try
+                {
+                    var responseVoice = await client.GetAsync(endpointVoice);
+
+                    if (!responseVoice.IsSuccessStatusCode)
+                        throw new HttpRequestException(responseVoice.ReasonPhrase);
+
+                    string jsonVoice = await responseVoice.Content.ReadAsStringAsync();
+
+                    JObject id = JsonConvert.DeserializeObject<JObject>(jsonVoice);
+                    foreach (JProperty prop in id.Properties())
+                    {
+                        Ship ship = _fullShipList.Find(x => x.Id == prop.Name);
+                        foreach (JProperty propSkin in prop.Children<JObject>().Properties())
+                        {
+                            foreach (Skin skin in ship.Skins)
+                            {
+                                if (skin.Name == propSkin.Name)
+                                {
+                                    skin.Lines = new List<VoiceLine>();
+                                    JToken lines = propSkin.Children().ElementAt(0);
+                                    foreach (JToken line in lines)
+                                    {
+                                        VoiceLine newLine = line.ToObject<VoiceLine>();
+                                        skin.Lines.Add(newLine);
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+                catch (Exception)
+                {
+                    return;
                 }
             }
         }

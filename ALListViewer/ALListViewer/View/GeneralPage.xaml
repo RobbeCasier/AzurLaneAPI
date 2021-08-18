@@ -9,25 +9,55 @@
     <ContentPage.BindingContext>
         <vm:DetailPageVM/>
     </ContentPage.BindingContext>
+    <ContentPage.Resources>
+        <Style x:Key="Header" TargetType="Label">
+            <Setter Property="FontAttributes" Value="Bold"/>
+            <Setter Property="BackgroundColor" Value="LightGray"/>
+            <Setter Property="HorizontalTextAlignment" Value="Center"/>
+            <Setter Property="VerticalOptions" Value="FillAndExpand"/>
+        </Style>
+        <Style x:Key="Variable" TargetType="Label">
+            <Setter Property="BackgroundColor" Value="WhiteSmoke"/>
+            <Setter Property="HorizontalTextAlignment" Value="Start"/>
+            <Setter Property="HorizontalOptions" Value="FillAndExpand"/>
+            <Setter Property="VerticalOptions" Value="CenterAndExpand"/>
+        </Style>
+        <Style x:Key="StatHeader" TargetType="Image">
+            <Setter Property="BackgroundColor" Value="LightGray"/>
+            <Setter Property="HorizontalOptions" Value="FillAndExpand"/>
+            <Setter Property="VerticalOptions" Value="FillAndExpand"/>
+        </Style>
+        <Style x:Key="StatVariable" TargetType="Label">
+            <Setter Property="BackgroundColor" Value="WhiteSmoke"/>
+            <Setter Property="HorizontalTextAlignment" Value="Center"/>
+            <Setter Property="VerticalTextAlignment" Value="Center"/>
+            <Setter Property="HorizontalOptions" Value="FillAndExpand"/>
+            <Setter Property="VerticalOptions" Value="FillAndExpand"/>
+        </Style>
+    </ContentPage.Resources>
     <ScrollView>
         <StackLayout>
-            <Grid>
+            <Grid ColumnSpacing="0">
                 <Grid.Resources>
                     <conv:ImagWeb x:Key="RetrieveImage"/>
                 </Grid.Resources>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="auto"/>
+                </Grid.RowDefinitions>
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition/>
-                    <ColumnDefinition/>
+                    <ColumnDefinition Width="1*"/>
+                    <ColumnDefinition Width="2*"/>
                 </Grid.ColumnDefinitions>
+                <Image Grid.Column="0" Background="{Binding ColorBrush}"/>
                 <Image Grid.Column="0" Source="{Binding Ship.Thumbnail, Converter={StaticResource RetrieveImage}}"/>
-                <Grid Grid.Column="1">
+                <Grid Grid.Column="1" BackgroundColor="Black" ColumnSpacing="1" RowSpacing="1">
                     <Grid.RowDefinitions>
-                        <RowDefinition/>
-                        <RowDefinition/>
-                        <RowDefinition/>
-                        <RowDefinition/>
-                        <RowDefinition/>
-                        <RowDefinition/>
+                        <RowDefinition Height="auto"/>
+                        <RowDefinition Height="auto"/>
+                        <RowDefinition Height="auto"/>
+                        <RowDefinition Height="auto"/>
+                        <RowDefinition Height="auto"/>
+                        <RowDefinition Height="auto"/>
                     </Grid.RowDefinitions>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition/>
@@ -35,44 +65,59 @@
                     </Grid.ColumnDefinitions>
                     <Label Grid.Row="0"
                        Grid.Column="0"
-                       Text="ID"/>
+                       Text="ID"
+                       Style="{StaticResource Header}"/>
                     <Label Grid.Row="0"
                        Grid.Column="1"  
-                       Text="{Binding Ship.Id}"/>
+                       Text="{Binding Ship.Id}"
+                           Style="{StaticResource Variable}"/>
                     <Label Grid.Row="1"
                        Grid.Column="0"  
-                       Text="Rarity"/>
-                    <Label Grid.Row="1"
-                       Grid.Column="1"  
-                       Text="{Binding Ship.Rarity}"/>
+                       Text="Rarity"
+                       Style="{StaticResource Header}" VerticalTextAlignment="Center"/>
+                    <StackLayout Grid.Row="1"
+                           Grid.Column="1" Spacing="0">
+                        <Label Text="{Binding Ship.Rarity}"
+                               Style="{StaticResource Variable}"/>
+                        <Label Text="{Binding Ship.Stars}"
+                               Style="{StaticResource Variable}"/>
+                    </StackLayout>
                     <Label Grid.Row="2"
                        Grid.Column="0"  
-                       Text="Classification"/>
+                       Text="Classification"
+                       Style="{StaticResource Header}"/>
                     <Label Grid.Row="2"
                        Grid.Column="1"  
-                       Text="{Binding Ship.ShipClass}"/>
+                       Text="{Binding Ship.ShipClass}"
+                           Style="{StaticResource Variable}"/>
                     <Label Grid.Row="3"
                        Grid.Column="0"  
-                       Text="Faction"/>
+                       Text="Faction"
+                       Style="{StaticResource Header}"/>
                     <Label Grid.Row="3"
                        Grid.Column="1"  
-                       Text="{Binding Ship.Nationality}"/>
+                       Text="{Binding Ship.Nationality}"
+                           Style="{StaticResource Variable}"/>
                     <Label Grid.Row="4"
                        Grid.Column="0"  
-                       Text="Class"/>
+                       Text="Class"
+                       Style="{StaticResource Header}"/>
                     <Label Grid.Row="4"
                        Grid.Column="1"  
-                       Text="{Binding Ship.HullType}"/>
+                       Text="{Binding Ship.HullType}"
+                           Style="{StaticResource Variable}"/>
                     <Label Grid.Row="5"
                        Grid.Column="0"  
-                       Text="Construction Time"/>
+                       Text="Construction Time"
+                       Style="{StaticResource Header}"/>
                     <Label Grid.Row="5"
                        Grid.Column="1"  
-                       Text="{Binding Ship.ConstructionTime}"/>
+                       Text="{Binding Ship.ConstructionTime}"
+                           Style="{StaticResource Variable}"/>
                 </Grid>
             </Grid>
             <Picker ItemsSource="{Binding Stats}" SelectedIndex="{Binding StatIndex}" SelectedItem="{Binding SelectedStat, Mode=TwoWay}"/>
-            <Grid BackgroundColor="LightGray">
+            <Grid BackgroundColor="Black" ColumnSpacing="1" RowSpacing="1">
                 <Grid.Resources>
                     <conv:ValueToVisibility x:Key="IsVisible"/>
                 </Grid.Resources>
@@ -95,108 +140,149 @@
                 <!--First Row-->
                 <Image Grid.Row="0"
                    Grid.Column="0"
-                   Source="Duration.png"/>
+                   Source="Duration.png"
+                       Style="{StaticResource StatHeader}"/>
                 <Label Grid.Row="0"
-                   Grid.Column="1" Text="{Binding CurrentStat.Health}"/>
+                   Grid.Column="1" Text="{Binding CurrentStat.Health}"
+                       Style="{StaticResource StatVariable}"/>
                 <Image Grid.Row="0"
                    Grid.Column="2"
-                   Source="Armor.png"/>
+                   Source="Armor.png"
+                       Style="{StaticResource StatHeader}"/>
                 <Label Grid.Row="0"
                    Grid.Column="3"
-                   Text="{Binding CurrentStat.Armor}"/>
+                   Text="{Binding CurrentStat.Armor}"
+                       Style="{StaticResource StatVariable}"/>
                 <Image Grid.Row="0"
                    Grid.Column="4"
-                   Source="Refill.png"/>
+                   Source="Refill.png"
+                       Style="{StaticResource StatHeader}"/>
                 <Label Grid.Row="0"
                    Grid.Column="5"
-                   Text="{Binding CurrentStat.Reload}"/>
+                   Text="{Binding CurrentStat.Reload}"
+                       Style="{StaticResource StatVariable}"/>
                 <Image Grid.Row="0"
                    Grid.Column="6"
-                   Source="Luck.png"/>
+                   Source="Luck.png"
+                       Style="{StaticResource StatHeader}"/>
                 <Label Grid.Row="0"
                    Grid.Column="7"
-                   Text="{Binding CurrentStat.Luck}"/>
+                   Text="{Binding CurrentStat.Luck}"
+                       Style="{StaticResource StatVariable}"/>
 
                 <!--Second Row-->
                 <Image Grid.Row="1"
                    Grid.Column="0"
-                   Source="Firepower.png"/>
+                   Source="Firepower.png"
+                       Style="{StaticResource StatHeader}"/>
                 <Label Grid.Row="1"
-                   Grid.Column="1" Text="{Binding CurrentStat.Firepower}"/>
+                   Grid.Column="1" Text="{Binding CurrentStat.Firepower}"
+                       Style="{StaticResource StatVariable}"/>
                 <Image Grid.Row="1"
                    Grid.Column="2"
-                   Source="Torpedo.png"/>
+                   Source="Torpedo.png"
+                       Style="{StaticResource StatHeader}"/>
                 <Label Grid.Row="1"
                    Grid.Column="3"
-                   Text="{Binding CurrentStat.Torpedo}"/>
+                   Text="{Binding CurrentStat.Torpedo}"
+                       Style="{StaticResource StatVariable}"/>
                 <Image Grid.Row="1"
                    Grid.Column="4"
-                   Source="Evasion.png"/>
+                   Source="Evasion.png"
+                       Style="{StaticResource StatHeader}"/>
                 <Label Grid.Row="1"
                    Grid.Column="5"
-                   Text="{Binding CurrentStat.Evasion}"/>
+                   Text="{Binding CurrentStat.Evasion}"
+                       Style="{StaticResource StatVariable}"/>
                 <Label Grid.Row="1"
                    Grid.Column="6"
-                   Text="Spd" FontAttributes="Bold"/>
+                   Text="Spd" FontAttributes="Bold"
+                       BackgroundColor="LightGray"
+                       HorizontalTextAlignment="Center"
+                       VerticalTextAlignment="Center"/>
                 <Label Grid.Row="1"
                    Grid.Column="7"
-                   Text="{Binding CurrentStat.Luck}"/>
+                   Text="{Binding CurrentStat.Luck}"
+                       Style="{StaticResource StatVariable}"/>
 
                 <!--Third Row-->
                 <Image Grid.Row="2"
                    Grid.Column="0"
-                   Source="AntiAir.png"/>
+                   Source="AntiAir.png"
+                       Style="{StaticResource StatHeader}"/>
                 <Label Grid.Row="2"
-                   Grid.Column="1" Text="{Binding CurrentStat.Antiair}"/>
+                   Grid.Column="1" Text="{Binding CurrentStat.Antiair}"
+                       Style="{StaticResource StatVariable}"/>
                 <Image Grid.Row="2"
                    Grid.Column="2"
-                   Source="Aviation.png"/>
+                   Source="Aviation.png"
+                       Style="{StaticResource StatHeader}"/>
                 <Label Grid.Row="2"
                    Grid.Column="3"
-                   Text="{Binding CurrentStat.Aviation}"/>
+                   Text="{Binding CurrentStat.Aviation}"
+                       Style="{StaticResource StatVariable}"/>
                 <Image Grid.Row="2"
                    Grid.Column="4"
-                   Source="Consumption.png"/>
+                   Source="Consumption.png"
+                       Style="{StaticResource StatHeader}"/>
                 <Label Grid.Row="2"
                    Grid.Column="5"
-                   Text="{Binding CurrentStat.OilConsumption}"/>
+                   Text="{Binding CurrentStat.OilConsumption}"
+                       Style="{StaticResource StatVariable}"/>
                 <Image Grid.Row="2"
                    Grid.Column="6"
-                   Source="Hit.png"/>
+                   Source="Hit.png"
+                       Style="{StaticResource StatHeader}"/>
                 <Label Grid.Row="2"
                    Grid.Column="7"
-                   Text="{Binding CurrentStat.Accuracy}"/>
+                   Text="{Binding CurrentStat.Accuracy}"
+                       Style="{StaticResource StatVariable}"/>
 
                 <!--Fourth Row-->
                 <Image Grid.Row="3"
                    Grid.Column="0"
-                   Source="ASW.png"/>
+                   Source="ASW.png"
+                       Style="{StaticResource StatHeader}"/>
                 <Label Grid.Row="3"
-                   Grid.Column="1" Text="{Binding CurrentStat.AntisubmarineWarfare}"/>
+                   Grid.Column="1" Text="{Binding CurrentStat.AntisubmarineWarfare}"
+                       Style="{StaticResource StatVariable}"/>
+                <Image Grid.Row="3"
+                   Grid.Column="2" Style="{StaticResource StatHeader}"/>
                 <Image Grid.Row="3"
                    Grid.Column="2"
                    Source="Oxygen.png"
-                   IsVisible="{Binding CurrentStat.Oxygen, Converter={StaticResource IsVisible}}"/>
+                   IsVisible="{Binding CurrentStat.Oxygen, Converter={StaticResource IsVisible}}"
+                       Style="{StaticResource StatHeader}"/>
                 <Label Grid.Row="3"
                    Grid.Column="3"
-                   Text="{Binding CurrentStat.Oxygen}"/>
+                   Text="{Binding CurrentStat.Oxygen}"
+                       Style="{StaticResource StatVariable}"/>
+                <Image Grid.Row="3"
+                   Grid.Column="4" Style="{StaticResource StatHeader}"/>
                 <Image Grid.Row="3"
                    Grid.Column="4"
                    Source="Ammunition.png"
-                   IsVisible="{Binding CurrentStat.Ammunition, Converter={StaticResource IsVisible}}"/>
+                   IsVisible="{Binding CurrentStat.Ammunition, Converter={StaticResource IsVisible}}"
+                       Style="{StaticResource StatHeader}"/>
                 <Label Grid.Row="3"
                    Grid.Column="5"
-                   Text="{Binding CurrentStat.Ammunition}"/>
+                   Text="{Binding CurrentStat.Ammunition}"
+                       Style="{StaticResource StatVariable}"/>
+                <Image Grid.Row="3"
+                   Grid.Column="6" Style="{StaticResource StatHeader}"/>
+                <Label Grid.Row="3"
+                   Grid.Column="7" Style="{StaticResource StatVariable}"/>
             </Grid>
-            <Grid>
+            <Grid BackgroundColor="Black" RowSpacing="1">
                 <Grid.RowDefinitions>
-                    <RowDefinition/>
-                    <RowDefinition/>
+                    <RowDefinition Height="auto"/>
+                    <RowDefinition Height="auto"/>
                 </Grid.RowDefinitions>
                 <Label Grid.Row="0"
-                   Text="Gear"/>
+                   Text="Gear"
+                       Style="{StaticResource Header}"/>
 
-                <Grid Grid.Row="1">
+                <Grid Grid.Row="1" ColumnSpacing="1" RowSpacing="1">
                     <Grid.Resources>
                         <conv:ValueToVisibility x:Key="IsVisible"/>
                     </Grid.Resources>
@@ -207,79 +293,113 @@
                         <RowDefinition/>
                     </Grid.RowDefinitions>
                     <Grid.ColumnDefinitions>
-                        <ColumnDefinition/>
-                        <ColumnDefinition/>
-                        <ColumnDefinition/>
+                        <ColumnDefinition Width="1*"/>
+                        <ColumnDefinition Width="4*"/>
+                        <ColumnDefinition Width="3*"/>
                     </Grid.ColumnDefinitions>
 
                     <!--Heading-->
                     <Label Grid.Row="0"
-                       Grid.Column="0"
-                       Text="Slot"/>
+                           Grid.Column="0"
+                           Text="Slot"
+                           Style="{StaticResource Header}"/>
                     <Label Grid.Row="0"
                        Grid.Column="1"
-                       Text="Efficiency"/>
+                       Text="Efficiency"
+                           Style="{StaticResource Header}"/>
                     <Label Grid.Row="0"
                        Grid.Column="2"
-                       Text="Equippable"/>
+                       Text="Equippable"
+                           Style="{StaticResource Header}"/>
 
                     <!--row 1-->
                     <Label Grid.Row="1"
                        Grid.Column="0" 
-                       Text="1"/>
+                       Text="1"
+                           Style="{StaticResource StatVariable}"/>
                     <StackLayout Grid.Row="1"
-                             Grid.Column="1" Orientation="Horizontal">
-                        <Label Text="{Binding Ship.Slots[0].MinEfficiency, StringFormat=' {0}%'}"/>
+                             Grid.Column="1" Orientation="Horizontal" BackgroundColor="WhiteSmoke" HorizontalOptions="FillAndExpand">
+                        <Label Text="{Binding Ship.Slots[0].MinEfficiency, StringFormat=' {0}%'}" />
                         <Label Text="{Binding Ship.Slots[0].MaxEfficiency, StringFormat='-->{0}%'}"/>
                         <Label Text="{Binding Ship.Slots[0].KaiEfficiency, StringFormat='-->{0}%'}" IsVisible="{Binding Ship.Slots[0].KaiEfficiency, Converter={StaticResource IsVisible} }"/>
                     </StackLayout>
                     <Label Grid.Row="1"
                        Grid.Column="2"
-                       Text="{Binding Ship.Slots[0].Type}"/>
+                       Text="{Binding Ship.Slots[0].Type}"
+                           Style="{StaticResource StatVariable}"/>
 
                     <!--row 2-->
                     <Label Grid.Row="2"
                        Grid.Column="0" 
-                       Text="1"/>
+                       Text="2"
+                           Style="{StaticResource StatVariable}"/>
                     <StackLayout Grid.Row="2"
                              Grid.Column="1"
-                             Orientation="Horizontal">
+                             Orientation="Horizontal" BackgroundColor="WhiteSmoke" HorizontalOptions="Fill">
                         <Label Text="{Binding Ship.Slots[1].MinEfficiency, StringFormat=' {0}%'}"/>
                         <Label Text="{Binding Ship.Slots[1].MaxEfficiency, StringFormat='-->{0}%'}"/>
                         <Label Text="{Binding Ship.Slots[1].KaiEfficiency, StringFormat='-->{0}%'}" IsVisible="{Binding Ship.Slots[1].KaiEfficiency, Converter={StaticResource IsVisible} }"/>
                     </StackLayout>
                     <Label Grid.Row="2"
                        Grid.Column="2"
-                       Text="{Binding Ship.Slots[1].Type}"/>
+                       Text="{Binding Ship.Slots[1].Type}"
+                           Style="{StaticResource StatVariable}"/>
 
                     <!--row 3-->
                     <Label Grid.Row="3"
                        Grid.Column="0" 
-                       Text="1"/>
+                       Text="3"
+                           Style="{StaticResource StatVariable}"/>
                     <StackLayout Grid.Row="3"
                              Grid.Column="1"
-                             Orientation="Horizontal">
+                             Orientation="Horizontal" BackgroundColor="WhiteSmoke" HorizontalOptions="FillAndExpand">
                         <Label Text="{Binding Ship.Slots[2].MinEfficiency, StringFormat=' {0}%'}"/>
                         <Label Text="{Binding Ship.Slots[2].MaxEfficiency, StringFormat='-->{0}%'}"/>
                         <Label Text="{Binding Ship.Slots[2].KaiEfficiency, StringFormat='-->{0}%'}" IsVisible="{Binding Ship.Slots[0].KaiEfficiency, Converter={StaticResource IsVisible} }"/>
                     </StackLayout>
                     <Label Grid.Row="3"
                        Grid.Column="2"
-                       Text="{Binding Ship.Slots[2].Type}"/>
+                       Text="{Binding Ship.Slots[2].Type}"
+                           Style="{StaticResource StatVariable}"/>
                 </Grid>
             </Grid>
-            <CollectionView ItemsSource="{Binding Ship.Skills}" ItemsLayout="HorizontalList">
+            <CollectionView ItemsSource="{Binding Ship.Skills}" ItemsLayout="HorizontalList" SelectedItem="{Binding SelectedSkill}" HeightRequest="120"
+                            SelectionChangedCommand="{Binding Source={RelativeSource AncestorType={x:Type vm:DetailPageVM}}, Path=CmdExpand}" SelectionChangedCommandParameter="{Binding Source={x:Reference expander}, Path=.}"
+                            SelectionMode="Single">
                 <CollectionView.ItemTemplate>
                     <DataTemplate>
-                        <xct:Expander>
-                            <xct:Expander.Header>
-                                <Image Source="{Binding Icon}" WidthRequest="120" HeightRequest="120"/>
-                            </xct:Expander.Header>
-                            <Label Text="TEST"/>
-                        </xct:Expander>
+                        <StackLayout>
+                            <VisualStateManager.VisualStateGroups>
+                                <VisualStateGroup Name="CommonStates">
+                                    <VisualState Name="Selected">
+                                        <VisualState.Setters>
+                                            <Setter Property="BackgroundColor" Value="{Binding Color}"/>
+                                        </VisualState.Setters>
+                                    </VisualState>
+                                    <VisualState Name="Normal">
+                                        <VisualState.Setters>
+                                            <Setter Property="BackgroundColor" Value="Transparent"/>
+                                        </VisualState.Setters>
+                                    </VisualState>
+                                </VisualStateGroup>
+                            </VisualStateManager.VisualStateGroups>
+                            <Image Source="{Binding Icon}" WidthRequest="120" HeightRequest="120"/>
+                        </StackLayout>
                     </DataTemplate>
                 </CollectionView.ItemTemplate>
             </CollectionView>
+            <xct:Expander x:Name="expander" HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand">
+                <xct:Expander.ContentTemplate>
+                    <DataTemplate>
+                        <StackLayout>
+                            <Label Grid.Row="0" Text="{Binding SelectedSkill.Name}" FontAttributes="Bold" FontSize="Medium"/>
+                            <Label Grid.Row="1" Text="{Binding SelectedSkill.Description}"/>
+                        </StackLayout>
+
+                    </DataTemplate>
+                    
+                </xct:Expander.ContentTemplate>
+            </xct:Expander>
         </StackLayout>
     </ScrollView>
 </ContentPage>

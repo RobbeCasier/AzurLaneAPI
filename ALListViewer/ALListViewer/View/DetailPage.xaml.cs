@@ -19,7 +19,9 @@ namespace ALListViewer.View
             var genPage = new GeneralPage();
             var quotesPage = new QuotesPage();
             var galPage = new GalleryPage();
-            genPage.BindingContext = this.BindingContext;
+            genPage.BindingContext = BindingContext;
+            quotesPage.BindingContext = BindingContext;
+            galPage.BindingContext = BindingContext;
             Children.Add(genPage);
             Children.Add(quotesPage);
             Children.Add(galPage);

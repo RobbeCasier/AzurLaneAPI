@@ -1,13 +1,19 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:vm="clr-namespace:ALListViewer.ViewModel"
              x:Class="ALListViewer.View.GalleryPage"
              Title="Gallery">
+    <ContentPage.BindingContext>
+        <vm:DetailPageVM/>
+    </ContentPage.BindingContext>
     <ContentPage.Content>
         <StackLayout>
-            <Label Text="Welcome to Xamarin.Forms!"
-                VerticalOptions="CenterAndExpand" 
-                HorizontalOptions="CenterAndExpand" />
+            <Picker ItemsSource="{Binding Skins}" SelectedIndex="{Binding StatIndex}" SelectedItem="{Binding SelectedSkin}"/>
+            <Grid>
+                <Image Source="{Binding CurrentSkin.Background}" Aspect="AspectFill"/>
+                <Image Source="{Binding CurrentSkin.Image}"/>
+            </Grid>
         </StackLayout>
     </ContentPage.Content>
 </ContentPage>

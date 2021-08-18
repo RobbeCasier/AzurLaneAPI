@@ -56,7 +56,7 @@
                                                  VerticalOptions="Fill">
                                 <ContentView.Triggers>
                                     <DataTrigger TargetType="ContentView" Binding="{Binding}" Value="Normal">
-                                        <Setter Property="BackgroundColor" Value="Gray"/>
+                                        <Setter Property="BackgroundColor" Value="LightGray"/>
                                     </DataTrigger>
                                     <DataTrigger TargetType="ContentView" Binding="{Binding}" Value="Rare">
                                         <Setter Property="BackgroundColor" Value="#9fe8ff"/>

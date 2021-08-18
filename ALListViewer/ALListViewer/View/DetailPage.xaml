@@ -7,7 +7,7 @@
     <TabbedPage.BindingContext>
         <vm:DetailPageVM/>
     </TabbedPage.BindingContext>
-  <!--Pages can be added as references or inline-->
+    <!--Pages can be added as references or inline-->
     
     <!--<ContentPage Title="Quotes" />-->
 </TabbedPage>

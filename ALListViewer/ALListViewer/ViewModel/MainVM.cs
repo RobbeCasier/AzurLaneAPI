@@ -68,10 +68,14 @@ namespace ALListViewer.ViewModel
         async void GoToDetailPage()
         {
             var detailPage = new DetailPage();
+            Brush bgColor = GetColorFromShipRarity(SelectedShip.Rarity);
             detailPage.Title = SelectedShip.Name;
+            detailPage.BarBackground = bgColor;
             await Application.Current.MainPage.Navigation.PushAsync(detailPage, true);
             (detailPage.BindingContext as DetailPageVM).Ship = SelectedShip;
+            (detailPage.BindingContext as DetailPageVM).ColorBrush = bgColor;
             (detailPage.BindingContext as DetailPageVM).RaisePropertyChanged("Ship");
+            (detailPage.BindingContext as DetailPageVM).RaisePropertyChanged("ColorBrush");
         }
         private void SetupBasicSortingTypes()
         {
@@ -130,7 +134,15 @@ namespace ALListViewer.ViewModel
                 () =>
                 {
                     Ships = taskResult.Result;
-                    RaisePropertyChanged("Ships");
+                    var voiceTask = Task.Run(() =>
+                    {
+                        return _alRepository.GetVoices();
+                    });
+                    taskResult.ConfigureAwait(true).GetAwaiter().OnCompleted(
+                        () =>
+                        {
+                            RaisePropertyChanged("Ships");
+                        });
                 });
         }
 
@@ -156,6 +168,37 @@ namespace ALListViewer.ViewModel
         {
             Ships = _alRepository.GetMETAShips();
             RaisePropertyChanged("Ships");
+        }
+
+        ColorTypeConverter colorConverter = new ColorTypeConverter();
+        private Brush GetColorFromShipRarity(string ShipRarity)
+        {
+            switch (ShipRarity)
+            {
+                case "Normal":
+                    return new SolidColorBrush(Color.LightGray);
+                case "Rare":
+                    return new SolidColorBrush((Color)colorConverter.ConvertFromInvariantString("#9fe8ff"));
+                case "Elite":
+                    return new SolidColorBrush((Color)colorConverter.ConvertFromInvariantString("#c4adff"));
+                case "Super Rare":
+                case "Priority":
+                    return new SolidColorBrush((Color)colorConverter.ConvertFromInvariantString("#ee9"));
+                case "Ultra Rare":
+                case "Decisive":
+                    var gradStopCollection = new GradientStopCollection();
+                    Color tempColor = (Color)colorConverter.ConvertFromInvariantString("#fbffca");
+                    gradStopCollection.Add(new GradientStop(tempColor, 0.0f));
+                    tempColor = (Color)colorConverter.ConvertFromInvariantString("#baffbf");
+                    gradStopCollection.Add(new GradientStop(tempColor, 0.33f));
+                    tempColor = (Color)colorConverter.ConvertFromInvariantString("#a7efff");
+                    gradStopCollection.Add(new GradientStop(tempColor, 0.66f));
+                    tempColor = (Color)colorConverter.ConvertFromInvariantString("#ffabff");
+                    gradStopCollection.Add(new GradientStop(tempColor, 1.0f));
+                    return new LinearGradientBrush(gradStopCollection, new Point(0, 0), new Point(1, 1));
+                default:
+                    return null;
+            }
         }
     }
 }

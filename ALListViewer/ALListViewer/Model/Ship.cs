@@ -99,5 +99,14 @@ namespace ALListViewer.Model
         public string Image { get; set; }
         public string Background { get; set; }
         public string Bg { get; set; }
+        public List<VoiceLine> Lines { get; set; }
     }
+
+    public class VoiceLine
+    {
+        public string Event { get; set; }
+        public string Audio { get; set; }
+        public string En { get; set; }
+    }
+
 }
