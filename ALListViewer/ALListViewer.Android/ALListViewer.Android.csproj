@@ -149,5 +149,8 @@
   <ItemGroup>
     <AndroidResource Include="Resources\drawable\PlayAudioImage.png" />
   </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\drawable\FDGFeelRich.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\Android\Xamarin.Android.CSharp.targets" />
 </Project>

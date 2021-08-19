@@ -4,6 +4,7 @@
              xmlns:conv="clr-namespace:ALListViewer.Converters"
              xmlns:vm="clr-namespace:ALListViewer.ViewModel"
              xmlns:dg="clr-namespace:Xamarin.Forms.DataGrid;assembly=Xamarin.Forms.DataGrid"
+             xmlns:xct="clr-namespace:Xamarin.CommunityToolkit.UI.Views;assembly=Xamarin.CommunityToolkit"
              x:Class="ALListViewer.View.MainPage"
              Title="List">
     <ContentPage.BindingContext>

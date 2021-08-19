@@ -388,7 +388,7 @@
                     </DataTemplate>
                 </CollectionView.ItemTemplate>
             </CollectionView>
-            <xct:Expander x:Name="expander" HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand">
+            <xct:Expander x:Name="expander" HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand" HeightRequest="500">
                 <xct:Expander.ContentTemplate>
                     <DataTemplate>
                         <StackLayout>
@@ -397,7 +397,6 @@
                         </StackLayout>
 
                     </DataTemplate>
-                    
                 </xct:Expander.ContentTemplate>
             </xct:Expander>
         </StackLayout>

@@ -93,7 +93,11 @@ namespace ALListViewer.Repository
                         {
                             foreach (Skin skin in ship.Skins)
                             {
-                                if (skin.Name == propSkin.Name)
+                                string name = skin.Name;
+                                //oath has been written as Wedding sometimes
+                                if (name.Equals("Wedding"))
+                                    name = "Oath";
+                                if (name == propSkin.Name)
                                 {
                                     skin.Lines = new List<VoiceLine>();
                                     JToken lines = propSkin.Children().ElementAt(0);
