@@ -16,9 +16,10 @@ Here I will show the current things that can be done.
 - Account tab (here you can set your ID and your profile picture to one of your collected ships), will have you collection ratio
 The hardest one:
 - List of all Equipments
-- Add to your list
-- Local safe file
-- change lv (has impact on stats)
-- set your ship with the fitting equipment
+- set your ship with the fitting equipment  
+
+## Update  
+Android version added.  
+This version does not yet contain the option of an own list, but it has more information then the WPF version has.
 
 
